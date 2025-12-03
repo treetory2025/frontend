@@ -3,7 +3,6 @@
 ### Environment
 
 - Node: 20 (LTS)
-- Build Tool: Vite
 - Package Manager: Npm
 
 ### Core
@@ -14,7 +13,6 @@
 ### State / Data
 
 - Client State: Zustand
-- Server State: React Query
 
 ### Styling & Animation
 
