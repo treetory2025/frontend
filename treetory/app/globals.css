@@ -1,3 +1,13 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "GMarketSans";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff")
+    format("woff");
+  font-weight: 500;
+  font-display: swap;
+}
+
 /* Tailwind CSS 설정 */
 :root {
   /* colors */
@@ -18,25 +28,23 @@
 
   /* Font sizes */
   --fs-title: 28px;
-  --lh-title: 39.2px;
+  --lh-title: 1.4;
 
   --fs-heading: 22px;
-  --lh-heading: 30.8px;
+  --lh-heading: 1.4;
 
   --fs-subtitle: 18px;
-  --lh-subtitle: 25.2px;
+  --lh-subtitle: 1.4;
 
   --fs-body: 16px;
-  --lh-body: 24px;
+  --lh-body: 1.4;
 
   --fs-button: 15px;
-  --lh-button: 21px;
+  --lh-button: 1.4;
 
   --fs-caption: 13px;
-  --lh-caption: 19.5px;
+  --lh-caption: 1.5;
 }
-
-@import "tailwindcss";
 
 @theme inline {
   /* colors */
@@ -85,6 +93,7 @@ body {
   align-items: center;
   background: #17395c;
   overflow: hidden;
+  font-family: "GMarketSans";
 }
 
 body > .app-container {
@@ -100,9 +109,9 @@ body > .app-container {
     width: 30vw;
     height: 100vh;
     border-radius: 20px;
+    padding-top: 48px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: start;
   }
 }
