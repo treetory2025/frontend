@@ -1,26 +1,108 @@
+/* Tailwind CSS 설정 */
+:root {
+  /* colors */
+  --background: #17395c;
+  --foreground: #fffff7;
+  --navy: #17395c;
+  --skyblue-background: #e6f3f9;
+  --skyblue: #cce8f3;
+  --yellow: #efb758;
+  --red: #d13c3c;
+  --beige: #fffff7;
+  --fg-primary: #1b1b1b;
+  --fg-secondary: #4b4b4b;
+  --fg-tertiary: #6b6b6b;
+  --muted-bg: #f5f5f5;
+  --muted-navy: #708499;
+  --green: #209f87;
+
+  /* Font sizes */
+  --fs-title: 28px;
+  --lh-title: 39.2px;
+
+  --fs-heading: 22px;
+  --lh-heading: 30.8px;
+
+  --fs-subtitle: 18px;
+  --lh-subtitle: 25.2px;
+
+  --fs-body: 16px;
+  --lh-body: 24px;
+
+  --fs-button: 15px;
+  --lh-button: 21px;
+
+  --fs-caption: 13px;
+  --lh-caption: 19.5px;
+}
+
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
+  /* colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-navy: var(--navy);
+  --color-skyblue-background: var(--skyblue-background);
+  --color-skyblue: var(--skyblue);
+  --color-yellow: var(--yellow);
+  --color-red: var(--red);
+  --color-beige: var(--beige);
+  --color-fg-primary: var(--fg-primary);
+  --color-fg-secondary: var(--fg-secondary);
+  --color-fg-tertiary: var(--fg-tertiary);
+  --color-muted-bg: var(--muted-bg);
+  --color-muted-navy: var(--muted-navy);
+  --color-green: var(--green);
+  /* texts */
+  --text-title: var(--fs-title);
+  --text-title--line-height: var(--lh-title);
+
+  --text-heading: var(--fs-heading);
+  --text-heading--line-height: var(--lh-heading);
+
+  --text-subtitle: var(--fs-subtitle);
+  --text-subtitle--line-height: var(--lh-subtitle);
+
+  --text-body: var(--fs-body);
+  --text-body--line-height: var(--lh-body);
+
+  --text-button: var(--fs-button);
+  --text-button--line-height: var(--lh-button);
+
+  --text-caption: var(--fs-caption);
+  --text-caption--line-height: var(--lh-caption);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* 기본 설정 */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #17395c;
+  overflow: hidden;
+}
+
+body > .app-container {
+  min-width: 360px;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+}
+
+@media (min-width: 376px) {
+  body > .app-container {
+    min-width: 375px;
+    width: 30vw;
+    height: 100vh;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 }
