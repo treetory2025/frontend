@@ -8,6 +8,9 @@
   font-display: swap;
 }
 
+.font-memoment {
+  font-family: var(--font-memoment);
+}
 /* Tailwind CSS 설정 */
 :root {
   /* colors */
@@ -62,7 +65,10 @@
   --color-muted-bg: var(--muted-bg);
   --color-muted-navy: var(--muted-navy);
   --color-green: var(--green);
+
   /* texts */
+  --font-memoment: var(--font-memoment);
+
   --text-title: var(--fs-title);
   --text-title--line-height: var(--lh-title);
 
