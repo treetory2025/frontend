@@ -2,7 +2,7 @@ import { LucideIcon } from "lucide-react";
 
 interface MenuItemProps {
   label: string;
-  icon: LucideIcon;
+  icon: LucideIcon | (() => null);
   onClick?: () => void;
 }
 

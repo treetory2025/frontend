@@ -16,9 +16,6 @@ export default function RootLayout({
     <html lang="kr">
       <body>
         <div className="app-container">
-          <header>
-            <Header />
-          </header>
           <main className="h-full">{children}</main>
         </div>
       </body>

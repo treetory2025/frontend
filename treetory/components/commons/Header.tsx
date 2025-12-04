@@ -32,7 +32,7 @@ export default function Header() {
           {/* 메뉴 토글 */}
           {isMenuOpen && (
             <div className="border-red absolute top-12 left-0 box-content flex w-[180px] justify-start rounded-xl border-4 bg-white p-2">
-              <HeaderMenu />
+              <HeaderMenu onClose={() => setIsMenuOpen(false)} />
             </div>
           )}
         </div>
