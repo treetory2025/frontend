@@ -1,11 +1,30 @@
 @import "tailwindcss";
 
+/* font 설정 */
+@font-face {
+  font-family: "GMarketSans";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff")
+    format("woff");
+  font-weight: 300;
+  font-display: swap;
+}
+
 @font-face {
   font-family: "GMarketSans";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff")
     format("woff");
   font-weight: 500;
   font-display: swap;
+}
+@font-face {
+  font-family: "GMarketSans";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff")
+    format("woff");
+  font-weight: 700;
+  font-display: swap;
+}
+.font-memoment {
+  font-family: var(--font-memoment);
 }
 
 /* Tailwind CSS 설정 */
@@ -62,24 +81,32 @@
   --color-muted-bg: var(--muted-bg);
   --color-muted-navy: var(--muted-navy);
   --color-green: var(--green);
+
   /* texts */
+  --font-memoment: var(--font-memoment);
+
   --text-title: var(--fs-title);
   --text-title--line-height: var(--lh-title);
+  --text-title--font-weight: 700;
 
   --text-heading: var(--fs-heading);
   --text-heading--line-height: var(--lh-heading);
 
   --text-subtitle: var(--fs-subtitle);
   --text-subtitle--line-height: var(--lh-subtitle);
+  --text-subtitle--font-weight: 700;
 
   --text-body: var(--fs-body);
   --text-body--line-height: var(--lh-body);
+  --text-body--font-weight: 500;
 
   --text-button: var(--fs-button);
   --text-button--line-height: var(--lh-button);
+  --text-button--font-weight: 500;
 
   --text-caption: var(--fs-caption);
   --text-caption--line-height: var(--lh-caption);
+  --text-caption--font-weight: 500;
 }
 
 /* 기본 설정 */
@@ -90,7 +117,7 @@ body {
   height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   background: #17395c;
   overflow: hidden;
   font-family: "GMarketSans";
@@ -100,22 +127,15 @@ body > .app-container {
   min-width: 360px;
   width: 100%;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 28px;
+  border-radius: 0px;
 }
 
 @media (min-width: 376px) {
   body > .app-container {
-    min-width: 375px;
-    width: 30vw;
+    width: 100vw;
+    max-width: 720px;
     height: 100vh;
     border-radius: 20px;
     padding-top: 48px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 28px;
   }
 }

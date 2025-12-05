@@ -1,6 +1,17 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
-import Header from "@/components/commons/Header";
+import localFont from "next/font/local";
+
+const treetoryFont = localFont({
+  src: [
+    {
+      path: "../public/fonts/MemomentKkukkukk.ttf",
+      weight: "500",
+      style: "normal",
+    },
+  ],
+  variable: "--font-memoment",
+});
 
 export const metadata: Metadata = {
   title: "Treetory 2025",
@@ -13,12 +24,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="kr">
+    <html lang="kr" className={treetoryFont.variable}>
       <body>
         <div className="app-container">
-          <header>
-            <Header />
-          </header>
           <main className="h-full">{children}</main>
         </div>
       </body>
