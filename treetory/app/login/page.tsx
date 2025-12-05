@@ -1,0 +1,56 @@
+import GoogleLogo from "@/public/icons/google.svg";
+import KakaoLogo from "@/public/icons/kakao.svg";
+import BellRing1 from "@/public/icons/bell-ring1.svg";
+import BellRing2 from "@/public/icons/bell-ring2.svg";
+
+import Image from "next/image";
+import style from "@/app/login/login.module.css";
+
+export default function Page() {
+  return (
+    <div className="flex flex-col justify-end gap-20">
+      <div className="p flex w-full flex-col items-center gap-2 pt-20">
+        <h1 className="font-memoment text-green text-8xl">트리토리</h1>
+        <p className="text-body text-beige font-light">
+          함께 완성하는 우리만의 크리스마스 이야기
+        </p>
+      </div>
+      <div
+        className="flex h-[80dvh] min-h-[540px] flex-col items-center justify-center bg-cover bg-center md:h-[85dvh]"
+        style={{ backgroundImage: `url('/images/tree_login.png')` }}
+      >
+        <div className="flex w-full items-start justify-center gap-1 pt-14 md:gap-4">
+          <div className="flex w-34 flex-col items-center md:w-40">
+            <button
+              className={`size-20 md:size-24 ${style.loginButton} bg-white`}
+            >
+              <Image
+                src={BellRing1}
+                alt="로고 장식1"
+                className="absolute -top-5 md:-top-5 md:size-8"
+              />
+              <Image src={GoogleLogo} alt="구글 로그인" />
+            </button>
+          </div>
+          <div className="flex w-34 flex-col items-center md:w-40">
+            <button
+              className={`size-20 bg-[#FFEC00] md:size-24 ${style.loginButton}`}
+            >
+              <Image
+                src={BellRing2}
+                alt="로고 장식2"
+                className="absolute -top-3 md:-top-4 md:size-5"
+              />
+              <Image src={KakaoLogo} alt="구글 로그인" />
+            </button>
+            <div
+              className={`text-beige text-caption md:text-body ${style.tooltip}`}
+            >
+              <p>간편하게 시작하기</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
