@@ -49,7 +49,8 @@ export default function HeaderMenu({ onClose }: { onClose: () => void }) {
       label: "즐겨찾기",
       icon: MoveRight,
       onClick: () => {
-        console.log("즐겨찾기 페이지 이동");
+        router.push("/bookmarks");
+
         onClose();
       },
     },
