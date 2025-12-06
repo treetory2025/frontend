@@ -72,4 +72,4 @@ jobs:
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            /home/bacinf/treetory/deploy-front.sh
+            /home/bacinf/treetory-front/deploy.sh
