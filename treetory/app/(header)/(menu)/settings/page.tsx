@@ -1,9 +1,14 @@
+"use client";
+
 import PageHeading from "@/components/commons/PageHeading";
 import ContentSection from "@/components/commons/ContentSection";
 import ContentContainer from "@/components/ui/settings/ContentContainer";
 import { MoveRight, SquarePen, MessageCircleQuestionMark } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const router = useRouter();
+
   return (
     <>
       <PageHeading title="설정" />
@@ -33,7 +38,12 @@ export default function Page() {
         <ContentContainer>
           <div className="flex w-full items-center justify-between pb-3">
             <h3 className="text-subtitle text-primary">테마 정보</h3>
-            <button className="cursor-pointer">
+            <button
+              className="cursor-pointer"
+              onClick={() => {
+                router.push("/settings/theme");
+              }}
+            >
               <MoveRight size={24} className="text-muted-navy" />
             </button>
           </div>
