@@ -1,3 +1,5 @@
+"use client";
+
 import GoogleLogo from "@/public/icons/google.svg";
 import KakaoLogo from "@/public/icons/kakao.svg";
 import BellRing1 from "@/public/icons/bell-ring1.svg";
@@ -7,6 +9,8 @@ import Image from "next/image";
 import style from "@/app/login/login.module.css";
 
 export default function Page() {
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
   return (
     <div className={`${style.container}`}>
       <div className={`${style.loginHeadingWrapper} `}>
@@ -23,7 +27,12 @@ export default function Page() {
       >
         <div className={`${style.loginButtonWrapper} w-full`}>
           <div className="flex w-34 flex-col items-center md:w-40">
-            <button className={`${style.loginButton} bg-white`}>
+            <button
+              className={`${style.loginButton} bg-white`}
+              onClick={() => {
+                window.location.href = `${BASE_URL}/auth/login/google`;
+              }}
+            >
               <Image
                 src={BellRing1}
                 alt="로고 장식1"
@@ -33,7 +42,12 @@ export default function Page() {
             </button>
           </div>
           <div className="flex w-34 flex-col items-center md:w-40">
-            <button className={`bg-[#FFEC00] ${style.loginButton}`}>
+            <button
+              className={`bg-[#FFEC00] ${style.loginButton}`}
+              onClick={() => {
+                window.location.href = `${BASE_URL}/auth/login/kakao`;
+              }}
+            >
               <Image
                 src={BellRing2}
                 alt="로고 장식2"
