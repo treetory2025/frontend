@@ -133,7 +133,7 @@ body > .app-container {
 @media (min-width: 376px) {
   body > .app-container {
     width: 100vw;
-    max-width: 720px;
+    max-width: 640px;
     height: 100vh;
     border-radius: 20px;
     padding-top: 48px;
