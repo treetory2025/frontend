@@ -30,7 +30,7 @@ export default function Page() {
             <button
               className={`${style.loginButton} bg-white`}
               onClick={() => {
-                window.location.href = `${BASE_URL}/auth/login/google`;
+                window.location.href = `/api/auth/login/google`;
               }}
             >
               <Image
@@ -45,7 +45,7 @@ export default function Page() {
             <button
               className={`bg-[#FFEC00] ${style.loginButton}`}
               onClick={() => {
-                window.location.href = `${BASE_URL}/auth/login/kakao`;
+                window.location.href = `/api/auth/login/kakao`;
               }}
             >
               <Image

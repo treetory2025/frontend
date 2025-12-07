@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-  const res = await fetch(`${BASE_URL}/me`, {
+  const res = await fetch(`/api/members/me`, {
     method: "GET",
     credentials: "include",
   });
