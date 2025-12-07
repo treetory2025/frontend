@@ -8,22 +8,22 @@ import style from "@/app/login/login.module.css";
 
 export default function Page() {
   return (
-    <div className="flex flex-col justify-end gap-20">
-      <div className="p flex w-full flex-col items-center gap-2 pt-20">
-        <h1 className="font-memoment text-green text-8xl">트리토리</h1>
-        <p className="text-body text-beige font-light">
+    <div className={`${style.container}`}>
+      <div className={`${style.loginHeadingWrapper} `}>
+        <h1 className="font-memoment text-green text-7xl md:text-8xl">
+          트리토리
+        </h1>
+        <p className="text-body text-beige text-base font-light">
           함께 완성하는 우리만의 크리스마스 이야기
         </p>
       </div>
       <div
-        className="flex h-[80dvh] min-h-[540px] flex-col items-center justify-center bg-cover bg-center md:h-[85dvh]"
+        className={`bg-cover bg-center ${style.loginWrapper}`}
         style={{ backgroundImage: `url('/images/tree_login.png')` }}
       >
-        <div className="flex w-full items-start justify-center gap-1 pt-14 md:gap-4">
+        <div className={`${style.loginButtonWrapper} w-full`}>
           <div className="flex w-34 flex-col items-center md:w-40">
-            <button
-              className={`size-20 md:size-24 ${style.loginButton} bg-white`}
-            >
+            <button className={`${style.loginButton} bg-white`}>
               <Image
                 src={BellRing1}
                 alt="로고 장식1"
@@ -33,9 +33,7 @@ export default function Page() {
             </button>
           </div>
           <div className="flex w-34 flex-col items-center md:w-40">
-            <button
-              className={`size-20 bg-[#FFEC00] md:size-24 ${style.loginButton}`}
-            >
+            <button className={`bg-[#FFEC00] ${style.loginButton}`}>
               <Image
                 src={BellRing2}
                 alt="로고 장식2"

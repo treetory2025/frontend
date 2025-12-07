@@ -1,3 +1,34 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  gap: 8px;
+}
+
+.loginHeadingWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.loginWrapper {
+  height: 80dvh;
+  min-height: 720px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginButtonWrapper {
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  padding-top: 20px;
+  gap: 0px;
+}
+
 .loginButton {
   position: relative;
   cursor: pointer;
@@ -6,6 +37,73 @@
   align-items: center;
   border-radius: 100%;
   padding: 4px;
+  width: 80px;
+  height: 80px;
+}
+
+@media (min-height: 915px) {
+  .container {
+    gap: 72px;
+  }
+  .loginHeadingWrapper {
+    padding-top: 48px;
+  }
+  .loginWrapper {
+    max-height: 900px;
+  }
+
+  .loginButtonWrapper {
+    padding-top: 40px;
+    gap: 16px;
+  }
+
+  .loginButton {
+    width: 108px;
+    height: 108px;
+  }
+}
+
+@media (min-height: 731px) and (max-height: 914px) {
+  .container {
+    gap: 44px;
+  }
+
+  .loginWrapper {
+    max-height: 900px;
+  }
+
+  .loginHeadingWrapper {
+    padding-top: 48px;
+  }
+
+  .loginButtonWrapper {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    padding-top: 28px;
+    gap: 8px;
+  }
+
+  .loginButton {
+    width: 88px;
+    height: 88px;
+  }
+}
+
+/* 너무 작을 때 최소 720 보장 */
+@media (max-height: 730px) {
+  .container {
+    gap: 40px;
+  }
+
+  .loginWrapper {
+    height: 80dvh;
+    min-height: 720px;
+  }
+
+  .loginHeadingWrapper {
+    padding-top: 32px;
+  }
 }
 
 .tooltip {
