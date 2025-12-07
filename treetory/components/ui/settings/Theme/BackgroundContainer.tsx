@@ -4,7 +4,11 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
-export default function BackgroundContainer() {
+export default function BackgroundContainer({
+  onSubmit,
+}: {
+  onSubmit: (value: string) => void;
+}) {
   const themes = [
     { id: 0, name: "고요한 밤", image: theme1 },
     { id: 1, name: "눈내리는 언덕", image: theme2 },
@@ -74,6 +78,7 @@ export default function BackgroundContainer() {
         className="bg-green text-button text-beige mt-4 h-12 w-[60%] rounded-md"
         onClick={() => {
           setCurrentTheme(shownTheme.name);
+          onSubmit(shownTheme.name);
         }}
       >
         선택

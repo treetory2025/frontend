@@ -1,10 +1,11 @@
 "use client";
 
+import { useState } from "react";
+import { useUserStore } from "@/store/useStore";
+
 import ContentSection from "@/components/commons/ContentSection";
 import PageHeading from "@/components/commons/PageHeading";
-import ContentContainer from "@/components/ui/settings/ContentContainer";
 import Tab from "@/components/commons/Tab";
-import { useState } from "react";
 import BackgroundContainer from "@/components/ui/settings/Theme/BackgroundContainer";
 
 export default function Page() {
@@ -13,6 +14,13 @@ export default function Page() {
     { label: "트리", value: "theme" },
   ];
   const [theme, setTheme] = useState(THEME_TABS[0].value);
+  const user = useUserStore((s) => s.user);
+
+  const [background, setBackground] = useState(user?.background || "고요한 밤");
+  //  api 연결 전 임시 로직
+  const handleBackGroundUpdate = (newTheme: string) => {
+    setBackground(newTheme);
+  };
 
   return (
     <>
@@ -26,9 +34,9 @@ export default function Page() {
               <p className="text-caption md:text-body text-muted-navy">
                 현재 적용된 테마
               </p>
-              <p className="text-navy text-subtitle">테마 이름</p>
+              <p className="text-navy text-subtitle">{background}</p>
             </div>
-            <BackgroundContainer />
+            <BackgroundContainer onSubmit={handleBackGroundUpdate} />
           </>
         )}
       </ContentSection>
