@@ -51,8 +51,8 @@ export default function BackgroundContainer({
         <div
           className={`box-content h-[327px] w-[200px] overflow-hidden rounded-xl border-[5px] ${selectedTheme.name === shownTheme.name ? "border-green" : "border-white"}`}
         >
-          <img
-            src={shownTheme.image.src}
+          <Image
+            src={shownTheme.image}
             className="h-full w-full"
             alt={shownTheme.name}
           />
