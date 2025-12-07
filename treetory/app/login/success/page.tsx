@@ -12,7 +12,7 @@ export default function Page() {
 
   useEffect(() => {
     async function getUser() {
-      const res = await fetch("/api/me", { credentials: "include" });
+      const res = await fetch("/api/members/me", { credentials: "include" });
       //   인증된 사용자 정보 불러오기 실패
       if (!res.ok) {
         router.replace("/login");

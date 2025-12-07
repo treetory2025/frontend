@@ -7,7 +7,7 @@ export async function apiFetch(url: string, options: RequestInit = {}) {
 
   //   access token 만료 -> reissue
   if (res.status === 401) {
-    const refreshed = await fetch(`${BASE_URL}/auth/reissue`, {
+    const refreshed = await fetch(`/api/auth/reissue`, {
       method: "POST",
       credentials: "include",
     });

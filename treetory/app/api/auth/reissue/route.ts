@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function POST() {
-  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-  const res = await fetch(`${BASE_URL}/auth/reissue`, {
+  const res = await fetch(`/api/auth/reissue`, {
     method: "POST",
     credentials: "include",
   });
