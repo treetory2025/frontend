@@ -11,6 +11,7 @@ export async function GET() {
     return NextResponse.json({ error: "UNAUTHORIZED" }, { status: 401 });
   }
 
-  const user = await res.json();
+  const data = await res.json();
+  const user = data.body;
   return NextResponse.json(user);
 }

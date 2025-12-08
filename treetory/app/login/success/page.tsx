@@ -19,7 +19,14 @@ export default function Page() {
       }
 
       const data = await res.json();
+      console.log("User data:", data); // 디버깅용
       setUser(data);
+
+      if (!data.uuid) {
+        console.error("UUID가 없습니다:", data);
+        router.replace("/login");
+        return;
+      }
 
       requestAnimationFrame(() => {
         router.replace(`/tree/${data.uuid}`);
