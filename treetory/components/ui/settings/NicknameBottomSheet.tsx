@@ -61,8 +61,11 @@ export default function NicknameBottomSheet({
     }
 
     const data = await res.json();
-    console.log("닉네임 변경 성공!");
-    setUser({ nickname: data.nickname });
+
+    const payload = data?.body ?? data;
+    console.log("닉네임 변경 성공!", payload);
+    // 기존 user를 보존하며 닉네임만 업데이트
+    setUser({ ...(user ?? {}), nickname: payload.nickname });
     console.log(user);
     onClose();
   };
