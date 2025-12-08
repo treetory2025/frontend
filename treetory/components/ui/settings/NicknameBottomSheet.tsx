@@ -61,12 +61,20 @@ export default function NicknameBottomSheet({
     }
 
     const data = await res.json();
+    const newNickname = data?.body?.nickname ?? nickname;
 
-    const payload = data?.body ?? data;
-    console.log("닉네임 변경 성공!", payload);
-    // 기존 user를 보존하며 닉네임만 업데이트
-    setUser({ ...(user ?? {}), nickname: payload.nickname });
-    console.log(user);
+    // 닉네임 변경 후 최신 사용자 정보 재조회
+    const meRes = await apiFetch(`/api/members/me`, { credentials: "include" });
+    if (meRes.ok) {
+      const meData = await meRes.json();
+      const me = meData?.body ?? meData;
+      setUser(me);
+    } else {
+      // 재조회 실패 시에도 입력한 닉네임으로 로컬 상태 업데이트
+      setUser({ ...(user ?? {}), nickname: newNickname });
+    }
+
+    console.log("닉네임 변경 성공!");
     onClose();
   };
 
