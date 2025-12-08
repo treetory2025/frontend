@@ -4,15 +4,17 @@ import PageHeading from "@/components/commons/PageHeading";
 import ContentSection from "@/components/commons/ContentSection";
 import ContentContainer from "@/components/ui/settings/ContentContainer";
 import { MoveRight, SquarePen, MessageCircleQuestionMark } from "lucide-react";
+
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/useStore";
+
 import { useBottomSheet } from "@/hooks/useBottomSheet";
-import { BottomSheet } from "@/components/commons/BottomSheet";
 import NicknameBottomSheet from "@/components/ui/settings/nicknameBottomSheet";
 
 export default function Page() {
   const router = useRouter();
   const user = useUserStore((s) => s.user);
+  console.log("user: ", user);
 
   // 닉네임 바텀 시트 상태 관리
   const { isOpen, open, close } = useBottomSheet();
@@ -27,7 +29,7 @@ export default function Page() {
             <p className="text-caption md:text-body text-muted-navy">닉네임</p>
             {/* 닉네임 정보 */}
             <div className="text-body bg-muted-bg text-navy rounded-lg px-2 py-4 md:text-lg">
-              {user?.nickname ?? "닉네임"}
+              {user?.nickname}
             </div>
             <div className="flex justify-end">
               <button
@@ -42,7 +44,7 @@ export default function Page() {
             <p className="text-caption md:text-body text-muted-navy">
               가입 계정
             </p>
-            <p className="text-navy text-body md:text-lg">id@email.com</p>
+            <p className="text-navy text-body md:text-lg">{user?.email}</p>
           </div>
         </ContentContainer>
 
@@ -64,7 +66,7 @@ export default function Page() {
                 현재 적용된 배경
               </p>
               <p className="text-navy text-body text-primary md:text-lg">
-                고요한밤
+                {user?.background}
               </p>
             </div>
             <div className="py-1">
@@ -72,7 +74,7 @@ export default function Page() {
                 현재 적용된 트리
               </p>
               <p className="text-navy text-body text-primary md:text-lg">
-                눈 덮인 트리
+                {user?.theme}
               </p>
             </div>
           </div>

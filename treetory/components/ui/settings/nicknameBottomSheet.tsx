@@ -16,6 +16,8 @@ export default function NicknameBottomSheet({
   onClose,
 }: BottomSheetProps) {
   const user = useUserStore((s) => s.user);
+  const setUser = useUserStore.getState().setUser;
+
   const [nickname, setNickname] = useState("");
 
   useEffect(() => {
@@ -58,7 +60,9 @@ export default function NicknameBottomSheet({
     }
 
     const data = await res.json();
-    useUserStore((s) => s.setUser({ nickname: data.nickname }));
+    console.log("닉네임 변경 성공!");
+    setUser({ nickname: data.nickname });
+    console.log(user);
     onClose();
   };
 

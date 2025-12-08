@@ -7,8 +7,7 @@ import style from "@/app/login/login.module.css";
 
 export default function Page() {
   const router = useRouter();
-  const user = useUserStore();
-  const setUser = useUserStore((s) => s.setUser);
+  const setUser = useUserStore.getState().setUser;
 
   useEffect(() => {
     async function getUser() {
@@ -22,7 +21,7 @@ export default function Page() {
       const data = await res.json();
       setUser(data);
       //    임시로 tree/1로 이동
-      router.replace(`/tree/${data.memberId ?? "1"}`);
+      router.replace(`/tree/${data.uuid ?? "1"}`);
     }
 
     getUser();
