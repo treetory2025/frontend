@@ -3,13 +3,15 @@ import { X } from "lucide-react";
 type ButtonProps = {
   onClick: () => void;
   children?: React.ReactNode;
+  disabled?: boolean;
 };
 
-export function ActionButton({ onClick, children }: ButtonProps) {
+export function ActionButton({ onClick, children, disabled }: ButtonProps) {
   return (
     <button
-      className="bg-green text-beige text-button md:text-body flex w-full cursor-pointer items-center justify-center rounded-md py-2 md:py-3"
+      className={`bg-green text-beige text-button md:text-body flex w-full items-center justify-center rounded-md py-2 md:py-3 ${disabled ? "cursor-now-allowed opacity-20" : "cursor-pointer"}`}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </button>
