@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/useStore";
 
 import { useBottomSheet } from "@/hooks/useBottomSheet";
-import NicknameBottomSheet from "@/components/ui/settings/NicknameBottomSheet";
+import NicknameBottomSheet from "@/components/ui/settings/temp";
 import { useEffect, useState } from "react";
 
 export default function Page() {
