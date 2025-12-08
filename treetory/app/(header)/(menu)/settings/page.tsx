@@ -10,24 +10,17 @@ import { useUserStore } from "@/store/useStore";
 
 import { useBottomSheet } from "@/hooks/useBottomSheet";
 import NicknameBottomSheet from "@/components/ui/settings/NicknameBottomSheet";
-import { useEffect, useState } from "react";
 
 export default function Page() {
   const router = useRouter();
   const user = useUserStore((s) => s.user);
-
-  // client hydration
-  const [hydrated, setHydrated] = useState(false);
+  const hasHydrated = useUserStore((s) => s._hasHydrated);
   // 닉네임 바텀 시트 상태 관리
   const { isOpen, open, close } = useBottomSheet();
 
   console.log("user: ", user);
 
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
-
-  if (!hydrated) {
+  if (!hasHydrated) {
     return (
       <>
         <PageHeading title="설정" />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useUserStore } from "@/store/useStore";
 
 import ContentSection from "@/components/commons/ContentSection";
@@ -16,9 +16,17 @@ export default function Page() {
   ];
   const [theme, setTheme] = useState(THEME_TABS[0].value);
   const user = useUserStore((s) => s.user);
+  const hasHydrated = useUserStore((s) => s._hasHydrated);
 
-  const [background, setBackground] = useState(user?.background || "고요한 밤");
-  const [tree, setTree] = useState(user?.theme || "눈 덮인 트리");
+  const [background, setBackground] = useState("고요한 밤");
+  const [tree, setTree] = useState("눈 덮인 트리");
+
+  useEffect(() => {
+    if (hasHydrated && user) {
+      setBackground(user?.background || "고요한 밤");
+      setTree(user?.theme || "눈 덮인 트리");
+    }
+  }, [hasHydrated, user]);
 
   //  api 연결 전 임시 로직
   const handleBackGroundUpdate = (newTheme: string) => {

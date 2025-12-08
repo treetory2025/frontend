@@ -16,15 +16,16 @@ export default function NicknameBottomSheet({
   onClose,
 }: BottomSheetProps) {
   const user = useUserStore((s) => s.user);
+  const hasHydrated = useUserStore((s) => s._hasHydrated);
   const setUser = useUserStore.getState().setUser;
 
   const [nickname, setNickname] = useState("");
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && hasHydrated) {
       setNickname(user?.nickname || "");
     }
-  }, [isOpen, user?.nickname]);
+  }, [isOpen, user?.nickname, hasHydrated]);
 
   const onHandleXButton = () => {
     setNickname(user?.nickname || "");
