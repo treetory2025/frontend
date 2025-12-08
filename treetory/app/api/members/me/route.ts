@@ -20,7 +20,6 @@ export async function GET() {
   }
 
   const data = await res.json();
-  // 백엔드가 { header, body } 형태를 주면 body만 반환, 아니면 전체 반환
-  const user = data.body ?? data;
+  const user = data?.body;
   return NextResponse.json(user);
 }

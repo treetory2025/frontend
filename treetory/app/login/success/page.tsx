@@ -20,10 +20,13 @@ export default function Page() {
 
       const data = await res.json();
       console.log("User data:", data); // 디버깅용
-      const user = data.body;
+      // 라우트가 body를 평탄화했으면 data에 바로, 그렇지 않으면 data.body
+      const user = data?.body ?? data;
       setUser(user);
+      console.log("User Check:", user);
+      console.log("User UUID Check:", user.uuid);
 
-      if (!user.uuid) {
+      if (!user?.uuid) {
         console.error("UUID가 없습니다:", user);
         router.replace("/login");
         return;
