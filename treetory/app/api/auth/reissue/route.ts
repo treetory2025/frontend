@@ -1,7 +1,16 @@
 import { NextResponse } from "next/server";
 
 export async function POST() {
-  const res = await fetch(`/api/auth/reissue`, {
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+  if (!BASE_URL) {
+    return NextResponse.json(
+      { error: "API_URL_NOT_CONFIGURED" },
+      { status: 500 },
+    );
+  }
+
+  const res = await fetch(`${BASE_URL}/api/auth/reissue`, {
     method: "POST",
     credentials: "include",
   });
@@ -11,5 +20,6 @@ export async function POST() {
   }
 
   const data = await res.json();
-  return NextResponse.json(data);
+  const payload = data.body ?? data;
+  return NextResponse.json(payload);
 }
