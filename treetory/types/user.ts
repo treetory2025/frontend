@@ -1,5 +1,5 @@
 export type User = {
-  memberId?: string; // 임시로 옵셔널 설정
+  uuid?: string;
   nickname?: string;
   email?: string;
   theme?: string;
