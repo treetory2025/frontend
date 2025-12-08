@@ -15,7 +15,7 @@ export async function apiFetch(url: string, options: RequestInit = {}) {
     if (!refreshed.ok) {
       // 로그인 만료
       window.location.href = "/login";
-      return;
+      throw new Error("Unauthorized"); // undefined 방지
     }
 
     // access token 갱신 후 재요청

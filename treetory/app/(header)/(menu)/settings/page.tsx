@@ -1,23 +1,39 @@
+"use client";
+
 import PageHeading from "@/components/commons/PageHeading";
 import ContentSection from "@/components/commons/ContentSection";
 import ContentContainer from "@/components/ui/settings/ContentContainer";
 import { MoveRight, SquarePen, MessageCircleQuestionMark } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "@/store/useStore";
+import { useBottomSheet } from "@/hooks/useBottomSheet";
+import { BottomSheet } from "@/components/commons/BottomSheet";
+import NicknameBottomSheet from "@/components/ui/settings/nicknameBottomSheet";
 
 export default function Page() {
+  const router = useRouter();
+  const user = useUserStore((s) => s.user);
+
+  // 닉네임 바텀 시트 상태 관리
+  const { isOpen, open, close } = useBottomSheet();
+
   return (
     <>
       <PageHeading title="설정" />
-      <ContentSection className="space-y-4 md:space-y-6">
+      <ContentSection className="relative space-y-4 md:space-y-6">
         <ContentContainer>
           <p className="text-subtitle text-primary pb-3">내 정보</p>
           <div className="flex flex-col gap-3 px-2 py-1">
             <p className="text-caption md:text-body text-muted-navy">닉네임</p>
             {/* 닉네임 정보 */}
-            <div className="text-body bg-muted-bg text-navy rounded-lg px-2 py-3 md:text-lg">
-              닉네임표시
+            <div className="text-body bg-muted-bg text-navy rounded-lg px-2 py-4 md:text-lg">
+              {user?.nickname ?? "닉네임"}
             </div>
             <div className="flex justify-end">
-              <button className="bg-muted-navy text-beige text-button flex cursor-pointer items-center gap-2 rounded-sm px-4 py-2">
+              <button
+                className="bg-muted-navy text-beige text-button flex cursor-pointer items-center gap-2 rounded-sm px-4 py-2"
+                onClick={open}
+              >
                 변경하기
                 <SquarePen size={16} className="inline-block" />
               </button>
@@ -33,7 +49,12 @@ export default function Page() {
         <ContentContainer>
           <div className="flex w-full items-center justify-between pb-3">
             <h3 className="text-subtitle text-primary">테마 정보</h3>
-            <button className="cursor-pointer">
+            <button
+              className="cursor-pointer"
+              onClick={() => {
+                router.push("/settings/theme");
+              }}
+            >
               <MoveRight size={24} className="text-muted-navy" />
             </button>
           </div>
@@ -78,6 +99,11 @@ export default function Page() {
           </button>
         </ContentContainer>
       </ContentSection>
+
+      {/* 닉네임 변경 바텀 시트 */}
+      <NicknameBottomSheet isOpen={isOpen} onClose={close}>
+        테스트용
+      </NicknameBottomSheet>
     </>
   );
 }
