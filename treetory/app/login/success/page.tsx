@@ -20,8 +20,10 @@ export default function Page() {
 
       const data = await res.json();
       setUser(data);
-      //    임시로 tree/1로 이동
-      router.replace(`/tree/${data.uuid ?? "1"}`);
+
+      requestAnimationFrame(() => {
+        router.replace(`/tree/${data.uuid}`);
+      });
     }
 
     getUser();
