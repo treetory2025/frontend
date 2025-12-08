@@ -9,15 +9,31 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/useStore";
 
 import { useBottomSheet } from "@/hooks/useBottomSheet";
-import NicknameBottomSheet from "@/components/ui/settings/nicknameBottomSheet";
+import NicknameBottomSheet from "@/components/ui/settings/NicknameBottomSheet";
+import { useEffect, useState } from "react";
 
 export default function Page() {
   const router = useRouter();
   const user = useUserStore((s) => s.user);
-  console.log("user: ", user);
 
+  // client hydration
+  const [hydrated, setHydrated] = useState(false);
   // 닉네임 바텀 시트 상태 관리
   const { isOpen, open, close } = useBottomSheet();
+
+  console.log("user: ", user);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return (
+      <>
+        <PageHeading title="설정" />
+      </>
+    ); // 또는 로딩 UI
+  }
 
   return (
     <>
@@ -103,9 +119,7 @@ export default function Page() {
       </ContentSection>
 
       {/* 닉네임 변경 바텀 시트 */}
-      <NicknameBottomSheet isOpen={isOpen} onClose={close}>
-        테스트용
-      </NicknameBottomSheet>
+      <NicknameBottomSheet isOpen={isOpen} onClose={close} />
     </>
   );
 }
