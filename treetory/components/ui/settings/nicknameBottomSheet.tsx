@@ -45,7 +45,7 @@ export default function NicknameBottomSheet({
   const onChangeNickname = async () => {
     if (isDisabled) return;
 
-    const res = await apiFetch(`/api/members/nickname`, {
+    const res = await apiFetch(`/api/members/nicknames`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
