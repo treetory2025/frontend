@@ -20,16 +20,17 @@ export default function Page() {
 
       const data = await res.json();
       console.log("User data:", data); // 디버깅용
-      setUser(data);
+      const user = data.body;
+      setUser(user);
 
-      if (!data.uuid) {
-        console.error("UUID가 없습니다:", data);
+      if (!user.uuid) {
+        console.error("UUID가 없습니다:", user);
         router.replace("/login");
         return;
       }
 
       requestAnimationFrame(() => {
-        router.replace(`/tree/${data.uuid}`);
+        router.replace(`/tree/${user.uuid}`);
       });
     }
 
