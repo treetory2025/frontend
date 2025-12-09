@@ -13,8 +13,9 @@ export function DefaultTree({
   containerWidth,
   containerHeight,
 }: TreeLayerProps) {
-  const [treeImg] = useImage("/images/main/snow-tree-defualt.png");
+  const [treeImg] = useImage("/images/main/snow-tree-default.png");
   const [stumpImg] = useImage("/images/main/stump.png");
+  const [testImg] = useImage("/images/main/snow-tree-1.png");
 
   if (!treeImg || !stumpImg) return null;
 
@@ -41,6 +42,13 @@ export function DefaultTree({
     <Group x={x} y={y}>
       <KonvaImage
         image={stumpImg}
+        scale={{ x: scale, y: scale }}
+        x={(treeW - stumpW) / 2}
+        y={treeH}
+        offsetY={26}
+      />
+      <KonvaImage
+        image={testImg}
         scale={{ x: scale, y: scale }}
         x={(treeW - stumpW) / 2}
         y={treeH}
