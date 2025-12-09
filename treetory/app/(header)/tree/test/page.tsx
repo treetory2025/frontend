@@ -1,9 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
-import { Stage, Layer } from "react-konva";
+import { Stage, Layer, Group } from "react-konva";
 import { Tree } from "@/components/tree/Tree";
+import bottomImg from "@/public/images/main/snow-bottom.png";
 import { BottomLayer } from "@/components/tree/TreeLayer";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 type TreeType = "default" | "tree1" | "tree2";
 
@@ -21,7 +24,7 @@ export default function TreeScaleTest() {
   // 트리 리스트
 
   const [trees, setTrees] = useState<TreeItem[]>([
-    { type: "default", scale: 1, offset: 0 },
+    { type: "default", scale: 1.25, offset: 0 },
   ]);
   useEffect(() => {
     function updateSize() {
@@ -42,13 +45,27 @@ export default function TreeScaleTest() {
     };
   }, []);
 
+  const lastTree = trees[trees.length - 1];
+  const calculateDynamicHeight = () => {
+    const positions = trees.map((t) => {
+      const treeBaseHeight = 349; // 원본 트리 높이
+      const h = treeBaseHeight * t.scale;
+      return t.offset + h;
+    });
+
+    const maxTreeBottom = Math.max(...positions, 0);
+
+    return Math.max(size.height, maxTreeBottom + 150); // padding
+  };
+
+  const dynamicHeight = calculateDynamicHeight();
+
   // 트리 추가 버튼
   const addTree = () => {
     setTrees((prev) => {
       const last = prev[prev.length - 1];
       const nextScale = last.scale * 1.25;
-
-      const nextOffset = last.offset + 72;
+      const nextOffset = last.offset + 120;
 
       const nextType = prev.length % 2 === 1 ? "tree1" : "tree2";
 
@@ -60,33 +77,46 @@ export default function TreeScaleTest() {
   };
 
   return (
-    <div ref={containerRef} className="relative h-full w-full">
+    <div
+      ref={containerRef}
+      className="no-scrollbar relative w-full overflow-y-scroll"
+      style={{ height: "100dvh" }}
+    >
       <button
         onClick={addTree}
-        className="absolute right-4 bottom-4 z-50 rounded-lg bg-white px-4 py-2 shadow"
+        className="absolute right-0 bottom-0 z-50 rounded-lg bg-white px-4 py-2 shadow"
       >
         트리 추가
       </button>
-
-      <Stage width={size.width} height={size.height}>
-        <Layer>
-          {trees.map((t, i) => (
-            <Tree
-              key={i}
+      <div
+        style={{
+          width: size.width,
+          height: dynamicHeight,
+          zIndex: 1,
+        }}
+      >
+        <Stage width={size.width} height={dynamicHeight}>
+          <Layer>
+            <Group y={-40 - lastTree.offset * 0.5}>
+              {[...trees].reverse().map((t, i) => (
+                <Tree
+                  key={i}
+                  containerWidth={size.width}
+                  containerHeight={dynamicHeight}
+                  type={t.type}
+                  scale={t.scale}
+                  offsetY={t.offset}
+                />
+              ))}
+            </Group>
+          {/* 스텀프 위치  */}
+            <BottomLayer
               containerWidth={size.width}
-              containerHeight={size.height}
-              type={t.type}
-              scale={t.scale}
-              offsetY={t.offset}
+              containerHeight={dynamicHeight}
             />
-          ))}
-
-          <BottomLayer
-            containerWidth={size.width}
-            containerHeight={size.height}
-          />
-        </Layer>
-      </Stage>
+          </Layer>
+        </Stage>
+      </div>
     </div>
   );
 }

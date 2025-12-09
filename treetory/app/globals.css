@@ -141,3 +141,12 @@ body > .app-container {
     padding-top: 48px;
   }
 }
+
+/* scroll bar UI 삭제 클래스 */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

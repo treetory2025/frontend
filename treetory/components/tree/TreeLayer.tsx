@@ -67,21 +67,24 @@ export function BottomLayer({
 
   if (!bottomImage) return null;
 
-  const targetWidth = containerWidth;
-
-  const scale = targetWidth / bottomImage.width;
+  // 바닥 스케일 계산
+  const scale = containerWidth / bottomImage.width;
 
   const bottomH =
     containerHeight <= 720
-      ? bottomImage.height * scale * 0.6
+      ? bottomImage.height * scale * 0.7
       : bottomImage.height * scale;
 
+  const bottomY = containerHeight - bottomH;
+
   return (
-    <KonvaImage
-      image={bottomImage}
-      scale={{ x: scale, y: scale }}
-      x={0}
-      y={containerHeight - bottomH}
-    />
+    <>
+      <KonvaImage
+        image={bottomImage}
+        scale={{ x: scale, y: scale }}
+        x={0}
+        y={bottomY}
+      />
+    </>
   );
 }
