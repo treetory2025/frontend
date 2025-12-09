@@ -18,12 +18,12 @@ export function DefaultTree({
 
   if (!treeImg || !stumpImg) return null;
 
-  const widthRatio = containerHeight <= 720 ? 0.75 : 0.9;
+  const widthRatio = containerHeight <= 720 ? 0.65 : 0.9;
 
   const targetWidth = containerWidth * widthRatio;
   const scale = targetWidth / treeImg.width;
 
-  const overlap = 26;
+  const overlap = 20;
 
   const treeW = treeImg.width * scale;
   const treeH = treeImg.height * scale;
