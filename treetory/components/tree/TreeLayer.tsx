@@ -18,13 +18,12 @@ export function DefaultTree({
 
   if (!treeImg || !stumpImg) return null;
 
-  const widthRatio = 0.9;
+  const widthRatio = containerHeight <= 720 ? 0.75 : 0.9;
 
   const targetWidth = containerWidth * widthRatio;
   const scale = targetWidth / treeImg.width;
 
-  const overlap = 26; // 트리 PNG 하단 기준 픽셀 단위 최소 겹침 값
-  //   const overlap = minOverlap * scale;
+  const overlap = 26;
 
   const treeW = treeImg.width * scale;
   const treeH = treeImg.height * scale;
@@ -35,7 +34,6 @@ export function DefaultTree({
   // ⬇ Group 전체 높이
   const totalHeight = treeH + stumpH;
 
-  //
   const x = (containerWidth - treeW) / 2;
   const y = containerHeight - totalHeight + overlap;
 
@@ -50,5 +48,32 @@ export function DefaultTree({
       />
       <KonvaImage image={treeImg} scale={{ x: scale, y: scale }} />
     </Group>
+  );
+}
+
+export function BottomLayer({
+  containerWidth,
+  containerHeight,
+}: TreeLayerProps) {
+  const [bottomImage] = useImage("/images/main/snow-bottom.png");
+
+  if (!bottomImage) return null;
+
+  const targetWidth = containerWidth;
+
+  const scale = targetWidth / bottomImage.width;
+
+  const bottomH =
+    containerHeight <= 720
+      ? bottomImage.height * scale * 0.6
+      : bottomImage.height * scale;
+
+  return (
+    <KonvaImage
+      image={bottomImage}
+      scale={{ x: scale, y: scale }}
+      x={0}
+      y={containerHeight - bottomH}
+    />
   );
 }
