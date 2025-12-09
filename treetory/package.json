@@ -9,11 +9,14 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "konva": "^10.0.12",
     "lucide-react": "^0.555.0",
     "motion": "^12.23.25",
     "next": "^16.0.7",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "react-konva": "^19.2.1",
+    "use-image": "^1.1.4",
     "zustand": "^5.0.9"
   },
   "devDependencies": {
