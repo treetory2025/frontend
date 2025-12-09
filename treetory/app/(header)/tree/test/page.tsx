@@ -1,10 +1,10 @@
 "use client";
 
-import { DefaultTree } from "@/components/tree/TreeLayer";
-import { h1 } from "motion/react-client";
+import { BottomLayer, DefaultTree } from "@/components/tree/TreeLayer";
 import { useState, useRef, useEffect } from "react";
 import { Stage, Layer, Group, Rect, Image as KonvaImage } from "react-konva";
 import useImage from "use-image";
+import style from "@/app/(header)/tree/test/test.module.css";
 
 // const BASE_WIDTH = 440;
 // const BASE_HEIGHT = 370;
@@ -14,29 +14,43 @@ export default function TreeScaleTest() {
   const containerRef = useRef<HTMLDivElement>(null);
   // 트리 layer 사이즈
   const [size, setSize] = useState({ width: 0, height: 0 });
+  const [bottomImage] = useImage("/images/main/snow-bottom.png");
 
   useEffect(() => {
-    if (!containerRef.current) return;
-
-    const resizeObserver = new ResizeObserver(() => {
-      const { clientWidth, clientHeight } = containerRef.current!;
+    function updateSize() {
+      if (!containerRef.current) return;
+      const { clientWidth, clientHeight } = containerRef.current;
       setSize({ width: clientWidth, height: clientHeight });
-    });
+    }
 
-    resizeObserver.observe(containerRef.current);
+    updateSize();
 
-    return () => resizeObserver.disconnect();
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(el);
+
+    window.addEventListener("resize", updateSize);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateSize);
+    };
   }, []);
 
   return (
     <div ref={containerRef} className="h-full w-full">
-      {/* dom 인식 전 */}
-      {!size.width && <h1 className="text-title text-beige text-center"></h1>}
-
+      {!size.width && <div></div>}
       <Stage width={size.width} height={size.height}>
-        {/* 트리 렌더 */}
         <Layer>
-          <DefaultTree
+          <Group offsetY={size.height > 720 ? 60 : 20}>
+            <DefaultTree
+              containerWidth={size.width}
+              containerHeight={size.height}
+            />
+          </Group>
+          <BottomLayer
             containerWidth={size.width}
             containerHeight={size.height}
           />
