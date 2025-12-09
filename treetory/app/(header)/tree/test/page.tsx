@@ -1,12 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { Stage, Layer, Group } from "react-konva";
 import { Tree } from "@/components/tree/Tree";
-import bottomImg from "@/public/images/main/snow-bottom.png";
 import { BottomLayer } from "@/components/tree/TreeLayer";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 type TreeType = "default" | "tree1" | "tree2";
 
@@ -109,7 +106,7 @@ export default function TreeScaleTest() {
                 />
               ))}
             </Group>
-          {/* 스텀프 위치  */}
+            {/* 스텀프 위치  */}
             <BottomLayer
               containerWidth={size.width}
               containerHeight={dynamicHeight}
