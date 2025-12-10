@@ -4,31 +4,23 @@ import { useState, useRef, useEffect } from "react";
 
 import { textUser } from "@/app/mock/userInfoMock";
 import { useParams } from "next/navigation";
-import { Owner } from "@/types/user";
 import { Group, Layer, Stage } from "react-konva";
 import { Tree } from "@/components/tree/Tree";
-
-type TreeType = "default" | "add1" | "tree2";
-
-interface TreeItem {
-  theme?: string;
-  type: TreeType;
-  scale: number;
-  offset: number;
-  isEnd: boolean;
-}
+import { BottomLayer } from "@/components/tree/TreeLayer";
+import { TreeItem } from "@/types/tree";
+import { useOwnerStore } from "@/store/userStore";
 
 export default function Page() {
   // uuid 가져오기
   const params = useParams();
   const uuid = params.uuid;
 
+  const { owner, setOwner, _hasHydrated } = useOwnerStore();
+
   // 전체 사이즈 규격 초기화
   const containerRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
 
-  // 사이트 소유자 초기화
-  const [owner, setOwner] = useState<Owner | null>(null);
   // 트리 리스트 초기화
   const [trees, setTrees] = useState<TreeItem[]>([]);
 
@@ -40,22 +32,25 @@ export default function Page() {
 
       if (!res.ok) {
         console.log("목업 사용하기");
-        setOwner(textUser.body);
-        console.log(textUser.body);
+        setOwner(textUser.body); // store에 저장
         return;
       }
+
       const data = await res.json();
       console.log("트리조회성공: ", data);
+
+      setOwner(data.body); // 실제 owner 저장소 반영
     }
 
     getOwner();
-  }, [uuid]);
+  }, [uuid, setOwner]);
 
   useEffect(() => {
     if (!owner) return; // owner가 없으면 실행 X
 
     const defaultTree: TreeItem = {
       theme: owner.treeTheme,
+      background: owner.treeBackground,
       type: "default",
       scale: 1.25,
       offset: 0,
@@ -78,7 +73,7 @@ export default function Page() {
         const last = newTrees[newTrees.length - 1];
 
         const nextScale = last.scale * 1.25;
-        const nextOffset = last.offset + 120;
+        const nextOffset = last.offset;
         const nextType = newTrees.length % 2 === 1 ? "add1" : "tree2";
 
         newTrees.push({
@@ -156,6 +151,11 @@ export default function Page() {
     });
   };
 
+  const stageOffsetY =
+    dynamicHeight > 600 && size.width > 540
+      ? -dynamicHeight * 0.2
+      : -dynamicHeight * 0.3;
+
   return (
     <div
       ref={containerRef}
@@ -169,17 +169,9 @@ export default function Page() {
         트리 추가
       </button>
       <div style={{ width: size.width, height: dynamicHeight, zIndex: 1 }}>
-        <Stage
-          width={size.width}
-          height={dynamicHeight}
-          offsetY={
-            dynamicHeight > 600 && size.width > 540
-              ? -dynamicHeight * 0.2
-              : -dynamicHeight * 0.3
-          }
-        >
-          <Layer>
-            <Group draggable={true}>
+        <Stage width={size.width} height={dynamicHeight} offsetY={stageOffsetY}>
+          <Layer draggable={true}>
+            <Group>
               {[...trees].reverse().map((t, i) => (
                 <Tree
                   key={i}
@@ -189,9 +181,18 @@ export default function Page() {
                   isEnd={i === 0}
                   offset={t.offset}
                   theme={t.theme ? t.theme : ""}
+                  background={t.background ? t.background : ""}
                   type={t.type}
                 />
               ))}
+
+              <BottomLayer
+                containerWidth={size.width}
+                containerHeight={dynamicHeight}
+                scale={1}
+                theme={owner?.treeBackground}
+                stageOffsetY={stageOffsetY}
+              />
             </Group>
           </Layer>
         </Stage>

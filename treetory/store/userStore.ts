@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { User } from "@/types/user";
+import type { User, Owner } from "@/types/user";
 import { persist } from "zustand/middleware";
 
 interface UserState {
@@ -25,6 +25,35 @@ export const useUserStore = create<UserState>()(
     }),
     {
       name: "user-storage", // localStorage key
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
+    },
+  ),
+);
+
+interface OwnerState {
+  owner: Owner | null;
+  setOwner: (owner: Owner | null) => void;
+  clearOwner: () => void;
+  _hasHydrated: boolean;
+  setHasHydrated: (state: boolean) => void;
+}
+export const useOwnerStore = create<OwnerState>()(
+  persist(
+    (set) => ({
+      owner: null,
+      setOwner: (owner) => set({ owner }),
+      clearOwner: () => set({ owner: null }),
+      _hasHydrated: false,
+      setHasHydrated: (state) => {
+        set({
+          _hasHydrated: state,
+        });
+      },
+    }),
+    {
+      name: "owner-storage", // localStorage key
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
       },
