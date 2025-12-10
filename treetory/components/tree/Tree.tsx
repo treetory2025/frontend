@@ -11,6 +11,7 @@ interface Props {
   offset: number;
   isEnd: boolean;
   theme: string;
+  background: string;
   type: TreeType;
 }
 
@@ -21,6 +22,7 @@ export function Tree({
   isEnd,
   offset,
   theme,
+  background,
   type,
 }: Props) {
   const imgMap = {
@@ -45,6 +47,7 @@ export function Tree({
   if (!treeImg) return null;
 
   const treeW = treeImg.width * scale;
+  const treeH = treeImg.height * scale;
 
   // 가로 중앙 정렬
   const x = (containerWidth - treeW) / 2;
