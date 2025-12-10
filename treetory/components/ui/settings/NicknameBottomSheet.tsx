@@ -7,7 +7,7 @@ import {
   CancleButton,
   XButton,
 } from "@/components/commons/Button";
-import { useUserStore } from "@/store/useStore";
+import { useUserStore } from "@/store/userStore";
 import { useEffect, useMemo, useState } from "react";
 import { apiFetch } from "@/lib/api";
 

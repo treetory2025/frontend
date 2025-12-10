@@ -1,6 +1,6 @@
 "use client";
 
-import { useUserStore } from "@/store/useStore";
+import { useUserStore } from "@/store/userStore";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import style from "@/app/login/login.module.css";

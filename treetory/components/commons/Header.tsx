@@ -19,7 +19,7 @@ export default function Header() {
   });
 
   return (
-    <div className="flex w-full items-center justify-between px-5">
+    <div className="flex w-full items-center justify-between px-5 pt-6 md:pt-12">
       <div className="flex items-center justify-between gap-3">
         {/* 메뉴 버튼 */}
         <div className="relative" ref={menuRef}>

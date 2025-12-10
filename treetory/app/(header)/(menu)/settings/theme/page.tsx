@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useUserStore } from "@/store/useStore";
+import { useUserStore } from "@/store/userStore";
 
 import ContentSection from "@/components/commons/ContentSection";
 import PageHeading from "@/components/commons/PageHeading";

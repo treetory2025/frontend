@@ -6,7 +6,7 @@ import ContentContainer from "@/components/ui/settings/ContentContainer";
 import { MoveRight, SquarePen, MessageCircleQuestionMark } from "lucide-react";
 
 import { useRouter } from "next/navigation";
-import { useUserStore } from "@/store/useStore";
+import { useUserStore } from "@/store/userStore";
 
 import { useBottomSheet } from "@/hooks/useBottomSheet";
 import NicknameBottomSheet from "@/components/ui/settings/NicknameBottomSheet";
