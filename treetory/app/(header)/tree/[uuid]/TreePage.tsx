@@ -4,7 +4,7 @@ import { Owner } from "@/types/user";
 import { useEffect, useState, useRef } from "react";
 import { Layer, Stage } from "react-konva";
 import { Tree } from "@/components/tree/Tree";
-import { useOwner } from "./tree-context";
+import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
 interface TreePageProps {
   owner: Owner;
 }
