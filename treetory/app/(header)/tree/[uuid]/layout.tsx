@@ -16,7 +16,7 @@ export default async function Layout({
 
   return (
     <OwnerProvider value={owner}>
-      <div className="flex h-full w-full flex-col justify-between">
+      <div className="flex h-full w-full flex-col justify-between px-5">
         <TreeHeader />
         {children}
       </div>
