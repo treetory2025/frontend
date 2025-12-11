@@ -60,14 +60,17 @@ export default function TreePage() {
           zIndex: 1,
         }}
       >
-        <Stage width={size.width} height={Math.max(size.height, treeHeight)}>
+        <Stage
+          width={size.width}
+          height={Math.max(size.height, treeHeight + 120)}
+        >
           <Layer draggable={true}>
             <Tree
               containerWidth={size.width}
               containerHeight={size.height}
               scale={1.0}
               theme={owner.treeTheme}
-              size={treeSize}
+              size={owner.treeSize}
               onLoad={(h: number) => setTreeHeight(h)}
             />
           </Layer>

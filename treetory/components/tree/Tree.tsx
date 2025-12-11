@@ -43,19 +43,20 @@ export function Tree({
   } else if (size === 8 || size === 10) {
     diff = 8;
   }
+  let y = 0;
+
+  if (containerHeight <= 455) {
+    y = containerHeight * 0.05;
+  } else if (containerWidth >= 540 && containerHeight <= 720) {
+    y = containerHeight * 0.1;
+  } else {
+    y = containerHeight * 0.2;
+  }
+
   // 가로 중앙 정렬
   const x = (containerWidth - treeW) / 2 - diff * scale;
   return (
-    <Group
-      x={x}
-      y={
-        containerHeight <= 455
-          ? containerHeight * 0.05
-          : containerWidth >= 540 && containerHeight <= 720
-            ? containerHeight * 0.1
-            : containerHeight * 0.2
-      }
-    >
+    <Group x={x} y={y}>
       <KonvaImage image={treeImg} scale={{ x: scale, y: scale }} />
     </Group>
   );
