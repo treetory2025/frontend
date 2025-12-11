@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { Group, Image as KonvaImage } from "react-konva";
 import useImage from "use-image";
 
-type TreeType = "default" | "add1" | "tree2";
 interface Props {
   containerWidth: number;
   scale: number;
@@ -31,7 +30,7 @@ export function Tree({ containerWidth, scale, theme, size, onLoad }: Props) {
   const treeW = treeImg.width * scale;
   let diff = 0;
 
-  if (!size) {
+  if (theme !== "SNOWY" || !size) {
     diff = 0;
   } else if (size === 8 || size === 10) {
     diff = 8;
