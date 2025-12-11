@@ -16,7 +16,7 @@ export default function AddTreeButton({ uuid }: { uuid: string }) {
 
   const increaseTreeSize = async () => {
     try {
-      const res = await apiFetch(`/api/trees/size`, {
+      const res = await apiFetch(`/trees/size`, {
         method: "PATCH",
         credentials: "include",
       });

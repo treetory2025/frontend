@@ -3,14 +3,15 @@ import { textUser } from "@/app/mock/userInfoMock";
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function apiFetch(url: string, options: RequestInit = {}) {
-  let res = await fetch(url, {
+  const apiUrl = `${BASE_URL}` + url;
+  let res = await fetch(apiUrl, {
     ...options,
     credentials: "include",
   });
 
   //   access token 만료 -> reissue
   if (res.status === 401) {
-    const refreshed = await fetch(`/api/auth/reissue`, {
+    const refreshed = await fetch(`${BASE_URL}/auth/reissue`, {
       method: "POST",
       credentials: "include",
     });
@@ -22,7 +23,7 @@ export async function apiFetch(url: string, options: RequestInit = {}) {
     }
 
     // access token 갱신 후 재요청
-    res = await fetch(url, {
+    res = await fetch(apiUrl, {
       ...options,
       credentials: "include",
     });
