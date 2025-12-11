@@ -6,12 +6,11 @@ import { useParams, useRouter } from "next/navigation";
 import AddTreeButton from "./Button";
 
 export default function TreeHeader() {
-  const { owner, refreshOwner } = useOwner();
+  const { owner, refreshOwner, uuid } = useOwner();
   const user = useUserStore().user;
 
   const router = useRouter();
   const params = useParams();
-  const uuid = params.uuid as string;
 
   const isOwner = user?.uuid === uuid;
 
