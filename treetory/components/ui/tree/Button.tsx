@@ -35,6 +35,7 @@ export default function AddTreeButton() {
           break;
         default:
           alert("트리 사이즈 변경 중 알 수 없는 오류가 발생했습니다.");
+          console.log("트리 사이즈 변경 실패 ", res);
       }
     } catch (error) {
       console.error("트리 사이즈 변경 중 네트워크 에러", error);
