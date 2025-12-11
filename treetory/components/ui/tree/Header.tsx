@@ -10,7 +10,6 @@ export default function TreeHeader() {
   const user = useUserStore().user;
 
   const router = useRouter();
-  const params = useParams();
 
   const isOwner = user?.uuid === uuid;
 
@@ -25,7 +24,7 @@ export default function TreeHeader() {
             {owner.nickname}님의 <span className="text-green">트리토리</span>
           </h1>
         </div>
-        {isOwner && <AddTreeButton uuid={uuid} />}
+        {isOwner && <AddTreeButton />}
       </div>
 
       <div className="bg-skyblue/20 text-beige text-caption flex w-full items-center justify-between rounded-md px-6 py-1.5">
@@ -42,7 +41,7 @@ export default function TreeHeader() {
           </button>
           <button
             className="bg-muted-navy text-beige cursor-pointer rounded-full p-2"
-            onClick={() => refreshOwner(uuid)}
+            onClick={() => refreshOwner}
           >
             <RotateCw size={20} strokeWidth={3} />
           </button>

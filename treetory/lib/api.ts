@@ -2,16 +2,17 @@ import { textUser } from "@/app/mock/userInfoMock";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
+// client 패치
 export async function apiFetch(url: string, options: RequestInit = {}) {
-  const apiUrl = `${BASE_URL}` + url;
-  let res = await fetch(apiUrl, {
+  console.log("api fetch urL", url);
+  let res = await fetch(url, {
     ...options,
     credentials: "include",
   });
 
   //   access token 만료 -> reissue
   if (res.status === 401) {
-    const refreshed = await fetch(`${BASE_URL}/auth/reissue`, {
+    const refreshed = await fetch(`/api/auth/reissue`, {
       method: "POST",
       credentials: "include",
     });
@@ -23,7 +24,7 @@ export async function apiFetch(url: string, options: RequestInit = {}) {
     }
 
     // access token 갱신 후 재요청
-    res = await fetch(apiUrl, {
+    res = await fetch(url, {
       ...options,
       credentials: "include",
     });
@@ -32,7 +33,7 @@ export async function apiFetch(url: string, options: RequestInit = {}) {
   return res;
 }
 
-// 트리 소유자 트리 정보 조회
+// 트리 소유자 트리 정보 조회 (최초 - 서버)
 export async function getTreeOwner(uuid: string) {
   try {
     const res = await fetch(`${BASE_URL}/trees/${uuid}`, {

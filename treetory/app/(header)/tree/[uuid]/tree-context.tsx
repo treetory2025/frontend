@@ -23,9 +23,25 @@ export function OwnerProvider({
 }) {
   const [owner, setOwner] = useState<Owner>(initialOwner);
 
-  async function refreshOwner(uuid: string) {
-    const newOwner = await getTreeOwner(uuid);
-    setOwner(newOwner);
+  async function refreshOwner() {
+    try {
+      const res = await fetch(`/api/trees/${uuid}`, {
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        console.log("갱싱 실패", res);
+        return;
+      }
+
+      const data = await res.json();
+      const newOwner = data?.body;
+      setOwner(newOwner);
+
+      return;
+    } catch (error: any) {
+      throw new Error(error);
+    }
   }
 
   return (

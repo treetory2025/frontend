@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
 import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
 
-export default function AddTreeButton({ uuid }: { uuid: string }) {
+export default function AddTreeButton() {
   const [showTooltip, setShowTooltip] = useState(true); // tooltip 시작 시 보임
   const [fade, setFade] = useState(false); // opacity 컨트롤
-  const { owner, refreshOwner } = useOwner();
+  const { owner, refreshOwner, uuid } = useOwner();
 
   // mount 후 1초 뒤 페이드아웃
   useEffect(() => {
@@ -16,7 +16,7 @@ export default function AddTreeButton({ uuid }: { uuid: string }) {
 
   const increaseTreeSize = async () => {
     try {
-      const res = await apiFetch(`/trees/size`, {
+      const res = await apiFetch(`/api/trees/size`, {
         method: "PATCH",
         credentials: "include",
       });
