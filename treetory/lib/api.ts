@@ -34,7 +34,7 @@ export async function apiFetch(url: string, options: RequestInit = {}) {
 // 트리 소유자 트리 정보 조회
 export async function getTreeOwner(uuid: string) {
   try {
-    const res = await fetch(`/api/trees/${uuid}`, {
+    const res = await fetch(`${BASE_URL}/trees/${uuid}`, {
       credentials: "include",
     });
 
