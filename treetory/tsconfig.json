@@ -32,7 +32,7 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts",
-    "app/(header)/tree/[uuid]/ornaments"
+    "app/(header)/(menu)/tree/[uuid]/ornaments"
   ],
   "exclude": ["node_modules"]
 }

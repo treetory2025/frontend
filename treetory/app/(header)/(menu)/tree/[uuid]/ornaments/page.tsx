@@ -1,9 +1,9 @@
-import PageHeading from "@/components/ui/tree/PageHeading";
+import PageHeading from "@/components/commons/PageHeading";
 
 export default function Page() {
   return (
     <div>
-      <PageHeading />
+      <PageHeading title="장식하기" />
     </div>
   );
 }

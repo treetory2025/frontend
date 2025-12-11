@@ -28,7 +28,7 @@ export default function TreeHeader() {
         <div className="flex items-center gap-3 md:gap-4">
           <button
             className="bg-beige text-muted-navy cursor-pointer rounded-2xl p-2"
-            onClick={() => router.push(`/tree/${uuid}/ornaments`)}
+            onClick={() => router.push(`/tree/${uuid}/my-ornaments`)}
           >
             <List size={20} strokeWidth={3} />
           </button>
