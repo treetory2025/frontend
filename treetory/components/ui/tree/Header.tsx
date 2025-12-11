@@ -26,7 +26,7 @@ export default function TreeHeader() {
             {owner.nickname}님의 <span className="text-green">트리토리</span>
           </h1>
         </div>
-        {!isOwner && <AddTreeButton uuid={uuid} />}
+        {isOwner && <AddTreeButton uuid={uuid} />}
       </div>
 
       <div className="bg-skyblue/20 text-beige text-caption flex w-full items-center justify-between rounded-md px-6 py-1.5">
