@@ -4,7 +4,7 @@ export const textUser = {
   },
   body: {
     nickname: "정진영",
-    treeSize: 1,
+    treeSize: 3,
     treeTheme: "NORMAL",
     treeBackground: "SILENT_NIGHT",
     ornamentsRes: [],
