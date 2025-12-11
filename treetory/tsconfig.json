@@ -31,7 +31,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    "app/(header)/(menu)/tree/[uuid]/ornaments"
   ],
   "exclude": ["node_modules"]
 }
