@@ -47,35 +47,43 @@ export default function NicknameBottomSheet({
   // 닉네임 변경
   const onChangeNickname = async () => {
     if (isDisabled) return;
+    try {
+      const res = await apiFetch(`/api/members/nicknames`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ nickname }),
+      });
 
-    const res = await apiFetch(`/api/members/nicknames`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ nickname }),
-    });
+      if (!res.ok) {
+        if (res.status === 400) {
+          alert("유효하지 않는 닉네임입니다.");
+          return;
+        }
+        console.error("닉네임 변경 실패", res);
+        return;
+      }
 
-    if (!res.ok) {
-      console.error("닉네임 변경 실패");
-      return;
+      // 닉네임 변경 후 최신 사용자 정보 재조회
+      try {
+        const meRes = await apiFetch(`/api/members/me`, {
+          credentials: "include",
+        });
+        if (meRes.ok) {
+          const meData = await meRes.json();
+          const me = meData?.body ?? meData;
+          setUser(me);
+        }
+      } catch (error) {
+        // 재조회 실패 시에도 입력한 닉네임으로 로컬 상태 업데이트
+        console.error("닉네임 변경 후 정보 조회 실패", error);
+      }
+
+      console.log("닉네임 변경 성공!");
+      onClose();
+    } catch (error) {
+      console.error(error);
     }
-
-    const data = await res.json();
-    const newNickname = data?.body?.nickname ?? nickname;
-
-    // 닉네임 변경 후 최신 사용자 정보 재조회
-    const meRes = await apiFetch(`/api/members/me`, { credentials: "include" });
-    if (meRes.ok) {
-      const meData = await meRes.json();
-      const me = meData?.body ?? meData;
-      setUser(me);
-    } else {
-      // 재조회 실패 시에도 입력한 닉네임으로 로컬 상태 업데이트
-      setUser({ ...(user ?? {}), nickname: newNickname });
-    }
-
-    console.log("닉네임 변경 성공!");
-    onClose();
   };
 
   return (

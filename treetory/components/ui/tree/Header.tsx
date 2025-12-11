@@ -6,12 +6,11 @@ import { useParams, useRouter } from "next/navigation";
 import AddTreeButton from "./Button";
 
 export default function TreeHeader() {
-  const { owner, refreshOwner } = useOwner();
+  const { owner, refreshOwner, uuid } = useOwner();
   const user = useUserStore().user;
 
   const router = useRouter();
   const params = useParams();
-  const uuid = params.uuid as string;
 
   const isOwner = user?.uuid === uuid;
 
@@ -26,7 +25,7 @@ export default function TreeHeader() {
             {owner.nickname}님의 <span className="text-green">트리토리</span>
           </h1>
         </div>
-        {!isOwner && <AddTreeButton uuid={uuid} />}
+        {isOwner && <AddTreeButton uuid={uuid} />}
       </div>
 
       <div className="bg-skyblue/20 text-beige text-caption flex w-full items-center justify-between rounded-md px-6 py-1.5">

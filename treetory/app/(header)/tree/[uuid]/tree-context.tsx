@@ -7,6 +7,7 @@ import { createContext, useContext, useState } from "react";
 type OwnerContextType = {
   owner: Owner;
   refreshOwner: (uuid: string) => Promise<void>;
+  uuid: string;
 };
 
 const OwnerContext = createContext<OwnerContextType | null>(null);
@@ -14,9 +15,11 @@ const OwnerContext = createContext<OwnerContextType | null>(null);
 export function OwnerProvider({
   initialOwner,
   children,
+  uuid,
 }: {
   initialOwner: Owner;
   children: React.ReactNode;
+  uuid: string;
 }) {
   const [owner, setOwner] = useState<Owner>(initialOwner);
 
@@ -26,7 +29,7 @@ export function OwnerProvider({
   }
 
   return (
-    <OwnerContext.Provider value={{ owner, refreshOwner }}>
+    <OwnerContext.Provider value={{ owner, refreshOwner, uuid }}>
       {children}
     </OwnerContext.Provider>
   );
