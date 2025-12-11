@@ -1,0 +1,3 @@
+export default function Page() {
+  return <>장식 리스트 페이지</>;
+}
