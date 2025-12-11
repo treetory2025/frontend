@@ -2,16 +2,15 @@
 
 import { Owner } from "@/types/user";
 import { useEffect, useState, useRef } from "react";
-import { useOwnerStore } from "@/store/userStore";
-import useImage from "use-image";
-import { Group, Layer, Stage, Image as KonvaImage } from "react-konva";
+import { Layer, Stage } from "react-konva";
 import { Tree } from "@/components/tree/Tree";
+import { useOwner } from "./tree-context";
 interface TreePageProps {
   owner: Owner;
 }
 
-export default function TreePage({ owner }: TreePageProps) {
-  const { setOwner, owner: storeOwner } = useOwnerStore();
+export default function TreePage() {
+  const owner = useOwner();
   const containerRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [treeHeight, setTreeHeight] = useState(0);
@@ -19,20 +18,12 @@ export default function TreePage({ owner }: TreePageProps) {
 
   useEffect(() => {
     //  storeOwner가 아직 없으면 바로 저장
-    if (!storeOwner) {
-      setOwner(owner);
-      setTreeSize(owner.treeSize ?? 3);
-
-      return;
-    }
-    //  기존과 동일하면 업데이트 진행 멈춤
-    if (JSON.stringify(storeOwner) === JSON.stringify(owner)) {
+    if (!owner) {
       return;
     }
 
-    setOwner(owner);
     setTreeSize(owner.treeSize ?? 3);
-  }, [owner, storeOwner, setOwner]);
+  }, [owner]);
 
   // 트리 규격에 따른 사이즈 확인
   useEffect(() => {
@@ -59,9 +50,8 @@ export default function TreePage({ owner }: TreePageProps) {
   };
   return (
     <div
-      className="no-scrollbar relative w-full overflow-y-scroll"
+      className={`no-scrollbar relative mb-0 h-full w-full overflow-y-scroll`}
       ref={containerRef}
-      style={{ height: "100dvh" }}
     >
       <button
         className="z-10 cursor-pointer rounded-2xl bg-white px-8 py-4"
@@ -74,7 +64,6 @@ export default function TreePage({ owner }: TreePageProps) {
           width: size.width,
           height: size.height,
           zIndex: 1,
-          paddingTop: 40,
         }}
       >
         <Stage width={size.width} height={Math.max(size.height, treeHeight)}>
