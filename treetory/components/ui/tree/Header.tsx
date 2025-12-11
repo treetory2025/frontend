@@ -4,10 +4,10 @@ import { List, RotateCw } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 
 export default function TreeHeader() {
-  const owner = useOwner();
+  const { owner, refreshOwner } = useOwner();
   const router = useRouter();
   const params = useParams();
-  const uuid = params.uuid;
+  const uuid = params.uuid as string;
 
   return (
     <header className="flex flex-col gap-2 select-none">
@@ -32,7 +32,10 @@ export default function TreeHeader() {
           >
             <List size={20} strokeWidth={3} />
           </button>
-          <button className="bg-muted-navy text-beige cursor-pointer rounded-full p-2">
+          <button
+            className="bg-muted-navy text-beige cursor-pointer rounded-full p-2"
+            onClick={() => refreshOwner(uuid)}
+          >
             <RotateCw size={20} strokeWidth={3} />
           </button>
         </div>

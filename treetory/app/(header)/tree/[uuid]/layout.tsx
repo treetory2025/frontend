@@ -15,7 +15,7 @@ export default async function Layout({
   const owner = (await getTreeOwner(uuid)) as Owner;
 
   return (
-    <OwnerProvider value={owner}>
+    <OwnerProvider initialOwner={owner}>
       <div className="flex h-full w-full flex-col justify-between px-5">
         <TreeHeader />
         {children}

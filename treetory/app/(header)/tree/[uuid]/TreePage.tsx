@@ -10,7 +10,7 @@ interface TreePageProps {
 }
 
 export default function TreePage() {
-  const owner = useOwner();
+  const { owner } = useOwner();
   const containerRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [treeHeight, setTreeHeight] = useState(0);

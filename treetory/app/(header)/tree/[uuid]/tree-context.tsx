@@ -1,19 +1,34 @@
 "use client";
 
+import { getTreeOwner } from "@/lib/api";
 import { Owner } from "@/types/user";
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 
-const OwnerContext = createContext<Owner | null>(null);
+type OwnerContextType = {
+  owner: Owner;
+  refreshOwner: (uuid: string) => Promise<void>;
+};
+
+const OwnerContext = createContext<OwnerContextType | null>(null);
 
 export function OwnerProvider({
-  value,
+  initialOwner,
   children,
 }: {
-  value: Owner;
+  initialOwner: Owner;
   children: React.ReactNode;
 }) {
+  const [owner, setOwner] = useState<Owner>(initialOwner);
+
+  async function refreshOwner(uuid: string) {
+    const newOwner = await getTreeOwner(uuid);
+    setOwner(newOwner);
+  }
+
   return (
-    <OwnerContext.Provider value={value}>{children}</OwnerContext.Provider>
+    <OwnerContext.Provider value={{ owner, refreshOwner }}>
+      {children}
+    </OwnerContext.Provider>
   );
 }
 

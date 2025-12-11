@@ -1,3 +1,9 @@
+import PageHeading from "@/components/ui/tree/PageHeading";
+
 export default function Page() {
-  return <>장식 리스트 페이지</>;
+  return (
+    <div>
+      <PageHeading />
+    </div>
+  );
 }
