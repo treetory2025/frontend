@@ -53,12 +53,6 @@ export default function TreePage() {
       className={`no-scrollbar relative mb-0 h-full w-full overflow-y-scroll`}
       ref={containerRef}
     >
-      <button
-        className="z-10 cursor-pointer rounded-2xl bg-white px-8 py-4"
-        onClick={() => increaseTreeSize()}
-      >
-        추가하기
-      </button>
       <div
         style={{
           width: size.width,
@@ -70,6 +64,7 @@ export default function TreePage() {
           <Layer draggable={true}>
             <Tree
               containerWidth={size.width}
+              containerHeight={size.height}
               scale={1.0}
               theme={owner.treeTheme}
               size={treeSize}

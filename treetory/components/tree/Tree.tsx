@@ -7,13 +7,21 @@ import useImage from "use-image";
 
 interface Props {
   containerWidth: number;
+  containerHeight: number;
   scale: number;
   theme?: string;
   size?: number;
   onLoad?: (height: number) => void;
 }
 
-export function Tree({ containerWidth, scale, theme, size, onLoad }: Props) {
+export function Tree({
+  containerWidth,
+  containerHeight,
+  scale,
+  theme,
+  size,
+  onLoad,
+}: Props) {
   const imgSrc = `/images/theme/tree/${theme}/Size${size}.png`;
   const baseImgSrc = `/images/theme/tree/${theme}/Size7.png`;
   const [treeImg] = useImage(imgSrc);
@@ -38,7 +46,16 @@ export function Tree({ containerWidth, scale, theme, size, onLoad }: Props) {
   // 가로 중앙 정렬
   const x = (containerWidth - treeW) / 2 - diff * scale;
   return (
-    <Group x={x} y={0}>
+    <Group
+      x={x}
+      y={
+        containerHeight <= 455
+          ? containerHeight * 0.05
+          : containerWidth >= 540 && containerHeight <= 720
+            ? containerHeight * 0.1
+            : containerHeight * 0.2
+      }
+    >
       <KonvaImage image={treeImg} scale={{ x: scale, y: scale }} />
     </Group>
   );
