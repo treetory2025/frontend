@@ -42,11 +42,6 @@ export async function getTreeOwner(uuid: string) {
       console.log("목업 사용 시작");
       console.log(res);
       return textUser.body;
-      // 이후 추가될 코드
-      // return NextResponse.json(
-      //         { error: "FAILED_TO_FETCH_UPSTREAM" },
-      //         { status: res.status },
-      //       );
     }
 
     const data = await res.json();
