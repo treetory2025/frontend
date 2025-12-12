@@ -4,6 +4,7 @@ import { off } from "process";
 import { useEffect } from "react";
 import { Group, Image as KonvaImage } from "react-konva";
 import useImage from "use-image";
+import Ornaments from "./Ornaments";
 
 interface Props {
   containerWidth: number;
@@ -58,6 +59,7 @@ export function Tree({
   return (
     <Group x={x} y={y}>
       <KonvaImage image={treeImg} scale={{ x: scale, y: scale }} />
+      <Ornaments />
     </Group>
   );
 }

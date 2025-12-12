@@ -2,10 +2,11 @@
 
 import { Owner } from "@/types/user";
 import { useEffect, useState, useRef } from "react";
-import { Layer, Stage } from "react-konva";
+import { Group, Layer, Stage } from "react-konva";
 import { Tree } from "@/components/ui/tree/Tree";
 import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
 import { useRouter } from "next/navigation";
+import Ornaments from "@/components/ui/tree/Ornaments";
 interface TreePageProps {
   owner: Owner;
 }
@@ -48,9 +49,6 @@ export default function TreePage() {
     };
   }, []);
 
-  const increaseTreeSize = () => {
-    setTreeSize((prev) => Math.min(prev + 1, 10));
-  };
   return (
     <div
       className={`no-scrollbar relative mb-0 h-full w-full overflow-y-scroll`}
@@ -66,6 +64,10 @@ export default function TreePage() {
         <Stage
           width={size.width}
           height={Math.max(size.height, treeHeight + 120)}
+          style={{
+            width: "100dvw", // CSS로 반응형 확대/축소
+            height: "auto",
+          }}
         >
           <Layer draggable={true}>
             <Tree
