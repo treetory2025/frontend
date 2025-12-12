@@ -3,7 +3,7 @@ import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
 import { useUserStore } from "@/store/userStore";
 import { List, RotateCw } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import AddTreeButton from "./Button";
+import { AddTreeButton } from "@/components//ui/tree/Button";
 
 export default function TreeHeader() {
   const { owner, refreshOwner, uuid } = useOwner();

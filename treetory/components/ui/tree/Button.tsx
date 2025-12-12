@@ -2,8 +2,9 @@ import { Plus } from "lucide-react";
 import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
 import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
+import { useRouter } from "next/navigation";
 
-export default function AddTreeButton() {
+export function AddTreeButton() {
   const [showTooltip, setShowTooltip] = useState(true); // tooltip 시작 시 보임
   const [fade, setFade] = useState(false); // opacity 컨트롤
   const { owner, refreshOwner, uuid } = useOwner();
@@ -77,5 +78,21 @@ export default function AddTreeButton() {
         )}
       </div>
     </div>
+  );
+}
+
+export function OrnamentsButton() {
+  const { uuid } = useOwner();
+  const router = useRouter();
+
+  return (
+    <button
+      className="bg-skyblue text-button text-navy absolute right-5 bottom-5 left-auto translate-x-0 cursor-pointer rounded-full border-4 border-white px-6 py-5 font-bold md:right-10 md:bottom-10"
+      onClick={() => {
+        window.location.href = `/tree/${uuid}/ornaments`;
+      }}
+    >
+      장식하기
+    </button>
   );
 }
