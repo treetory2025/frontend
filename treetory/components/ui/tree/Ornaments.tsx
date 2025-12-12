@@ -38,6 +38,7 @@ export default function Ornaments({
             onMouseOver={handleMouseOver}
             onMouseOut={handleMouseOut}
             onClick={() => onSelectOrnament(o)}
+            onTap={() => onSelectOrnament(o)}
           >
             <KonvaImage
               image={imgSrc}

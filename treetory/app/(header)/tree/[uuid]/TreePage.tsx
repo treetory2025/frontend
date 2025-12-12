@@ -1,6 +1,5 @@
 "use client";
 
-import type { Owner } from "@/types/user";
 import { useEffect, useState, useRef } from "react";
 import { Layer, Stage } from "react-konva";
 import { Tree } from "@/components/ui/tree/Tree";
@@ -71,7 +70,7 @@ export default function TreePage() {
           height: size.height,
           zIndex: 1,
         }}
-        className="overflow-y-scroll no-scrollbar"
+        className="no-scrollbar overflow-y-scroll"
       >
         <Stage
           width={size.width}
@@ -95,7 +94,7 @@ export default function TreePage() {
         </Stage>
       </div>
       <button
-        className="absolute right-0 left-auto px-6 py-5 font-bold translate-x-0 border-4 border-white rounded-full cursor-pointer bg-skyblue text-button text-navy bottom-20 md:bottom-10"
+        className="bg-skyblue text-button text-navy absolute right-0 bottom-20 left-auto translate-x-0 cursor-pointer rounded-full border-4 border-white px-6 py-5 font-bold md:bottom-10"
         onClick={() => {
           router.push(`/tree/${uuid}/ornaments`);
         }}
