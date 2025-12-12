@@ -106,10 +106,6 @@ export default function Page() {
               <MessageCircleQuestionMark size={20} />
             </div>
           </button>
-          <div className="border-muted-navy m-2 border-t-2 p-2" />
-          <button className="text-subtitle text-red w-full cursor-pointer p-2 text-start font-bold">
-            회원탈퇴
-          </button>
         </ContentContainer>
       </ContentSection>
 
