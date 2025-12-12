@@ -75,7 +75,9 @@ export default function Page() {
                 현재 적용된 배경
               </p>
               <p className="text-navy text-body text-primary md:text-lg">
-                {user?.background}
+                {user?.background === "SILENT_NIGHT"
+                  ? "고요한 밤"
+                  : "눈 내리는 언덕"}
               </p>
             </div>
             <div className="py-1">
@@ -83,7 +85,7 @@ export default function Page() {
                 현재 적용된 트리
               </p>
               <p className="text-navy text-body text-primary md:text-lg">
-                {user?.theme}
+                {user?.theme === "SNOWY" ? "눈덮인 트리" : "기본 트리"}
               </p>
             </div>
           </div>

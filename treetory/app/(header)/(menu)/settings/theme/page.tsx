@@ -48,7 +48,9 @@ export default function Page() {
               <p className="text-caption md:text-body text-muted-navy">
                 현재 적용된 테마
               </p>
-              <p className="text-navy text-subtitle">{background}</p>
+              <p className="text-navy text-subtitle">
+                {background === "SILENT_NIGHT" ? "고요한 밤" : "눈 내린 언덕"}
+              </p>
             </div>
             <BackgroundContainer onSubmit={handleBackGroundUpdate} />
           </>
@@ -60,7 +62,9 @@ export default function Page() {
               <p className="text-caption md:text-body text-muted-navy">
                 현재 적용된 테마
               </p>
-              <p className="text-navy text-subtitle">{tree}</p>
+              <p className="text-navy text-subtitle">
+                {tree === "SNOWY" ? "눈덮인 트리" : "기본 트리"}
+              </p>
             </div>
             <TreeContainer onSubmit={handleTreeUpdate} />
           </>
