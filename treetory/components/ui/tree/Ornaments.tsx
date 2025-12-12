@@ -6,7 +6,14 @@ import useImage from "use-image";
 export default function Ornaments() {
   const { owner } = useOwner();
   const ornaments = owner.ornamentsRes as Ornarment[];
-  console.log(ornaments);
+  const handleMouseOver = (e: any) => {
+    e.target.getStage().container().style.cursor = "pointer";
+  };
+
+  const handleMouseOut = (e: any) => {
+    e.target.getStage().container().style.cursor = "default";
+  };
+  console.log("장식 조회 : ", ornaments);
   if (!ornaments) return null;
 
   return (
@@ -24,6 +31,8 @@ export default function Ornaments() {
               ctx.arc(0, 0, radius, 0, Math.PI * 2, false);
             }}
             draggable={false}
+            onMouseOver={handleMouseOver}
+            onMouseOut={handleMouseOut}
           >
             <KonvaImage
               image={imgSrc}
