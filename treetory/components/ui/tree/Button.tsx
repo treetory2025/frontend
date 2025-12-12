@@ -23,7 +23,7 @@ export function AddTreeButton() {
       });
 
       if (res.ok) {
-        await refreshOwner(uuid);
+        await refreshOwner();
         return;
       }
 

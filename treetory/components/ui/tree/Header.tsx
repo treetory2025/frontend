@@ -41,7 +41,7 @@ export default function TreeHeader() {
           </button>
           <button
             className="bg-muted-navy text-beige cursor-pointer rounded-full p-2"
-            onClick={() => refreshOwner}
+            onClick={refreshOwner}
           >
             <RotateCw size={20} strokeWidth={3} />
           </button>
