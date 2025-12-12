@@ -1,9 +1,10 @@
 "use client";
 
-import { off } from "process";
 import { useEffect } from "react";
 import { Group, Image as KonvaImage } from "react-konva";
 import useImage from "use-image";
+import Ornaments from "./Ornaments";
+import type { Ornarment } from "@/types/ornarment";
 
 interface Props {
   containerWidth: number;
@@ -12,6 +13,7 @@ interface Props {
   theme?: string;
   size?: number;
   onLoad?: (height: number) => void;
+  onSelectOrnament: (ornament: Ornarment) => void;
 }
 
 export function Tree({
@@ -21,6 +23,7 @@ export function Tree({
   theme,
   size,
   onLoad,
+  onSelectOrnament,
 }: Props) {
   const imgSrc = `/images/theme/tree/${theme}/Size${size}.png`;
   const baseImgSrc = `/images/theme/tree/${theme}/Size7.png`;
@@ -58,6 +61,7 @@ export function Tree({
   return (
     <Group x={x} y={y}>
       <KonvaImage image={treeImg} scale={{ x: scale, y: scale }} />
+      <Ornaments onSelectOrnament={onSelectOrnament} />
     </Group>
   );
 }

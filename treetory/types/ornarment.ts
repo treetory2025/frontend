@@ -4,6 +4,6 @@ export type Ornarment = {
   createdDate: string;
   positionX: number;
   positionY: number;
-  size: number;
+  size: string;
   imgUrl: string;
 };
