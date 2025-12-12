@@ -4,7 +4,11 @@ import { BottomSheetProps } from "@/types/ui";
 import type { Ornarment } from "@/types/ornarment";
 import { BottomSheet } from "@/components/commons/BottomSheet";
 import Image from "next/image";
-import { ActionButton } from "@/components/commons/Button";
+import {
+  ActionButton,
+  CancleButton,
+  DeleteeButton,
+} from "@/components/commons/Button";
 import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
 import { isUser } from "@/lib/auth";
 
@@ -13,6 +17,8 @@ import CloseCircle from "@/public/icons/Close_Circle.png";
 import { MoveRight } from "lucide-react";
 import NoticeMessage from "./NoticeMessage";
 import { isChristmas2025InKorea } from "@/lib/date";
+import { useState } from "react";
+import { apiFetch } from "@/lib/api";
 
 type OrnamentBottomSheetProps = BottomSheetProps & {
   ornament: Ornarment | null;
@@ -23,12 +29,13 @@ export default function OrnamentBottomSheet({
   onClose,
   ornament,
 }: OrnamentBottomSheetProps) {
-  if (!ornament) return null;
   const { owner, uuid } = useOwner();
-  const [year, month, day] = ornament.createdDate.split(".");
   const isOwner = owner ? isUser(uuid) : false;
   const isChristmas = isChristmas2025InKorea();
-  // const isChristmas = true;
+
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  if (!ornament) return null;
+  const [year, month, day] = ornament.createdDate.split(".");
 
   return (
     <BottomSheet isOpen={isOpen} onClose={onClose}>
@@ -80,7 +87,7 @@ export default function OrnamentBottomSheet({
           </div>
           <button
             className="text-fg-secondary flex w-full cursor-pointer items-center justify-between px-4 py-2"
-            disabled={true}
+            onClick={() => setIsDeleteOpen(true)}
           >
             <div className="text-body flex items-center gap-3 font-bold">
               <Image
@@ -97,6 +104,58 @@ export default function OrnamentBottomSheet({
       )}
       <div className="flex w-full flex-col gap-2">
         <ActionButton onClick={onClose}>확인</ActionButton>
+      </div>
+      <DeleteBottomSheet
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        ornamentId={ornament.ornamentId}
+      />
+    </BottomSheet>
+  );
+}
+
+type DeleteBottomSheet = BottomSheetProps & { ornamentId: number };
+
+export function DeleteBottomSheet({
+  isOpen,
+  onClose,
+  ornamentId,
+}: DeleteBottomSheet) {
+  const { refreshOwner } = useOwner();
+  const deleteOrnarment = async () => {
+    try {
+      const res = await apiFetch(`/api/trees/ornaments/${ornamentId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (res.ok) {
+        console.log("장식 삭제 성공");
+        refreshOwner;
+        return;
+      }
+
+      if (!res.ok && res.status === 403) {
+        alert("삭제 권한이 없습니다.");
+        return;
+      } else {
+        console.log("api 요청 실패", res.status, res.body);
+      }
+    } catch (error) {
+      console.error("삭제 실패", error);
+    }
+  };
+  return (
+    <BottomSheet isOpen={isOpen} onClose={onClose} className="gap-12">
+      <h1 className="text-heading text-fg-primary font-bold">
+        해당 장식을 <span className="text-red">삭제</span>할까요?
+      </h1>
+      <p className="text-body text-fg-secondary">
+        삭제 시 등록된 장식 정보를 되돌릴 수 없습니다.
+      </p>
+      <div className="flex w-full flex-col gap-2">
+        <DeleteeButton onClick={deleteOrnarment} />
+        <CancleButton onClick={onClose} />
       </div>
     </BottomSheet>
   );
