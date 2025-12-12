@@ -40,3 +40,14 @@ export function XButton({ onClick }: ButtonProps) {
     </button>
   );
 }
+
+export function DeleteeButton({ onClick }: ButtonProps) {
+  return (
+    <button
+      className="bg-red text-beige text-button md:text-body flex w-full cursor-pointer items-center justify-center rounded-md py-2 md:py-3"
+      onClick={onClick}
+    >
+      삭제
+    </button>
+  );
+}
