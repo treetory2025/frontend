@@ -30,10 +30,12 @@ export default function OrnamentBottomSheet({
   ornament,
 }: OrnamentBottomSheetProps) {
   const { owner, uuid } = useOwner();
-  const isOwner = owner ? isUser(uuid) : false;
+  // const isOwner = owner ? isUser(uuid) : false;
+  const isOwner = true;
   const isChristmas = isChristmas2025InKorea();
 
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
   if (!ornament) return null;
   const [year, month, day] = ornament.createdDate.split(".");
 
@@ -109,42 +111,56 @@ export default function OrnamentBottomSheet({
         isOpen={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
         ornamentId={ornament.ornamentId}
+        isDone={onClose}
       />
     </BottomSheet>
   );
 }
 
-type DeleteBottomSheet = BottomSheetProps & { ornamentId: number };
+type DeleteBottomSheet = BottomSheetProps & {
+  ornamentId: number;
+  isDone: () => void;
+};
 
 export function DeleteBottomSheet({
   isOpen,
   onClose,
   ornamentId,
+  isDone,
 }: DeleteBottomSheet) {
   const { refreshOwner } = useOwner();
-  const deleteOrnarment = async () => {
-    try {
-      const res = await apiFetch(`/api/trees/ornaments/${ornamentId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-
-      if (res.ok) {
-        console.log("장식 삭제 성공");
-        refreshOwner;
-        return;
-      }
-
-      if (!res.ok && res.status === 403) {
-        alert("삭제 권한이 없습니다.");
-        return;
-      } else {
-        console.log("api 요청 실패", res.status, res.body);
-      }
-    } catch (error) {
-      console.error("삭제 실패", error);
-    }
+  const deleteOrnarment = () => {
+    console.log("삭제 버튼 확인");
+    refreshOwner;
+    onClose();
+    isDone();
   };
+  // api 서버 수정 후 반영 예정
+  // const deleteOrnarment = async () => {
+  //   try {
+  //     const res = await apiFetch(`/api/trees/ornaments/${ornamentId}`, {
+  //       method: "DELETE",
+  //       credentials: "include",
+  //     });
+
+  //     if (res.ok) {
+  //       console.log("장식 삭제 성공");
+  //       refreshOwner;
+  //       onClose()
+  //      isDone()
+  //       return;
+  //     }
+
+  //     if (!res.ok && res.status === 403) {
+  //       alert("삭제 권한이 없습니다.");
+  //       return;
+  //     } else {
+  //       console.log("api 요청 실패", res.status, res.body);
+  //     }
+  //   } catch (error) {
+  //     console.error("삭제 실패", error);
+  //   }
+  // };
   return (
     <BottomSheet isOpen={isOpen} onClose={onClose} className="gap-12">
       <h1 className="text-heading text-fg-primary font-bold">
