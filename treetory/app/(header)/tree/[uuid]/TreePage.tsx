@@ -1,15 +1,14 @@
 "use client";
 
-import { Owner } from "@/types/user";
+import type { Owner } from "@/types/user";
 import { useEffect, useState, useRef } from "react";
-import { Group, Layer, Stage } from "react-konva";
+import { Layer, Stage } from "react-konva";
 import { Tree } from "@/components/ui/tree/Tree";
 import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
 import { useRouter } from "next/navigation";
-import Ornaments from "@/components/ui/tree/Ornaments";
-interface TreePageProps {
-  owner: Owner;
-}
+import { Ornarment } from "@/types/ornarment";
+import { useBottomSheet } from "@/hooks/useBottomSheet";
+import OrnamentBottomSheet from "@/components/ui/tree/OrnamentBottomSheet";
 
 export default function TreePage() {
   const { owner, uuid } = useOwner();
@@ -17,10 +16,17 @@ export default function TreePage() {
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [treeHeight, setTreeHeight] = useState(0);
   const [treeSize, setTreeSize] = useState(3);
-  const [buttonRight, setButtonRight] = useState(10);
+
+  //선택된 장식 확인
+  const [selectedOrnament, setSelectedOrnament] = useState<Ornarment | null>(
+    null,
+  );
+  // 장식 조회 바텀 시트 상태 관리
+  const { isOpen, open, close } = useBottomSheet();
 
   const router = useRouter();
 
+  // 트리 사이즈 확인
   useEffect(() => {
     //  storeOwner가 아직 없으면 바로 저장
     if (!owner) {
@@ -50,6 +56,13 @@ export default function TreePage() {
     };
   }, []);
 
+  // 선택된 장식 정보 상태 저장
+  const handleSelectOrnament = (ornament: Ornarment) => {
+    setSelectedOrnament(ornament);
+    console.log("장식 선택", ornament);
+    open(); // 바텀시트 열기
+  };
+
   return (
     <div className={`relative mb-0 h-full w-full`} ref={containerRef}>
       <div
@@ -76,6 +89,7 @@ export default function TreePage() {
               theme={owner.treeTheme}
               size={owner.treeSize}
               onLoad={(h: number) => setTreeHeight(h)}
+              onSelectOrnament={handleSelectOrnament}
             />
           </Layer>
         </Stage>
@@ -88,6 +102,11 @@ export default function TreePage() {
       >
         장식하기
       </button>
+      <OrnamentBottomSheet
+        isOpen={isOpen}
+        onClose={close}
+        ornament={selectedOrnament}
+      />
     </div>
   );
 }

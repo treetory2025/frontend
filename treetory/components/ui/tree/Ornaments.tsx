@@ -3,7 +3,11 @@ import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
 import type { Ornarment } from "@/types/ornarment";
 import useImage from "use-image";
 
-export default function Ornaments() {
+export default function Ornaments({
+  onSelectOrnament,
+}: {
+  onSelectOrnament: (ornament: Ornarment) => void;
+}) {
   const { owner } = useOwner();
   const ornaments = owner.ornamentsRes as Ornarment[];
   const handleMouseOver = (e: any) => {
@@ -33,6 +37,7 @@ export default function Ornaments() {
             draggable={false}
             onMouseOver={handleMouseOver}
             onMouseOut={handleMouseOut}
+            onClick={() => onSelectOrnament(o)}
           >
             <KonvaImage
               image={imgSrc}
