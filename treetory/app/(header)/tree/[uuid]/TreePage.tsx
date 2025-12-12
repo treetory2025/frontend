@@ -5,16 +5,19 @@ import { useEffect, useState, useRef } from "react";
 import { Layer, Stage } from "react-konva";
 import { Tree } from "@/components/ui/tree/Tree";
 import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
+import { useRouter } from "next/navigation";
 interface TreePageProps {
   owner: Owner;
 }
 
 export default function TreePage() {
-  const { owner } = useOwner();
+  const { owner, uuid } = useOwner();
   const containerRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [treeHeight, setTreeHeight] = useState(0);
   const [treeSize, setTreeSize] = useState(3);
+
+  const router = useRouter();
 
   useEffect(() => {
     //  storeOwner가 아직 없으면 바로 저장
@@ -76,6 +79,14 @@ export default function TreePage() {
           </Layer>
         </Stage>
       </div>
+      <button
+        className="bg-skyblue text-button text-navy absolute right-0 bottom-20 left-auto translate-x-0 cursor-pointer rounded-full border-4 border-white px-6 py-5 font-bold md:bottom-10"
+        onClick={() => {
+          router.push(`/tree/${uuid}/ornaments`);
+        }}
+      >
+        장식하기
+      </button>
     </div>
   );
 }
