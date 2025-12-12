@@ -17,8 +17,8 @@ export default function Ornaments({
   const handleMouseOut = (e: any) => {
     e.target.getStage().container().style.cursor = "default";
   };
-  console.log("장식 조회 : ", ornaments);
   if (!ornaments) return null;
+  console.log(ornaments);
 
   return (
     <>
@@ -28,7 +28,7 @@ export default function Ornaments({
 
         return (
           <Group
-            key={o.ornamentId}
+            key={o.placedOrnamentId}
             x={o.positionX}
             y={o.positionY}
             clipFunc={(ctx) => {

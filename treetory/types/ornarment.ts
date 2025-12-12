@@ -1,4 +1,5 @@
 export type Ornarment = {
+  placedOrnamentId: number;
   ornamentId: number;
   writerNickname: string;
   createdDate: string;
