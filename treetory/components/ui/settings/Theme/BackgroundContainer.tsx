@@ -11,7 +11,7 @@ export default function BackgroundContainer({
 }) {
   const themes = [
     { id: 0, name: "고요한 밤", image: theme1 },
-    { id: 1, name: "눈내리는 언덕", image: theme2 },
+    { id: 1, name: "눈 내리는 언덕", image: theme2 },
   ];
 
   // 좌우 이동을 위한 index (회원 정보 반영 x)

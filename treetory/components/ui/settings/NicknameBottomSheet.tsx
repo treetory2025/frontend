@@ -75,7 +75,6 @@ export default function NicknameBottomSheet({
           setUser(me);
         }
       } catch (error) {
-        // 재조회 실패 시에도 입력한 닉네임으로 로컬 상태 업데이트
         console.error("닉네임 변경 후 정보 조회 실패", error);
       }
 
