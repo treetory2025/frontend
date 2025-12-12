@@ -1,14 +1,21 @@
+import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
+
 export function getUser() {
   if (typeof window === "undefined") return null;
-  const userStr = localStorage.getItem("user-storage");
-  return userStr ? JSON.parse(userStr) : null;
+
+  const storage = localStorage.getItem("user-storage");
+  if (!storage) return null;
+
+  const parsed = JSON.parse(storage);
+  return parsed?.state?.user ?? null;
 }
 
 export function isLoggedIn() {
   return !!getUser();
 }
 
-export function isUser(ownerUuid: string) {
+export function isUser() {
   const user = getUser();
-  return user ? user.uuid === ownerUuid : false;
+  const { uuid } = useOwner();
+  return user ? user.uuid === uuid : false;
 }

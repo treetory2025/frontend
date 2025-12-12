@@ -30,7 +30,7 @@ export default function OrnamentBottomSheet({
   ornament,
 }: OrnamentBottomSheetProps) {
   const { owner, uuid } = useOwner();
-  const isOwner = owner ? isUser(uuid) : false;
+  const isOwner = owner ? isUser() : false;
   const isChristmas = isChristmas2025InKorea();
 
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
