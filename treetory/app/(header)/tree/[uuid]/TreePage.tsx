@@ -17,6 +17,7 @@ export default function TreePage() {
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [treeHeight, setTreeHeight] = useState(0);
   const [treeSize, setTreeSize] = useState(3);
+  const [buttonRight, setButtonRight] = useState(10);
 
   const router = useRouter();
 
@@ -50,20 +51,18 @@ export default function TreePage() {
   }, []);
 
   return (
-    <div
-      className={`no-scrollbar relative mb-0 h-full w-full overflow-y-scroll`}
-      ref={containerRef}
-    >
+    <div className={`relative mb-0 h-full w-full`} ref={containerRef}>
       <div
         style={{
           width: size.width,
           height: size.height,
           zIndex: 1,
         }}
+        className="no-scrollbar overflow-y-scroll"
       >
         <Stage
           width={size.width}
-          height={Math.max(size.height, treeHeight + 120)}
+          height={treeHeight + 120}
           style={{
             width: "100dvw", // CSS로 반응형 확대/축소
             height: "auto",
