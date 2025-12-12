@@ -8,6 +8,7 @@ import PageHeading from "@/components/commons/PageHeading";
 import Tab from "@/components/commons/Tab";
 import BackgroundContainer from "@/components/ui/settings/Theme/BackgroundContainer";
 import TreeContainer from "@/components/ui/settings/Theme/TreeContaier";
+import { apiFetch } from "@/lib/api";
 
 export default function Page() {
   const THEME_TABS = [
@@ -16,6 +17,7 @@ export default function Page() {
   ];
   const [theme, setTheme] = useState(THEME_TABS[0].value);
   const user = useUserStore((s) => s.user);
+  const setUser = useUserStore.getState().setUser;
   const hasHydrated = useUserStore((s) => s._hasHydrated);
 
   const [background, setBackground] = useState("고요한 밤");
@@ -28,12 +30,80 @@ export default function Page() {
     }
   }, [hasHydrated, user]);
 
-  //  api 연결 전 임시 로직
-  const handleBackGroundUpdate = (newTheme: string) => {
-    setBackground(newTheme);
+  // 테마 배경 변경
+  const handleBackGroundUpdate = () => {
+    async function patchBackground() {
+      try {
+        const res = await apiFetch(`/api/trees/backgrounds`, {
+          method: "PATCH",
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          console.log("api 응답 실패", res);
+          return;
+        }
+
+        const data = await res.json();
+        console.log("배경 테마 변경 성공", data);
+        const newBackground = data?.body;
+
+        // 테마 변경 후 최신 사용자 정보 재조회
+        try {
+          const meRes = await apiFetch(`/api/members/me`, {
+            credentials: "include",
+          });
+          if (meRes.ok) {
+            const meData = await meRes.json();
+            const me = meData?.body ?? meData;
+            setUser(me);
+            setBackground(newBackground);
+          }
+        } catch (error) {
+          console.error("트리 테마 변경 후 정보 조회 실패", error);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    patchBackground();
   };
-  const handleTreeUpdate = (newTheme: string) => {
-    setTree(newTheme);
+
+  const handleTreeUpdate = () => {
+    async function patchTheme() {
+      try {
+        const res = await apiFetch(`/api/trees/themes`, {
+          method: "PATCH",
+          credentials: "include",
+        });
+        if (!res.ok) {
+          console.log("api 응답 실패", res);
+        }
+
+        const data = await res.json();
+        console.log("트리 테마 변경 성공", data);
+        const newTheme = data?.body;
+
+        // 테마 변경 후 최신 사용자 정보 재조회
+        try {
+          const meRes = await apiFetch(`/api/members/me`, {
+            credentials: "include",
+          });
+          if (meRes.ok) {
+            const meData = await meRes.json();
+            const me = meData?.body ?? meData;
+            setUser(me);
+            setTheme(newTheme);
+          }
+        } catch (error) {
+          console.error("트리 테마 변경 후 정보 조회 실패", error);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    patchTheme();
   };
 
   return (
@@ -49,7 +119,7 @@ export default function Page() {
                 현재 적용된 테마
               </p>
               <p className="text-navy text-subtitle">
-                {background === "SILENT_NIGHT" ? "고요한 밤" : "눈 내린 언덕"}
+                {background === "SILENT_NIGHT" ? "고요한 밤" : "눈 내리는 언덕"}
               </p>
             </div>
             <BackgroundContainer onSubmit={handleBackGroundUpdate} />

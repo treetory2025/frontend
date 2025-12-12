@@ -10,15 +10,15 @@ export default function TreeContainer({
   onSubmit: (value: string) => void;
 }) {
   const themes = [
-    { id: 0, name: "눈 덮인 트리", image: tree1 },
-    { id: 1, name: "일반 트리", image: tree2 },
+    { id: 0, name: "눈덮인 트리", image: tree1 },
+    { id: 1, name: "기본 트리", image: tree2 },
   ];
 
   // 좌우 이동을 위한 index (회원 정보 반영 x)
   const [index, setIndex] = useState(0);
 
   // 현재 설정된 테마 (회원 정보 반영 x)
-  const [currentTheme, setCurrentTheme] = useState("눈 덮인 트리");
+  const [currentTheme, setCurrentTheme] = useState("눈덮인 트리");
   const selectedTheme = themes.find((t) => t.name === currentTheme);
 
   if (!selectedTheme) return null; // 또는 로딩
