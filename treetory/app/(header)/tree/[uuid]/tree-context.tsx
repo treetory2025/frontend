@@ -1,12 +1,11 @@
 "use client";
 
-import { getTreeOwner } from "@/lib/api";
 import { Owner } from "@/types/user";
 import { createContext, useContext, useState } from "react";
 
 type OwnerContextType = {
   owner: Owner;
-  refreshOwner: (uuid: string) => Promise<void>;
+  refreshOwner: () => Promise<void>;
   uuid: string;
 };
 
@@ -37,6 +36,7 @@ export function OwnerProvider({
       const data = await res.json();
       const newOwner = data?.body;
       setOwner(newOwner);
+      console.log("갱신 성공", owner);
 
       return;
     } catch (error: any) {

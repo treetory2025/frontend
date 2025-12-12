@@ -1,3 +1,5 @@
+// "use client";
+
 import { Group, Image as KonvaImage } from "react-konva";
 import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
 import type { Ornarment } from "@/types/ornarment";
@@ -10,6 +12,33 @@ export default function Ornaments({
 }) {
   const { owner } = useOwner();
   const ornaments = owner.ornamentsRes as Ornarment[];
+  if (!ornaments || ornaments.length === 0) return null;
+
+  return (
+    <>
+      {ornaments.map((ornament) => (
+        <OrnamentItem
+          key={ornament.placedOrnamentId}
+          ornament={ornament}
+          onSelectOrnament={onSelectOrnament}
+        />
+      ))}
+    </>
+  );
+}
+
+export function OrnamentItem({
+  ornament,
+  onSelectOrnament,
+}: {
+  ornament: Ornarment;
+  onSelectOrnament: (ornament: Ornarment) => void;
+}) {
+  const [imgSrc] = useImage(ornament.imgUrl);
+
+  const radius =
+    ornament.size === "small" ? 22 : ornament.size === "medium" ? 30 : 38;
+
   const handleMouseOver = (e: any) => {
     e.target.getStage().container().style.cursor = "pointer";
   };
@@ -17,39 +46,27 @@ export default function Ornaments({
   const handleMouseOut = (e: any) => {
     e.target.getStage().container().style.cursor = "default";
   };
-  if (!ornaments) return null;
-  console.log(ornaments);
 
   return (
-    <>
-      {ornaments.map((o) => {
-        const [imgSrc] = useImage(o.imgUrl);
-        const radius = o.size === "small" ? 22 : o.size === "medium" ? 30 : 38;
-
-        return (
-          <Group
-            key={o.placedOrnamentId}
-            x={o.positionX}
-            y={o.positionY}
-            clipFunc={(ctx) => {
-              ctx.arc(0, 0, radius, 0, Math.PI * 2, false);
-            }}
-            draggable={false}
-            onMouseOver={handleMouseOver}
-            onMouseOut={handleMouseOut}
-            onClick={() => onSelectOrnament(o)}
-            onTap={() => onSelectOrnament(o)}
-          >
-            <KonvaImage
-              image={imgSrc}
-              width={radius * 2}
-              height={radius * 2}
-              offsetX={radius}
-              offsetY={radius}
-            />
-          </Group>
-        );
-      })}
-    </>
+    <Group
+      x={ornament.positionX}
+      y={ornament.positionY}
+      clipFunc={(ctx) => {
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+      }}
+      draggable={false}
+      onMouseOver={handleMouseOver}
+      onMouseOut={handleMouseOut}
+      onClick={() => onSelectOrnament(ornament)}
+      onTap={() => onSelectOrnament(ornament)}
+    >
+      <KonvaImage
+        image={imgSrc}
+        width={radius * 2}
+        height={radius * 2}
+        offsetX={radius}
+        offsetY={radius}
+      />
+    </Group>
   );
 }
