@@ -1,34 +1,26 @@
 "use client";
 
 import Header from "@/components/commons/Header";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import { useOwnerStore } from "@/store/userStore";
+import { useThemeStore } from "@/store/userStore";
+import { usePathname } from "next/navigation";
 
 export default function HeaderLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const params = useParams();
-  const uuid = params.uuid as string;
   const pathname = usePathname();
-  const router = useRouter();
-  const isTreePage = pathname.startsWith("/tree");
+  const isTreeRoute = pathname.startsWith("/tree");
 
-  // Zustand store
-  const { owner, _hasHydrated } = useOwnerStore();
+  const theme = useThemeStore((s) => s.theme);
 
-  // Hydration 전에 렌더하면 깜빡임 발생 -> 로딩 UI 연결 예정
-  if (!_hasHydrated) return null;
-
-  // tree 페이지이고 owner가 있을 때만 배경 적용
-  const bgClass =
-    isTreePage && owner
-      ? owner.treeBackground === "SILENT_NIGHT"
-        ? "bg-navy"
-        : "bg-skyblue"
-      : "";
-
+  const bgClass = isTreeRoute
+    ? theme === "SILENT_NIGHT"
+      ? "bg-navy"
+      : theme === "SNOWY_HILL"
+        ? "bg-skyblue"
+        : "bg-navy" // tree인데 아직 theme 없음
+    : "bg-navy"; // tree 아닌 페이지 기본 배경
   return (
     <div
       className={`relative flex h-full w-full flex-col justify-start gap-8 ${bgClass}`}
