@@ -3,58 +3,52 @@ import tree2 from "@/public/images/tree2.png";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { TREE_OPTIONS } from "@/types/theme";
 
-export default function TreeContainer({
-  onSubmit,
-}: {
-  onSubmit: (value: string) => void;
-}) {
-  const themes = [
-    { id: 0, name: "눈덮인 트리", image: tree1 },
-    { id: 1, name: "기본 트리", image: tree2 },
-  ];
+type TreeValue = (typeof TREE_OPTIONS)[number]["value"];
+interface Props {
+  currentTree: TreeValue;
+  onSubmit: (value: TreeValue) => void;
+}
 
-  // 좌우 이동을 위한 index (회원 정보 반영 x)
-  const [index, setIndex] = useState(0);
+const IMAGE_MAP: Record<TreeValue, any> = {
+  SNOWY: tree1,
+  NORMAL: tree2,
+};
 
-  // 현재 설정된 테마 (회원 정보 반영 x)
-  const [currentTheme, setCurrentTheme] = useState("눈덮인 트리");
-  const selectedTheme = themes.find((t) => t.name === currentTheme);
+export default function TreeContainer({ onSubmit, currentTree }: Props) {
+  const themes = TREE_OPTIONS;
 
-  if (!selectedTheme) return null; // 또는 로딩
+  const initialIndex = themes.findIndex((t) => t.value === currentTree);
+  const [index, setIndex] = useState(initialIndex === -1 ? 0 : initialIndex);
 
-  // 선택한 테마가 가장 첫번째로 오도록 설정
-  const sortedThemes = [
-    selectedTheme,
-    ...themes.filter((t) => t.name !== currentTheme),
-  ];
-
-  const canPrev = index > 0;
-  const canNext = index < sortedThemes.length - 1;
-
-  // 현재 화면에 보여줄 theme
   const shownTheme = themes[index];
 
+  const canPrev = index > 0;
+  const canNext = index < themes.length - 1;
+
+  // 현재 화면에 보여줄 theme
+
   return (
-    <div className="flex flex-col items-center gap-0 py-4">
+    <div className="flex flex-col items-center py-4">
       <div className="flex items-center justify-center gap-2">
         {/* 왼쪽 버튼 */}
         <button
           onClick={() => canPrev && setIndex(index - 1)}
           disabled={!canPrev}
-          className={`bg-muted-navy flex size-11 items-center justify-center rounded-full border-3 border-white pr-0.5 ${canPrev ? "" : "cursor-default opacity-20"}`}
+          className={`bg-muted-navy flex size-11 items-center justify-center rounded-full border-3 border-white pr-0.5 ${canPrev ? "cursor-pointer" : "cursor-default opacity-20"}`}
         >
           <ChevronLeft size={28} />
         </button>
 
         {/* 이미지 */}
         <div
-          className={`box-content h-[294px] w-[229px] overflow-hidden rounded-xl border-[5px] ${selectedTheme.name === shownTheme.name ? "border-green" : "border-white"}`}
+          className={`box-content h-[294px] w-[229px] overflow-hidden rounded-xl border-[5px] ${shownTheme.value === currentTree ? "border-green" : "border-white"}`}
         >
           <Image
-            src={shownTheme.image}
+            src={IMAGE_MAP[shownTheme.value]}
             className="h-full w-full"
-            alt={shownTheme.name}
+            alt={shownTheme.label}
           />
         </div>
 
@@ -62,7 +56,7 @@ export default function TreeContainer({
         <button
           onClick={() => canNext && setIndex(index + 1)}
           disabled={!canNext}
-          className={`bg-muted-navy flex size-11 items-center justify-center rounded-full border-3 border-white pl-0.5 ${canNext ? "" : "cursor-default opacity-20"}`}
+          className={`bg-muted-navy flex size-11 items-center justify-center rounded-full border-3 border-white pl-0.5 ${canNext ? "cursor-pointer" : "cursor-default opacity-20"}`}
         >
           <ChevronRight size={28} />
         </button>
@@ -70,15 +64,14 @@ export default function TreeContainer({
 
       {/* 선택된 테마가 항상 첫 번째 출력 */}
       <p className="text-navy font-memoment text-heading my-2 text-center">
-        {shownTheme.name}
+        {shownTheme.label}
       </p>
 
       {/* 선택 버튼 */}
       <button
-        className="bg-green text-button text-beige mt-4 h-12 w-[60%] rounded-md"
+        className="bg-green text-button text-beige mt-4 h-12 w-[60%] cursor-pointer rounded-md"
         onClick={() => {
-          setCurrentTheme(shownTheme.name);
-          onSubmit(shownTheme.name);
+          onSubmit(shownTheme.value);
         }}
       >
         선택
