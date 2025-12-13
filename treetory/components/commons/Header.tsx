@@ -84,18 +84,20 @@ export default function Header() {
             <Image src={cameraIcon} alt="camera" />
           </button>
         )}
+        {/* 즐겨찾기 버튼 */}
+        {isTreePage && !isTreeOwner && (
+          <div className="group relative">
+            <button className="text-yellow flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white">
+              {isBookmarked ? <StarOff size={24} /> : <Star size={24} />}
+            </button>
 
-        <div className="group relative">
-          <button className="text-yellow flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white">
-            {isBookmarked ? <StarOff size={24} /> : <Star size={24} />}
-          </button>
-
-          <div
-            className={`pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 rounded-md ${isBookmarked ? "bg-muted-navy" : "bg-[#FF4800]"} px-2 py-1 text-xs whitespace-nowrap text-white opacity-0 transition-opacity group-hover:opacity-100`}
-          >
-            {isBookmarked ? "즐겨찾기 해제" : "즐겨찾기를 해보세요!"}
+            <div
+              className={`pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 rounded-md ${isBookmarked ? "bg-muted-navy" : "bg-[#FF4800]"} px-2 py-1 text-xs whitespace-nowrap text-white opacity-0 transition-opacity group-hover:opacity-100`}
+            >
+              {isBookmarked ? "즐겨찾기 해제" : "즐겨찾기를 해보세요!"}
+            </div>
           </div>
-        </div>
+        )}
       </div>
       {/* 크리스마스 디데이 안내 */}
       {isChristmas ? (
