@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import BookmarksPage from "./BookmarksPage";
+import BookmarksPage from "@/app/(header)/(menu)/bookmarks/BookmarksPage";
 
 export default function Page() {
   return (
