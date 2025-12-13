@@ -10,7 +10,7 @@ export default function BookmarksMembersList({
   members: Member[];
 }) {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="my-8 flex flex-col gap-2">
       {members.map((member) => (
         <div
           key={member.memberId}
