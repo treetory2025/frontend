@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { Ornarment } from "@/types/ornarment";
 import { useBottomSheet } from "@/hooks/useBottomSheet";
 import OrnamentBottomSheet from "@/components/ui/tree/OrnamentBottomSheet";
+import { useThemeStore } from "@/store/userStore";
 
 export default function TreePage() {
   const { owner, uuid } = useOwner();
@@ -15,6 +16,9 @@ export default function TreePage() {
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [treeHeight, setTreeHeight] = useState(0);
   const [treeSize, setTreeSize] = useState(3);
+
+  // 배경 테마 확인
+  const setTheme = useThemeStore((s) => s.setTheme);
 
   //선택된 장식 확인
   const [selectedOrnament, setSelectedOrnament] = useState<Ornarment | null>(
@@ -34,6 +38,13 @@ export default function TreePage() {
 
     setTreeSize(owner.treeSize ?? 3);
   }, [owner]);
+
+  // 배경 테마 적용
+  useEffect(() => {
+    if (!owner.treeBackground) return;
+
+    setTheme(owner.treeBackground);
+  }, [owner.treeBackground, setTheme]);
 
   // 트리 규격에 따른 사이즈 확인
   useEffect(() => {
