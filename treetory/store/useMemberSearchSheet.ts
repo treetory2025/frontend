@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export const useUserSearchSheet = create<{
+export const useMemberSearchSheet = create<{
   isOpen: boolean;
   open: () => void;
   close: () => void;

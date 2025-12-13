@@ -5,7 +5,7 @@ import { MoveRight, Copy, LogIn, LogOut, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { isLoggedIn } from "@/lib/auth";
 import { useUserStore } from "@/store/userStore";
-import { useUserSearchSheet } from "@/store/useUserSearchSheet";
+import { useUserSearchSheet } from "@/store/useMemberSearchSheet";
 
 type Menu =
   | {
