@@ -60,6 +60,7 @@ export default function HeaderMenu({ onClose }: { onClose: () => void }) {
             console.log("로그아웃 처리");
             try {
               const res = await fetch(`/api/auth/logout`, {
+                method: "POST",
                 credentials: "include",
               });
 
