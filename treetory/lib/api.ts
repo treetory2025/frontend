@@ -53,3 +53,38 @@ export async function getTreeOwner(uuid: string) {
     throw new Error(error);
   }
 }
+
+export async function getBookmarks({
+  query,
+  page,
+  size,
+}: {
+  query?: string;
+  page: string;
+  size: string;
+}) {
+  try {
+    const params = new URLSearchParams({
+      page: String(page),
+      size: String(size),
+    });
+
+    if (query && query.trim() !== "") {
+      params.append("query", query);
+    }
+
+    const res = await fetch(`/api/members/bookmarks?${params.toString()}`, {
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      console.log("즐겨찾기 정보 조회 실패", res);
+      return;
+    }
+
+    const data = await res.json();
+    return data?.body;
+  } catch (error) {
+    console.error(error);
+  }
+}

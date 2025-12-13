@@ -4,12 +4,20 @@ import { useRouter } from "next/navigation";
 import SearchInput from "@/components/commons/searchInput";
 import { useState } from "react";
 
-export default function SearchSection() {
+export default function SearchSection({
+  initialQuery,
+}: {
+  initialQuery: string;
+}) {
   const router = useRouter();
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(initialQuery);
 
   const onSubmit = () => {
-    router.push(`/bookmarks?query=${input}`);
+    const params = new URLSearchParams();
+    if (input.trim()) params.set("query", input);
+    params.set("page", "0");
+
+    router.push(`/bookmarks?${params.toString()}`);
   };
 
   return (
