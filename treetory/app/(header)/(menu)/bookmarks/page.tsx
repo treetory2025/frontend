@@ -40,10 +40,10 @@ export default function Page() {
   return (
     <>
       <PageHeading title="즐겨찾기" />
-      <ContentSection className="h-full space-y-6 md:space-y-10 md:p-10">
+      <ContentSection className="no-scrollbar flex h-full flex-col overflow-y-auto md:p-10">
         <SearchSection initialQuery={query} />
         {members.length === 0 && (
-          <div className="flex flex-col items-center justify-center gap-4">
+          <div className="flex h-full flex-col items-center justify-center gap-4">
             <div className="text-muted-navy flex items-center rounded-full bg-white/50 p-4">
               <User size={32} />
             </div>
@@ -52,7 +52,6 @@ export default function Page() {
             </h1>
           </div>
         )}
-
         <BookmarksMembersList members={members} />
         <PaginationSection page={page} totalPage={totalPage} query={query} />
       </ContentSection>
