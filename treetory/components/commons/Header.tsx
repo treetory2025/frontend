@@ -16,17 +16,44 @@ import {
   isChristmas2025InKorea,
 } from "@/lib/date";
 
+import { useUserStore } from "@/store/userStore";
+import { useParams, usePathname } from "next/navigation";
+import { isLoggedIn } from "@/lib/auth";
+import { Star, StarOff } from "lucide-react";
+import { getBookmarks } from "@/lib/api";
+
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [diffdays, setDiffdays] = useState(0);
   const menuRef = useRef<HTMLDivElement | null>(null);
-  // const isChristmas = isChristmas2025InKorea();
-  const isChristmas = true;
+  const isChristmas = isChristmas2025InKorea();
+  const loggedIn = isLoggedIn();
+
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  const pathname = usePathname();
+  const isTreePage = pathname.startsWith("/tree/");
+
+  const params = useParams<{ uuid?: string }>();
+  const treeUuid = isTreePage ? params?.uuid : null;
+
+  const user = useUserStore((s) => s.user);
+
+  const isTreeOwner =
+    isTreePage && Boolean(user?.uuid && treeUuid && user.uuid === treeUuid);
+
   useEffect(() => {
     if (isChristmas) return;
     const diff = getDaysUntilChristmas2025InKorea();
     setDiffdays(diff);
   }, [isChristmas]);
+
+  useEffect(() => {
+    // 임시 북마크 해제
+    if (isTreePage && !isTreeOwner && loggedIn) {
+      setIsBookmarked(false);
+    }
+  }, [isBookmarked]);
 
   useCloseOnOutsideOrEsc(menuRef, {
     isOpen: isMenuOpen,
@@ -52,9 +79,23 @@ export default function Header() {
           )}
         </div>
         {/* 캡쳐 버튼 */}
-        <button className="bg-yellow flex h-10 w-10 cursor-pointer items-center justify-center rounded-full">
-          <Image src={cameraIcon} alt="camera" />
-        </button>
+        {isTreePage && isTreeOwner && (
+          <button className="bg-yellow flex h-10 w-10 cursor-pointer items-center justify-center rounded-full">
+            <Image src={cameraIcon} alt="camera" />
+          </button>
+        )}
+
+        <div className="group relative">
+          <button className="text-yellow flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white">
+            {isBookmarked ? <StarOff size={24} /> : <Star size={24} />}
+          </button>
+
+          <div
+            className={`pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 rounded-md ${isBookmarked ? "bg-muted-navy" : "bg-[#FF4800]"} px-2 py-1 text-xs whitespace-nowrap text-white opacity-0 transition-opacity group-hover:opacity-100`}
+          >
+            {isBookmarked ? "즐겨찾기 해제" : "즐겨찾기를 해보세요!"}
+          </div>
+        </div>
       </div>
       {/* 크리스마스 디데이 안내 */}
       {isChristmas ? (
@@ -63,7 +104,8 @@ export default function Header() {
         <div className="bg-beige flex h-10 items-center justify-center gap-2 rounded-full px-4">
           <Image src={rudolphIcon} alt="rudolph" />
           <p className="text-caption text-fg-primary">
-            크리스마스까지? <span className="font-bold"> D-{diffdays}</span>
+            크리스마스까지?
+            <span className="text-body font-bold"> D-{diffdays}</span>
           </p>
         </div>
       )}

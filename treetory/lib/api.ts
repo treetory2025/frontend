@@ -73,7 +73,7 @@ export async function getBookmarks({
       params.append("query", query);
     }
 
-    const res = await fetch(`/api/members/bookmarks?${params.toString()}`, {
+    const res = await apiFetch(`/api/members/bookmarks?${params.toString()}`, {
       credentials: "include",
     });
 
