@@ -1,9 +1,9 @@
 "use client";
 
 import { BottomSheet } from "@/components/commons/BottomSheet";
-import { useMemberSearchSheet } from "@/store/useMemberSearchSheet";
+import { useMemberSearchSheet } from "@/store/useUserSearchSheet";
 import { XIcon } from "lucide-react";
-import MemberSearchSection from "./memberSearchSection";
+import MemberSearchSection from "@/components/ui/memberSearch/MemberSearchSection";
 
 export default function MemberSearchBottomSheet() {
   const { isOpen, close } = useMemberSearchSheet();
