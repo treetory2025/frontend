@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import type { User, Owner } from "@/types/user";
 import { persist } from "zustand/middleware";
+import { BackgroundType } from "@/types/theme";
 
 interface UserState {
   user: User | null;
@@ -32,31 +33,12 @@ export const useUserStore = create<UserState>()(
   ),
 );
 
-interface OwnerState {
-  owner: Owner | null;
-  setOwner: (owner: Owner | null) => void;
-  clearOwner: () => void;
-  _hasHydrated: boolean;
-  setHasHydrated: (state: boolean) => void;
+interface ThemeState {
+  theme: BackgroundType | null;
+  setTheme: (theme: BackgroundType | null) => void;
 }
-export const useOwnerStore = create<OwnerState>()(
-  persist(
-    (set) => ({
-      owner: null,
-      setOwner: (owner) => set({ owner }),
-      clearOwner: () => set({ owner: null }),
-      _hasHydrated: false,
-      setHasHydrated: (state) => {
-        set({
-          _hasHydrated: state,
-        });
-      },
-    }),
-    {
-      name: "owner-storage", // localStorage key
-      onRehydrateStorage: () => (state) => {
-        state?.setHasHydrated(true);
-      },
-    },
-  ),
-);
+
+export const useThemeStore = create<ThemeState>((set) => ({
+  theme: null,
+  setTheme: (theme) => set({ theme }),
+}));

@@ -1,4 +1,5 @@
 import { Ornarment } from "@/types/ornarment";
+import { BackgroundType, TreeType } from "./theme";
 
 export type User = {
   uuid?: string;
@@ -11,7 +12,7 @@ export type User = {
 export type Owner = {
   nickname?: string;
   treeSize?: number;
-  treeTheme?: string;
-  treeBackground?: string;
+  treeTheme?: TreeType;
+  treeBackground?: BackgroundType;
   ornamentsRes?: Array<Ornarment>;
 };
