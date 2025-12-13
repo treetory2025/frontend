@@ -36,7 +36,7 @@ export default function MemberSearchSection() {
         const data = await res.json();
         if (!data?.body) return;
 
-        setMembers(data.body.members);
+        setMembers(data.body.members.content);
         setTotalPage(data.body.totalPage);
         setTotalElements(data.body.totalElements);
       } catch (error) {
