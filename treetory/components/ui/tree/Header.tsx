@@ -4,30 +4,35 @@ import { useUserStore } from "@/store/userStore";
 import { List, RotateCw } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { AddTreeButton } from "@/components//ui/tree/Button";
+import { useThemeStore } from "@/store/userStore";
 
 export default function TreeHeader() {
   const { owner, refreshOwner, uuid } = useOwner();
   const user = useUserStore().user;
-
   const router = useRouter();
 
+  const theme = useThemeStore((s) => s.theme);
   const isOwner = user?.uuid === uuid;
+
+  const textColor = theme === "SILENT_NIGHT" ? "text-beige" : "text-navy";
 
   return (
     <header className="flex flex-col gap-2 select-none">
       <div className="flex items-center justify-between">
         <div>
-          <p className="font-memoment text-beige text-body md:text-xl">
+          <p className={`font-memoment text-body md:text-xl ${textColor}`}>
             새로운 장식을 확인해보세요!
           </p>
-          <h1 className="text-title font-memoment text-beige">
+          <h1 className={`text-title font-memoment ${textColor}`}>
             {owner.nickname}님의 <span className="text-green">트리토리</span>
           </h1>
         </div>
         {isOwner && <AddTreeButton />}
       </div>
 
-      <div className="bg-skyblue/20 text-beige text-caption flex w-full items-center justify-between rounded-md px-6 py-1.5">
+      <div
+        className={`${theme === "SILENT_NIGHT" ? "bg-skyblue/20" : "bg-navy/30"} ${textColor} text-caption flex w-full items-center justify-between rounded-md px-6 py-1.5`}
+      >
         <p className="flex items-center gap-2">
           현재 등록된 장식
           <span className="font-bold">{owner.ornamentsRes?.length}개</span>
