@@ -5,6 +5,7 @@ import { MoveRight, Copy, LogIn, LogOut, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { isLoggedIn } from "@/lib/auth";
 import { useUserStore } from "@/store/userStore";
+import { useUserSearchSheet } from "@/store/useUserSearchSheet";
 
 type Menu =
   | {
@@ -22,6 +23,8 @@ export default function HeaderMenu({ onClose }: { onClose: () => void }) {
   const loggedIn = isLoggedIn();
   const user = useUserStore((s) => s.user);
   const clearUser = useUserStore((s) => s.clearUser);
+
+  const open = useUserSearchSheet((s) => s.open);
 
   const menus: Menu[] = [
     {
@@ -130,8 +133,7 @@ export default function HeaderMenu({ onClose }: { onClose: () => void }) {
       label: "사용자 검색",
       icon: Search,
       onClick: () => {
-        console.log("사용자 검색 클릭");
-        // router.push("/search");
+        open();
         onClose();
       },
     },
