@@ -41,9 +41,8 @@ export async function getTreeOwner(uuid: string) {
     });
 
     if (!res.ok) {
-      console.log("목업 사용 시작");
-      console.log(res);
-      return textUser.body;
+      console.log("api 불러오기 실패", res);
+      return;
     }
 
     const data = await res.json();
