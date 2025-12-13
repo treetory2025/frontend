@@ -1,86 +1,57 @@
 "use client";
 
 import SearchInput from "@/components/commons/searchInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SearchSlash } from "lucide-react";
-
-const testMembers = [
-  {
-    memberId: "a1f2c3d4-1111-2222-3333-444455556666",
-    nickname: "프론트엔드왕",
-    email: "frontend@treetory.com",
-    ornamentsCount: 3,
-  },
-  {
-    memberId: "b2c3d4e5-7777-8888-9999-000011112222",
-    nickname: "리액트고수",
-    email: "react@treetory.com",
-    ornamentsCount: 1,
-  },
-  {
-    memberId: "c3d4e5f6-aaaa-bbbb-cccc-ddddeeeeffff",
-    nickname: "타입스크립트",
-    email: "ts@treetory.com",
-    ornamentsCount: 5,
-  },
-  {
-    memberId: "d4e5f6a7-1234-5678-9012-abcdefabcdef",
-    nickname: "테스트유저3",
-    email: "test3@test.com",
-    ornamentsCount: 0,
-  },
-  {
-    memberId: "e5f6a7b8-fedc-ba98-7654-3210fedcba98",
-    nickname: "트리토리팬",
-    email: "fan@treetory.com",
-    ornamentsCount: 2,
-  },
-  {
-    memberId: "e5f6a7b8-fedc-ba98-7654-3210fedcba9ㄹㅇ8",
-    nickname: "트리토리팬",
-    email: "fan@treetory.com",
-    ornamentsCount: 2,
-  },
-];
+import MemberPaginationSection from "./MemberPaginationSection";
+import type { Member } from "@/types/user";
+import { useRouter } from "next/navigation";
 
 export default function MemberSearchSection() {
+  const router = useRouter();
   const [input, setInput] = useState("");
-
-  const [query, setQuery] = useState("");
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(1);
   const [totalElements, setTotalElements] = useState(0);
 
   const size = 5;
 
-  const [members, setMembers] = useState(testMembers);
+  const [members, setMembers] = useState<Member[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
 
-  const onSubmit = async () => {
+  useEffect(() => {
+    if (!hasSearched) return;
+
+    const fetchMembers = async () => {
+      try {
+        const res = await fetch(
+          `/api/members?query=${input.trim()}&page=${page}&size=${size}`,
+        );
+
+        if (!res.ok) {
+          console.log("사용자 검색 결과 없음");
+          return;
+        }
+
+        const data = await res.json();
+        if (!data?.body) return;
+
+        setMembers(data.body.members);
+        setTotalPage(data.body.totalPage);
+        setTotalElements(data.body.totalElements);
+      } catch (error) {
+        console.error("사용자 검색 실패", error);
+      }
+    };
+
+    fetchMembers();
+  }, [page, hasSearched, input, size]);
+
+  const onSubmit = () => {
     if (!input.trim()) return;
 
     setHasSearched(true);
-
-    try {
-      const res = await fetch(
-        `/api/members?query=${input.trim()}&page=${page}&size=${size}`,
-      );
-
-      if (!res.ok || res.status === 400) {
-        console.log("사용자 검색 결과 없음", res.body);
-        return;
-      }
-
-      const data = await res.json();
-      if (!data.body) return;
-
-      setMembers(data.body.members);
-      setPage(data.body.pageNum);
-      setTotalPage(data.body.totalPage);
-      setTotalElements(data.body.totalElements);
-    } catch (error) {
-      console.error("사용자 검색 실패", error);
-    }
+    setPage(0);
   };
 
   return (
@@ -128,12 +99,20 @@ export default function MemberSearchSection() {
                     <span className="font-bold">트리 장식 개수 </span>
                     {member.ornamentsCount}
                   </p>
-                  <button className="text-button bg-muted-navy text-beige rounded-full px-8 py-1">
+                  <button
+                    className="text-button bg-muted-navy text-beige cursor-pointer rounded-full px-8 py-1"
+                    onClick={() => router.push(`/tree/${member.memberId}`)}
+                  >
                     방문하기
                   </button>
                 </div>
               </div>
             ))}
+            <MemberPaginationSection
+              page={page}
+              totalPage={totalPage}
+              onChangePage={(nextPage) => setPage(nextPage)}
+            />
           </div>
         </div>
       )}
