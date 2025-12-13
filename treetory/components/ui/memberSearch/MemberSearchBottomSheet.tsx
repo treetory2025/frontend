@@ -1,7 +1,7 @@
 "use client";
 
 import { BottomSheet } from "@/components/commons/BottomSheet";
-import { useMemberSearchSheet } from "@/store/useUserSearchSheet";
+import { useMemberSearchSheet } from "@/store/useMemberSearchSheet";
 import { XIcon } from "lucide-react";
 import MemberSearchSection from "@/components/ui/memberSearch/MemberSearchSection";
 
