@@ -63,6 +63,11 @@ export default function MemberSearchSection() {
         onSubmit={onSubmit}
         onKeyDown={(e) => e.key === "Enter" && onSubmit()}
       />
+      {(!hasSearched || input.length === 0) && (
+        <div className="flex h-full w-full items-center justify-center">
+          <p className="text-fg-secondary">검색어를 입력해주세요.</p>
+        </div>
+      )}
       {hasSearched && members.length === 0 && (
         <div className="flex h-full flex-col items-center justify-center gap-6">
           <div className="text-muted-navy bg-muted-navy/50 flex items-center rounded-full p-4">
