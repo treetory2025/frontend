@@ -3,6 +3,7 @@
 import { BottomSheet } from "@/components/commons/BottomSheet";
 import { useMemberSearchSheet } from "@/store/useMemberSearchSheet";
 import { XIcon } from "lucide-react";
+import MemberSearchSection from "./memberSearchSection";
 
 export default function MemberSearchBottomSheet() {
   const { isOpen, close } = useMemberSearchSheet();
@@ -20,6 +21,7 @@ export default function MemberSearchBottomSheet() {
           <XIcon size={16} strokeWidth={3} />
         </button>
       </div>
+      <MemberSearchSection />
     </BottomSheet>
   );
 }
