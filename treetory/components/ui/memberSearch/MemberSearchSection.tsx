@@ -19,13 +19,15 @@ export default function MemberSearchSection() {
   const [members, setMembers] = useState<Member[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
 
+  const [searchKeyword, setSearchKeyword] = useState("");
+
   useEffect(() => {
     if (!hasSearched) return;
 
     const fetchMembers = async () => {
       try {
         const res = await fetch(
-          `/api/members?query=${input.trim()}&page=${page}&size=${size}`,
+          `/api/members?query=${searchKeyword.trim()}&page=${page}&size=${size}`,
         );
 
         if (!res.ok) {
@@ -37,8 +39,8 @@ export default function MemberSearchSection() {
         if (!data?.body) return;
 
         setMembers(data.body.members.content);
-        setTotalPage(data.body.totalPage);
-        setTotalElements(data.body.totalElements);
+        setTotalPage(data.body.members.totalPage);
+        setTotalElements(data.body.members.totalElements);
       } catch (error) {
         console.error("사용자 검색 실패", error);
       }
@@ -47,9 +49,18 @@ export default function MemberSearchSection() {
     fetchMembers();
   }, [page, hasSearched, input, size]);
 
-  const onSubmit = () => {
-    if (!input.trim()) return;
+  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+    setHasSearched(false);
+  };
 
+  const onSubmit = () => {
+    if (!input.trim()) {
+      alert("입력칸이 비어있습니다.");
+      return;
+    }
+
+    setSearchKeyword(input.trim());
     setHasSearched(true);
     setPage(0);
   };
@@ -59,7 +70,7 @@ export default function MemberSearchSection() {
       <SearchInput
         value={input}
         placeholder="닉네임, 이메일 계정 검색"
-        onChange={(e) => setInput(e.target.value)}
+        onChange={onChangeInput}
         onSubmit={onSubmit}
         onKeyDown={(e) => e.key === "Enter" && onSubmit()}
       />
@@ -80,8 +91,8 @@ export default function MemberSearchSection() {
         <div className="no-scrollbar flex h-full flex-col gap-3 overflow-y-auto">
           <div className="border-green my-4 flex w-full justify-between border-b-2 pb-2">
             <p className="text-body text-fg-secondary">
-              <span className="text-green font-bold">{input}</span>에 대한 검색
-              결과입니다.
+              <span className="text-green font-bold">{searchKeyword}</span>에
+              대한 검색 결과입니다.
             </p>
             <p className="text-fg-secondary font-bold">{totalElements}건</p>
           </div>
