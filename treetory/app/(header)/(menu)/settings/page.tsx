@@ -31,7 +31,7 @@ export default function Page() {
   return (
     <>
       <PageHeading title="설정" />
-      <ContentSection className="relative space-y-4 md:space-y-6">
+      <ContentSection className="relative h-full space-y-4 md:space-y-6">
         <ContentContainer>
           <p className="text-subtitle text-primary pb-3">내 정보</p>
           <div className="flex flex-col gap-3 px-2 py-1">
