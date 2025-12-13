@@ -5,7 +5,7 @@ import { MoveRight, Copy, LogIn, LogOut, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { isLoggedIn } from "@/lib/auth";
 import { useUserStore } from "@/store/userStore";
-import { useUserSearchSheet } from "@/store/useMemberSearchSheet";
+import { useMemberSearchSheet } from "@/store/useMemberSearchSheet";
 
 type Menu =
   | {
@@ -24,7 +24,7 @@ export default function HeaderMenu({ onClose }: { onClose: () => void }) {
   const user = useUserStore((s) => s.user);
   const clearUser = useUserStore((s) => s.clearUser);
 
-  const open = useUserSearchSheet((s) => s.open);
+  const open = useMemberSearchSheet((s) => s.open);
 
   const menus: Menu[] = [
     {
