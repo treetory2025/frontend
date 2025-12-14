@@ -54,15 +54,18 @@ export async function getTreeOwner(uuid: string) {
   }
 }
 
-// 장식 조회 API (추후 구현 예정)
+// 장식 등록 API
 // =======================================
-// Method: GET
-// URL: /api/ornaments?word={word}&category={category}&page={page}
-// 
-// Query Parameters:
-//   - word (string): 검색어 (선택사항)
-//   - category (string): 카테고리 (선택사항)
-//   - page (number): 페이지 번호 (선택사항, 기본값: 0)
+// Method: POST
+// URL: /api/ornaments
+//
+// Request Body:
+// {
+//   "name": "string",
+//   "category": "string",
+//   "imgUrl": "string",
+//   "isPublic": boolean
+// }
 //
 // Response Schema:
 // {
@@ -70,55 +73,30 @@ export async function getTreeOwner(uuid: string) {
 //     "message": "OK"
 //   },
 //   "body": {
-//     "ornaments": {
-//       "content": [
-//         {
-//           "ornamentId": 1,
-//           "name": "string",
-//           "imgUrl": "string"
-//         }
-//       ],
-//       "pageNum": 0,
-//       "pageSize": 18,
-//       "totalPage": 1,
-//       "totalElements": 1
-//     }
+//     "ornamentId": 1
 //   }
 // }
 //
-// Ornament Interface:
-// export interface Ornament {
-//   ornamentId: number;
-//   name: string;
-//   imgUrl: string;
-// }
-//
-// OrnamentResponse Interface:
-// export interface OrnamentResponse {
-//   ornaments: {
-//     content: Ornament[];
-//     pageNum: number;
-//     pageSize: number;
-//     totalPage: number;
-//     totalElements: number;
-//   };
-// }
-//
 // Usage Example:
-// export async function getOrnaments(
-//   word: string = '',
-//   category: string = '',
-//   page: number = 0
-// ): Promise<OrnamentResponse | null> {
-//   const params = new URLSearchParams();
-//   if (word) params.append('word', word);
-//   if (category) params.append('category', category);
-//   if (page > 0) params.append('page', page.toString());
+// export async function createOrnament(
+//   name: string,
+//   category: string,
+//   imgUrl: string,
+//   isPublic: boolean
+// ): Promise<{ ornamentId: number } | null> {
+//   const payload = { name, category, imgUrl, isPublic };
+//   const res = await apiFetch(`${BASE_URL}/api/ornaments`, {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify(payload),
+//   });
 //
-//   const url = `${BASE_URL}/api/ornaments?${params.toString()}`;
-//   const res = await apiFetch(url);
-//
-//   if (!res.ok) return null;
-//   return await res.json();
+//   if (!res.ok) {
+//     console.error("장식 등록 실패", res);
+//     return null;
+//   }
+//   
+//   const data = await res.json();
+//   return data?.body;
 // }
 // =======================================

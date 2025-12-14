@@ -1,9 +1,14 @@
 import { Plus } from 'lucide-react';
+import { useRouter, useParams } from 'next/navigation';
 
 export default function CreateOrnamentButton() {
+  const router = useRouter();
+  const params = useParams();
+  const uuid = params?.uuid as string;
+
   const handleCreateOrnament = () => {
-    // TODO: 장식 만들기 모달 또는 페이지로 이동
-    console.log('Create ornament clicked');
+    // 장식 만들기 페이지로 이동
+    router.push(`/tree/${uuid}/decorate/create`);
   };
 
   return (
