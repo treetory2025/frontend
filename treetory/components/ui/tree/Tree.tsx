@@ -64,7 +64,6 @@ export function Tree({
   // 가로 중앙 정렬
   const x = (containerWidth - treeW) / 2 - diff * scale;
   const diffX = (treeW - defaultW) / 2 + diff * scale;
-  console.log(size, diffX);
   return (
     <Group x={x} y={y}>
       <KonvaImage image={treeImg} scale={{ x: scale, y: scale }} />

@@ -69,7 +69,6 @@ export default function TreePage() {
   // 선택된 장식 정보 상태 저장
   const handleSelectOrnament = (ornament: Ornarment) => {
     setSelectedOrnament(ornament);
-    console.log("장식 선택", ornament);
     open(); // 바텀시트 열기
   };
 

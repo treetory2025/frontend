@@ -16,8 +16,6 @@ export default function Ornaments({
   const ornaments = owner.ornamentsRes as Ornarment[];
   if (!ornaments || ornaments.length === 0) return null;
 
-  console.log(diffX);
-
   return (
     <>
       {ornaments.map((ornament) => (
