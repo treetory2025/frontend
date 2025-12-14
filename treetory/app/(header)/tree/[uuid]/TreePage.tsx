@@ -17,6 +17,9 @@ export default function TreePage() {
   const [treeHeight, setTreeHeight] = useState(0);
   const [treeSize, setTreeSize] = useState(3);
 
+  // 로딩 확인
+  const [isTreeReady, setIsTreeReady] = useState(false);
+
   // 배경 테마 확인
   const setTheme = useThemeStore((s) => s.setTheme);
 
@@ -82,6 +85,15 @@ export default function TreePage() {
         }}
         className="no-scrollbar overflow-y-scroll"
       >
+        {!isTreeReady && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center">
+            <span
+              className={`text-body text-center ${owner.treeBackground === "SILENT_NIGHT" ? "text-beige" : "text-fg-primary"}`}
+            >
+              트리를 불러오는 중이에요
+            </span>
+          </div>
+        )}
         <Stage
           width={size.width}
           height={treeHeight + 120}
@@ -97,7 +109,10 @@ export default function TreePage() {
               scale={1.0}
               theme={owner.treeTheme}
               size={owner.treeSize}
-              onLoad={(h: number) => setTreeHeight(h)}
+              onLoad={(h: number) => {
+                setTreeHeight(h);
+                setIsTreeReady(true);
+              }}
               onSelectOrnament={handleSelectOrnament}
             />
           </Layer>
