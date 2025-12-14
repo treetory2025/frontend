@@ -19,6 +19,16 @@ export default function TreePage() {
   const [treeWidth, setTreeWidth] = useState(0);
   const [treeSize, setTreeSize] = useState(3);
 
+  const [isOutOfBounds, setIsOutOfBounds] = useState(false);
+  const lastValidPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+
+  const MARGIN = {
+    top: 0,
+    bottom: 120,
+    left: 0,
+    right: 0,
+  };
+
   // 로딩 확인
   const [isTreeReady, setIsTreeReady] = useState(false);
 
@@ -85,7 +95,7 @@ export default function TreePage() {
           height: size.height,
           zIndex: 1,
         }}
-        className="no-scrollbar overflow-y-scroll"
+        className="no-scrollbar"
       >
         {!isTreeReady && (
           <div className="absolute inset-0 z-10 flex items-center justify-center">
@@ -100,31 +110,24 @@ export default function TreePage() {
           width={size.width}
           height={treeHeight + 120}
           style={{
-            width: "100dvw", // CSS로 반응형 확대/축소
+            width: "100dvw",
             height: "auto",
           }}
         >
           <Layer>
-            <Group
-              draggable={true}
-              onDragMove={(p) => {
-                console.log(p);
+            <Tree
+              containerWidth={size.width}
+              containerHeight={size.height}
+              scale={1.0}
+              theme={owner.treeTheme}
+              size={4}
+              onLoad={({ width, height }) => {
+                setTreeWidth(width);
+                setTreeHeight(height);
+                setIsTreeReady(true);
               }}
-            >
-              <Tree
-                containerWidth={size.width}
-                containerHeight={size.height}
-                scale={1.0}
-                theme={owner.treeTheme}
-                size={owner.treeSize}
-                onLoad={({ width, height }) => {
-                  setTreeWidth(width);
-                  setTreeHeight(height);
-                  setIsTreeReady(true);
-                }}
-                onSelectOrnament={handleSelectOrnament}
-              />
-            </Group>
+              onSelectOrnament={handleSelectOrnament}
+            />
           </Layer>
         </Stage>
       </div>

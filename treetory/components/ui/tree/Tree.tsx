@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Group, Image as KonvaImage } from "react-konva";
 import useImage from "use-image";
 import Ornaments from "./Ornaments";
@@ -27,35 +27,33 @@ export function Tree({
 }: Props) {
   const defaultSrc = `/images/theme/tree/${theme}/Size3.png`;
   const imgSrc = `/images/theme/tree/${theme}/Size${size}.png`;
-  const baseImgSrc = `/images/theme/tree/${theme}/Size7.png`;
 
   const [defaultImg] = useImage(defaultSrc);
   const [treeImg] = useImage(imgSrc);
-  const [baseImg] = useImage(baseImgSrc);
+
+  const groupRef = useRef<any>(null);
 
   useEffect(() => {
     if (treeImg && onLoad) {
-      const width = treeImg.width * scale;
-      const height = treeImg.height * scale;
-
-      onLoad({ width, height });
+      onLoad({
+        width: treeImg.width * scale,
+        height: treeImg.height * scale,
+      });
     }
   }, [treeImg, scale, onLoad]);
 
-  if (!treeImg || !baseImg || !defaultImg) return null;
-
-  const defaultW = defaultImg.width * scale;
+  if (!treeImg || !defaultImg) return null;
 
   const treeW = treeImg.width * scale;
-  let diff = 0;
+  const treeH = treeImg.height * scale;
+  const defaultW = defaultImg.width * scale;
 
-  if (theme !== "SNOWY" || !size) {
-    diff = 0;
-  } else if (size === 8 || size === 10) {
+  let diff = 0;
+  if (theme === "SNOWY" && (size === 8 || size === 10)) {
     diff = 8;
   }
-  let y = 0;
 
+  let y = 0;
   if (containerHeight <= 455) {
     y = containerHeight * 0.05;
   } else if (containerWidth >= 540 && containerHeight <= 720) {
@@ -64,11 +62,47 @@ export function Tree({
     y = containerHeight * 0.2;
   }
 
-  // 가로 중앙 정렬
   const x = (containerWidth - treeW) / 2 - diff * scale;
+
   const diffX = (treeW - defaultW) / 2 + diff * scale;
+  const canDrag = diffX > 0;
+
+  const handleDragMove = (e: any) => {
+    if (!canDrag) return;
+
+    const node = e.target;
+
+    const currentX = node.x();
+    const currentY = node.y();
+
+    // X축 이동 가능 범위
+    const minX = 2 * x;
+    const maxX = 0;
+
+    // Y축 이동 가능 범위
+    const overflowY = Math.max(0, treeH - containerHeight);
+    const minY = y - overflowY;
+    const maxY = y;
+
+    const clampedX = Math.min(Math.max(currentX, minX), maxX);
+    const clampedY = Math.min(Math.max(currentY, minY), maxY);
+
+    if (clampedX !== currentX || clampedY !== currentY) {
+      node.position({
+        x: clampedX,
+        y: clampedY,
+      });
+    }
+  };
+
   return (
-    <Group x={x} y={y}>
+    <Group
+      ref={groupRef}
+      x={x}
+      y={y}
+      draggable={canDrag}
+      onDragMove={handleDragMove}
+    >
       <KonvaImage image={treeImg} scale={{ x: scale, y: scale }} />
       <Ornaments onSelectOrnament={onSelectOrnament} diffX={diffX} />
     </Group>
