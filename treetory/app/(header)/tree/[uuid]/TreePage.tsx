@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Layer, Stage } from "react-konva";
+import { Group, Layer, Stage } from "react-konva";
 import { Tree } from "@/components/ui/tree/Tree";
 import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
 import { useRouter } from "next/navigation";
@@ -9,12 +9,14 @@ import { Ornarment } from "@/types/ornarment";
 import { useBottomSheet } from "@/hooks/useBottomSheet";
 import OrnamentBottomSheet from "@/components/ui/tree/OrnamentBottomSheet";
 import { useThemeStore } from "@/store/userStore";
+import Konva from "konva";
 
 export default function TreePage() {
   const { owner, uuid } = useOwner();
   const containerRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [treeHeight, setTreeHeight] = useState(0);
+  const [treeWidth, setTreeWidth] = useState(0);
   const [treeSize, setTreeSize] = useState(3);
 
   // 로딩 확인
@@ -102,19 +104,27 @@ export default function TreePage() {
             height: "auto",
           }}
         >
-          <Layer draggable={true}>
-            <Tree
-              containerWidth={size.width}
-              containerHeight={size.height}
-              scale={1.0}
-              theme={owner.treeTheme}
-              size={owner.treeSize}
-              onLoad={(h: number) => {
-                setTreeHeight(h);
-                setIsTreeReady(true);
+          <Layer>
+            <Group
+              draggable={true}
+              onDragMove={(p) => {
+                console.log(p);
               }}
-              onSelectOrnament={handleSelectOrnament}
-            />
+            >
+              <Tree
+                containerWidth={size.width}
+                containerHeight={size.height}
+                scale={1.0}
+                theme={owner.treeTheme}
+                size={owner.treeSize}
+                onLoad={({ width, height }) => {
+                  setTreeWidth(width);
+                  setTreeHeight(height);
+                  setIsTreeReady(true);
+                }}
+                onSelectOrnament={handleSelectOrnament}
+              />
+            </Group>
           </Layer>
         </Stage>
       </div>

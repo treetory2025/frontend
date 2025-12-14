@@ -12,7 +12,7 @@ interface Props {
   scale: number;
   theme?: string;
   size?: number;
-  onLoad?: (height: number) => void;
+  onLoad?: (size: { width: number; height: number }) => void;
   onSelectOrnament: (ornament: Ornarment) => void;
 }
 
@@ -35,9 +35,12 @@ export function Tree({
 
   useEffect(() => {
     if (treeImg && onLoad) {
-      onLoad(treeImg.height * scale);
+      const width = treeImg.width * scale;
+      const height = treeImg.height * scale;
+
+      onLoad({ width, height });
     }
-  }, [treeImg, scale]);
+  }, [treeImg, scale, onLoad]);
 
   if (!treeImg || !baseImg || !defaultImg) return null;
 
