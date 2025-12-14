@@ -25,8 +25,11 @@ export function Tree({
   onLoad,
   onSelectOrnament,
 }: Props) {
+  const defaultSrc = `/images/theme/tree/${theme}/Size3.png`;
   const imgSrc = `/images/theme/tree/${theme}/Size${size}.png`;
   const baseImgSrc = `/images/theme/tree/${theme}/Size7.png`;
+
+  const [defaultImg] = useImage(defaultSrc);
   const [treeImg] = useImage(imgSrc);
   const [baseImg] = useImage(baseImgSrc);
 
@@ -36,7 +39,9 @@ export function Tree({
     }
   }, [treeImg, scale]);
 
-  if (!treeImg || !baseImg) return null;
+  if (!treeImg || !baseImg || !defaultImg) return null;
+
+  const defaultW = defaultImg.width * scale;
 
   const treeW = treeImg.width * scale;
   let diff = 0;
@@ -58,10 +63,12 @@ export function Tree({
 
   // 가로 중앙 정렬
   const x = (containerWidth - treeW) / 2 - diff * scale;
+  const diffX = (treeW - defaultW) / 2 + diff * scale;
+  console.log(size, diffX);
   return (
     <Group x={x} y={y}>
       <KonvaImage image={treeImg} scale={{ x: scale, y: scale }} />
-      <Ornaments onSelectOrnament={onSelectOrnament} />
+      <Ornaments onSelectOrnament={onSelectOrnament} diffX={diffX} />
     </Group>
   );
 }
