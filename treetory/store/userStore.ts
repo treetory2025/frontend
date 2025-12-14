@@ -39,6 +39,7 @@ interface ThemeState {
 }
 
 export const useThemeStore = create<ThemeState>((set) => ({
-  theme: null,
+  // 디폴트 - 고요한 밤 임시 설정
+  theme: "SILENT_NIGHT",
   setTheme: (theme) => set({ theme }),
 }));

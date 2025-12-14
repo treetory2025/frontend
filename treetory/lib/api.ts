@@ -54,49 +54,37 @@ export async function getTreeOwner(uuid: string) {
   }
 }
 
-// 장식 등록 API
-// =======================================
-// Method: POST
-// URL: /api/ornaments
-//
-// Request Body:
-// {
-//   "name": "string",
-//   "category": "string",
-//   "imgUrl": "string",
-//   "isPublic": boolean
-// }
-//
-// Response Schema:
-// {
-//   "header": {
-//     "message": "OK"
-//   },
-//   "body": {
-//     "ornamentId": 1
-//   }
-// }
-//
-// Usage Example:
-// export async function createOrnament(
-//   name: string,
-//   category: string,
-//   imgUrl: string,
-//   isPublic: boolean
-// ): Promise<{ ornamentId: number } | null> {
-//   const payload = { name, category, imgUrl, isPublic };
-//   const res = await apiFetch(`${BASE_URL}/api/ornaments`, {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify(payload),
-//   });
-//
-//   if (!res.ok) {
-//     console.error("장식 등록 실패", res);
-//     return null;
-//   }
-//   
-//   const data = await res.json();
-//   return data?.body;
-// }
-// =======================================
+export async function getBookmarks({
+  query,
+  page,
+  size,
+}: {
+  query?: string;
+  page: string;
+  size: string;
+}) {
+  try {
+    const params = new URLSearchParams({
+      page: String(page),
+      size: String(size),
+    });
+
+    if (query && query.trim() !== "") {
+      params.append("query", query);
+    }
+
+    const res = await apiFetch(`/api/members/bookmarks?${params.toString()}`, {
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      console.log("즐겨찾기 정보 조회 실패", res);
+      return;
+    }
+
+    const data = await res.json();
+    return data?.body;
+  } catch (error) {
+    console.error(error);
+  }
+}

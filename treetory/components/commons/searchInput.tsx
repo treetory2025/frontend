@@ -30,7 +30,7 @@ export default function SearchInput({
       />
       <button
         onClick={onSubmit}
-        className="bg-green text-beige text-button h-10 w-20 rounded-md px-4 py-2"
+        className="bg-green text-beige text-button h-10 w-20 cursor-pointer rounded-md px-4 py-2"
       >
         검색
       </button>

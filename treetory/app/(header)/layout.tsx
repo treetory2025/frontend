@@ -3,6 +3,7 @@
 import Header from "@/components/commons/Header";
 import { useThemeStore } from "@/store/userStore";
 import { usePathname } from "next/navigation";
+import MemberSearchBottomSheet from "@/components/ui/memberSearch/MemberSearchBottomSheet";
 
 export default function HeaderLayout({
   children,
@@ -30,6 +31,7 @@ export default function HeaderLayout({
       </header>
 
       {children}
+      <MemberSearchBottomSheet />
     </div>
   );
 }

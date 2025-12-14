@@ -16,3 +16,10 @@ export type Owner = {
   treeBackground?: BackgroundType;
   ornamentsRes?: Array<Ornarment>;
 };
+
+export type Member = {
+  memberId: string;
+  nickname: string;
+  email: string;
+  ornamentsCount: number;
+};
