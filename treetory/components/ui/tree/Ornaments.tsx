@@ -37,7 +37,9 @@ export function OrnamentItem({
   const [imgSrc] = useImage(ornament.imgUrl);
 
   const radius =
-    ornament.size === "small" ? 22 : ornament.size === "medium" ? 30 : 38;
+    ornament.size === "SMALL" ? 22 : ornament.size === "MEDIUM" ? 30 : 38;
+
+  console.log(ornament, radius);
 
   const handleMouseOver = (e: any) => {
     e.target.getStage().container().style.cursor = "pointer";
