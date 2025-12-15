@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Layer, Stage } from "react-konva";
+import { Group, Layer, Stage } from "react-konva";
 import { Tree } from "@/components/ui/tree/Tree";
 import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
 import { useRouter } from "next/navigation";
@@ -9,13 +9,29 @@ import { Ornarment } from "@/types/ornarment";
 import { useBottomSheet } from "@/hooks/useBottomSheet";
 import OrnamentBottomSheet from "@/components/ui/tree/OrnamentBottomSheet";
 import { useThemeStore } from "@/store/userStore";
+import Konva from "konva";
+import { useStageZoom } from "@/hooks/useStageZoom";
 
 export default function TreePage() {
   const { owner, uuid } = useOwner();
   const containerRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [treeHeight, setTreeHeight] = useState(0);
+  const [treeWidth, setTreeWidth] = useState(0);
   const [treeSize, setTreeSize] = useState(3);
+
+  const stageRef = useRef<Konva.Stage | null>(null);
+
+  const { handleWheel, handleTouchMove, handleTouchEnd } = useStageZoom(
+    stageRef,
+    {
+      minScale: 1,
+      maxScale: 1.6,
+      scaleBy: 1.01,
+    },
+  );
+  // 로딩 확인
+  const [isTreeReady, setIsTreeReady] = useState(false);
 
   // 배경 테마 확인
   const setTheme = useThemeStore((s) => s.setTheme);
@@ -69,7 +85,6 @@ export default function TreePage() {
   // 선택된 장식 정보 상태 저장
   const handleSelectOrnament = (ornament: Ornarment) => {
     setSelectedOrnament(ornament);
-    console.log("장식 선택", ornament);
     open(); // 바텀시트 열기
   };
 
@@ -81,24 +96,43 @@ export default function TreePage() {
           height: size.height,
           zIndex: 1,
         }}
-        className="no-scrollbar overflow-y-scroll"
+        className="no-scrollbar overflow-y-hidden"
       >
+        {!isTreeReady && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center">
+            <span
+              className={`text-body text-center ${owner.treeBackground === "SILENT_NIGHT" ? "text-beige" : "text-fg-primary"}`}
+            >
+              트리를 불러오는 중이에요
+            </span>
+          </div>
+        )}
         <Stage
+          ref={stageRef}
           width={size.width}
           height={treeHeight + 120}
           style={{
-            width: "100dvw", // CSS로 반응형 확대/축소
+            width: "100dvw",
             height: "auto",
+            touchAction: "none",
           }}
         >
-          <Layer draggable={true}>
+          <Layer
+            onWheel={handleWheel}
+            onTouchMove={handleTouchMove} // 모바일
+            onTouchEnd={handleTouchEnd}
+          >
             <Tree
               containerWidth={size.width}
               containerHeight={size.height}
-              scale={1.0}
+              scale={1}
               theme={owner.treeTheme}
               size={owner.treeSize}
-              onLoad={(h: number) => setTreeHeight(h)}
+              onLoad={({ width, height }) => {
+                setTreeWidth(width);
+                setTreeHeight(height);
+                setIsTreeReady(true);
+              }}
               onSelectOrnament={handleSelectOrnament}
             />
           </Layer>

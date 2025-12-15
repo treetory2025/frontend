@@ -29,7 +29,7 @@ export function OwnerProvider({
       });
 
       if (!res.ok) {
-        console.log("갱싱 실패", res);
+        console.log("갱신 실패", res);
         return;
       }
 

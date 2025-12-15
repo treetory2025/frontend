@@ -7,8 +7,10 @@ import useImage from "use-image";
 
 export default function Ornaments({
   onSelectOrnament,
+  diffX,
 }: {
   onSelectOrnament: (ornament: Ornarment) => void;
+  diffX: number;
 }) {
   const { owner } = useOwner();
   const ornaments = owner.ornamentsRes as Ornarment[];
@@ -21,6 +23,7 @@ export default function Ornaments({
           key={ornament.placedOrnamentId}
           ornament={ornament}
           onSelectOrnament={onSelectOrnament}
+          diffX={diffX}
         />
       ))}
     </>
@@ -30,9 +33,11 @@ export default function Ornaments({
 export function OrnamentItem({
   ornament,
   onSelectOrnament,
+  diffX,
 }: {
   ornament: Ornarment;
   onSelectOrnament: (ornament: Ornarment) => void;
+  diffX: number;
 }) {
   const [imgSrc] = useImage(ornament.imgUrl);
 
@@ -48,10 +53,11 @@ export function OrnamentItem({
   const handleMouseOut = (e: any) => {
     e.target.getStage().container().style.cursor = "default";
   };
+  console.log(diffX);
 
   return (
     <Group
-      x={ornament.positionX}
+      x={ornament.positionX + diffX}
       y={ornament.positionY}
       clipFunc={(ctx) => {
         ctx.arc(0, 0, radius, 0, Math.PI * 2);
