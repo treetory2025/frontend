@@ -44,8 +44,6 @@ export function OrnamentItem({
   const radius =
     ornament.size === "SMALL" ? 22 : ornament.size === "MEDIUM" ? 30 : 38;
 
-  console.log(ornament, radius);
-
   const handleMouseOver = (e: any) => {
     e.target.getStage().container().style.cursor = "pointer";
   };
@@ -53,7 +51,6 @@ export function OrnamentItem({
   const handleMouseOut = (e: any) => {
     e.target.getStage().container().style.cursor = "default";
   };
-  console.log(diffX);
 
   return (
     <Group

@@ -62,10 +62,11 @@ export default function TreePage() {
     setTheme(owner.treeBackground);
   }, [owner.treeBackground, setTheme]);
 
-  // 트리 규격에 따른 사이즈 확인
+  // stage 규격 확인
   useEffect(() => {
     function updateSize() {
       if (!containerRef.current) return;
+      console.log(containerRef);
       const { clientWidth, clientHeight } = containerRef.current;
       setSize({ width: clientWidth, height: clientHeight });
     }
@@ -89,7 +90,7 @@ export default function TreePage() {
   };
 
   return (
-    <div className={`relative mb-0 h-full w-full`} ref={containerRef}>
+    <div className={`relative h-full w-full`} ref={containerRef}>
       <div
         style={{
           width: size.width,
@@ -99,7 +100,7 @@ export default function TreePage() {
         className="no-scrollbar overflow-y-hidden"
       >
         {!isTreeReady && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center">
+          <div className="absolute inset-0 z-10 flex h-full items-center justify-center">
             <span
               className={`text-body text-center ${owner.treeBackground === "SILENT_NIGHT" ? "text-beige" : "text-fg-primary"}`}
             >
@@ -110,7 +111,7 @@ export default function TreePage() {
         <Stage
           ref={stageRef}
           width={size.width}
-          height={treeHeight + 120}
+          height={Math.max(size.height + 120, treeHeight + 120)}
           style={{
             width: "100dvw",
             height: "auto",
@@ -127,7 +128,7 @@ export default function TreePage() {
               containerHeight={size.height}
               scale={1}
               theme={owner.treeTheme}
-              size={owner.treeSize}
+              size={10}
               onLoad={({ width, height }) => {
                 setTreeWidth(width);
                 setTreeHeight(height);

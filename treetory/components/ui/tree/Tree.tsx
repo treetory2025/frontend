@@ -60,6 +60,7 @@ export function Tree({
   } else if (containerWidth >= 540 && containerHeight <= 720) {
     y = containerHeight * 0.1;
   } else {
+    console.log(containerWidth, containerHeight);
     y = containerHeight * 0.2;
   }
 
@@ -69,7 +70,8 @@ export function Tree({
   // 드래그 범위 제한
   const overflowX = Math.max(0, treeW - containerWidth);
   const canDragX = overflowX > 0;
-  const overflowY = Math.max(0, treeH - containerHeight);
+  const overflowY = Math.max(0, treeH - containerHeight + y);
+  console.log(treeH, containerHeight, y);
   const canDragY = overflowY > 0;
 
   const handleDragMove = (e: any) => {
@@ -85,10 +87,9 @@ export function Tree({
       const maxX = 0;
       nextX = Math.min(Math.max(nextX, minX), maxX);
     }
-
     if (canDragY) {
       const minY = y - overflowY;
-      const maxY = y;
+      const maxY = 0;
       nextY = Math.min(Math.max(nextY, minY), maxY);
     } else {
       nextY = y;
