@@ -6,8 +6,9 @@ import { SearchSlash } from "lucide-react";
 import MemberPaginationSection from "./MemberPaginationSection";
 import type { Member } from "@/types/user";
 import { useRouter } from "next/navigation";
+import { useMemberSearchSheet } from "@/store/useMemberSearchSheet";
 
-export default function MemberSearchSection() {
+export default function MemberSearchSection({ close }: { close: () => void }) {
   const router = useRouter();
   const [input, setInput] = useState("");
   const [page, setPage] = useState(0);
@@ -127,7 +128,10 @@ export default function MemberSearchSection() {
                   </p>
                   <button
                     className="text-button bg-muted-navy text-beige cursor-pointer rounded-full px-8 py-1"
-                    onClick={() => router.push(`/tree/${member.memberId}`)}
+                    onClick={() => {
+                      close();
+                      router.push(`/tree/${member.memberId}`);
+                    }}
                   >
                     방문하기
                   </button>

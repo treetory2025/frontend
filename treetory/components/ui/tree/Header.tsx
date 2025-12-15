@@ -7,7 +7,7 @@ import { AddTreeButton } from "@/components//ui/tree/Button";
 import { useThemeStore } from "@/store/userStore";
 
 export default function TreeHeader() {
-  const { owner, refreshOwner, uuid } = useOwner();
+  const { owner, refreshOwner, uuid, openSizeSheet } = useOwner();
   const user = useUserStore().user;
   const router = useRouter();
 
@@ -15,19 +15,22 @@ export default function TreeHeader() {
   const isOwner = user?.uuid === uuid;
 
   const textColor = theme === "SILENT_NIGHT" ? "text-beige" : "text-navy";
+  const welcomeStr = isOwner
+    ? "나의 트리를 둘러보세요!"
+    : "나만의 장식을 남겨보세요!";
 
   return (
     <header className="flex flex-col gap-2 px-5 select-none">
       <div className="flex items-center justify-between">
         <div>
           <p className={`font-memoment text-body md:text-xl ${textColor}`}>
-            새로운 장식을 확인해보세요!
+            {welcomeStr}
           </p>
           <h1 className={`text-title font-memoment ${textColor}`}>
             {owner.nickname}님의 <span className="text-green">트리토리</span>
           </h1>
         </div>
-        {isOwner && <AddTreeButton />}
+        {isOwner && <AddTreeButton onClick={openSizeSheet} />}
       </div>
 
       <div

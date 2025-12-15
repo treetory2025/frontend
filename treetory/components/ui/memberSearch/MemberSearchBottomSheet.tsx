@@ -21,7 +21,7 @@ export default function MemberSearchBottomSheet() {
           <XIcon size={16} strokeWidth={3} />
         </button>
       </div>
-      <MemberSearchSection />
+      <MemberSearchSection close={close} />
     </BottomSheet>
   );
 }
