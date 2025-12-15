@@ -78,7 +78,6 @@ export function Tree({
     let nextX = node.x();
     let nextY = node.y();
 
-    console.log(diffX);
     if (!canDragX) {
       nextX = x;
     } else {
