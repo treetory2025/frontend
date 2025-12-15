@@ -5,12 +5,14 @@ import { Group, Image as KonvaImage } from "react-konva";
 import useImage from "use-image";
 import Ornaments from "./Ornaments";
 import type { Ornarment } from "@/types/ornarment";
+import Background from "./Background";
 
 interface Props {
   containerWidth: number;
   containerHeight: number;
   scale: number;
   theme?: string;
+  background?: string;
   size?: number;
   onLoad?: (size: { width: number; height: number }) => void;
   onSelectOrnament: (ornament: Ornarment) => void;
@@ -21,6 +23,7 @@ export function Tree({
   containerHeight,
   scale,
   theme,
+  background,
   size,
   onLoad,
   onSelectOrnament,
@@ -60,7 +63,6 @@ export function Tree({
   } else if (containerWidth >= 540 && containerHeight <= 720) {
     y = containerHeight * 0.1;
   } else {
-    console.log(containerWidth, containerHeight);
     y = containerHeight * 0.2;
   }
 
@@ -70,8 +72,8 @@ export function Tree({
   // 드래그 범위 제한
   const overflowX = Math.max(0, treeW - containerWidth);
   const canDragX = overflowX > 0;
+  console.log(canDragX);
   const overflowY = Math.max(0, treeH - containerHeight + y);
-  console.log(treeH, containerHeight, y);
   const canDragY = overflowY > 0;
 
   const handleDragMove = (e: any) => {
@@ -81,15 +83,18 @@ export function Tree({
     let nextY = node.y();
 
     if (!canDragX) {
+      console.log(x);
       nextX = x;
     } else {
+      console.log("moving");
       const minX = 2 * x;
       const maxX = 0;
       nextX = Math.min(Math.max(nextX, minX), maxX);
     }
+
     if (canDragY) {
       const minY = y - overflowY;
-      const maxY = 0;
+      const maxY = y;
       nextY = Math.min(Math.max(nextY, minY), maxY);
     } else {
       nextY = y;
@@ -97,6 +102,8 @@ export function Tree({
 
     node.position({ x: nextX, y: nextY });
   };
+
+  console.log(y, treeH);
 
   return (
     <Group
@@ -106,7 +113,33 @@ export function Tree({
       draggable={canDragX || canDragY}
       onDragMove={handleDragMove}
     >
+      {background === "SNOWY_HILL" && (
+        <Background
+          x={x}
+          y={y}
+          containerWidth={containerWidth}
+          containerHeight={containerHeight}
+          treeWitdh={treeW}
+          treeHeight={treeH}
+          size={size}
+          scale={1}
+          theme={background}
+        />
+      )}
       <KonvaImage image={treeImg} scale={{ x: scale, y: scale }} />
+      {background === "SILENT_NIGHT" && (
+        <Background
+          x={x}
+          y={y}
+          containerWidth={containerWidth}
+          containerHeight={containerHeight}
+          treeWitdh={treeW}
+          treeHeight={treeH}
+          size={size}
+          scale={1}
+          theme={background}
+        />
+      )}
       <Ornaments onSelectOrnament={onSelectOrnament} diffX={diffX} />
     </Group>
   );
