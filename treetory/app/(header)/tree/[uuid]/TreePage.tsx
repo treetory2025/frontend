@@ -10,6 +10,7 @@ import { useBottomSheet } from "@/hooks/useBottomSheet";
 import OrnamentBottomSheet from "@/components/ui/tree/OrnamentBottomSheet";
 import { useThemeStore } from "@/store/userStore";
 import Konva from "konva";
+import { useStageZoom } from "@/hooks/useStageZoom";
 
 export default function TreePage() {
   const { owner, uuid } = useOwner();
@@ -19,13 +20,16 @@ export default function TreePage() {
   const [treeWidth, setTreeWidth] = useState(0);
   const [treeSize, setTreeSize] = useState(3);
 
-  const MARGIN = {
-    top: 0,
-    bottom: 120,
-    left: 0,
-    right: 0,
-  };
+  const stageRef = useRef<Konva.Stage | null>(null);
 
+  const { handleWheel, handleTouchMove, handleTouchEnd } = useStageZoom(
+    stageRef,
+    {
+      minScale: 1,
+      maxScale: 1.6,
+      scaleBy: 1.01,
+    },
+  );
   // 로딩 확인
   const [isTreeReady, setIsTreeReady] = useState(false);
 
@@ -92,7 +96,7 @@ export default function TreePage() {
           height: size.height,
           zIndex: 1,
         }}
-        className="no-scrollbar"
+        className="no-scrollbar overflow-y-hidden"
       >
         {!isTreeReady && (
           <div className="absolute inset-0 z-10 flex items-center justify-center">
@@ -104,18 +108,24 @@ export default function TreePage() {
           </div>
         )}
         <Stage
+          ref={stageRef}
           width={size.width}
           height={treeHeight + 120}
           style={{
             width: "100dvw",
             height: "auto",
+            touchAction: "none",
           }}
         >
-          <Layer>
+          <Layer
+            onWheel={handleWheel}
+            onTouchMove={handleTouchMove} // 모바일
+            onTouchEnd={handleTouchEnd}
+          >
             <Tree
               containerWidth={size.width}
               containerHeight={size.height}
-              scale={1.0}
+              scale={1}
               theme={owner.treeTheme}
               size={owner.treeSize}
               onLoad={({ width, height }) => {
