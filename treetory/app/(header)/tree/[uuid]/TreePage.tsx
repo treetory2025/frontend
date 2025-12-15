@@ -135,8 +135,7 @@ export default function TreePage() {
               scale={1}
               theme={owner.treeTheme}
               background={owner.treeBackground}
-              // background={"SNOWY_HILL"}
-              size={3}
+              size={owner.treeSize}
               onLoad={({ width, height }) => {
                 setTreeWidth(width);
                 setTreeHeight(height);
