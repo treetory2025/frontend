@@ -13,9 +13,10 @@ import Konva from "konva";
 import { useStageZoom } from "@/hooks/useStageZoom";
 import { useUserStore } from "@/store/userStore";
 import { WelcomeBottomSheet } from "@/components/commons/BottomSheet";
+import TreeSizeAddGuideBottomSheet from "@/components/ui/tree/TreeSizeAddGuideBottomSheet";
 
 export default function TreePage() {
-  const { owner, uuid } = useOwner(); // 해당 트리 소유자 정보
+  const { owner, uuid, isSizeSheetOpen, closeSizeSheet } = useOwner(); // 해당 트리 소유자 정보
   const user = useUserStore((s) => s.user); // 로그인 유저 정보
 
   const isOwner = user?.uuid === uuid;
@@ -158,12 +159,19 @@ export default function TreePage() {
       >
         장식하기
       </button>
+
+      {/* 바텀 시트 */}
       <OrnamentBottomSheet
         isOpen={isOpen}
         onClose={close}
         ornament={selectedOrnament}
       />
       <WelcomeBottomSheet isOwner={isOwner} />
+      <TreeSizeAddGuideBottomSheet
+        treeSize={owner.treeSize ?? 3}
+        isOpen={isSizeSheetOpen}
+        onClose={closeSizeSheet}
+      />
     </div>
   );
 }

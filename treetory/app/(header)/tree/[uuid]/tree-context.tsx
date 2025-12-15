@@ -7,6 +7,10 @@ type OwnerContextType = {
   owner: Owner;
   refreshOwner: () => Promise<void>;
   uuid: string;
+
+  isSizeSheetOpen: boolean;
+  openSizeSheet: () => void;
+  closeSizeSheet: () => void;
 };
 
 const OwnerContext = createContext<OwnerContextType | null>(null);
@@ -21,6 +25,7 @@ export function OwnerProvider({
   uuid: string;
 }) {
   const [owner, setOwner] = useState<Owner>(initialOwner);
+  const [isSizeSheetOpen, setIsSizeSheetOpen] = useState(false);
 
   async function refreshOwner() {
     try {
@@ -45,7 +50,16 @@ export function OwnerProvider({
   }
 
   return (
-    <OwnerContext.Provider value={{ owner, refreshOwner, uuid }}>
+    <OwnerContext.Provider
+      value={{
+        owner,
+        refreshOwner,
+        uuid,
+        isSizeSheetOpen,
+        openSizeSheet: () => setIsSizeSheetOpen(true),
+        closeSizeSheet: () => setIsSizeSheetOpen(false),
+      }}
+    >
       {children}
     </OwnerContext.Provider>
   );
