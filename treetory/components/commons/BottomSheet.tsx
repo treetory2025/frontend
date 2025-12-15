@@ -76,17 +76,14 @@ export function WelcomeBottomSheet({ isOwner }: WelcomeBottomSheetProps) {
     <BottomSheet
       isOpen={isOpen}
       onClose={close}
-      className="flex flex-col items-center justify-center"
+      className="flex flex-col items-center justify-center select-none"
     >
-      <div className="flex flex-col items-center gap-1 pt-2">
-        <h3 className="text-body text-fg-primary flex text-lg font-bold">
+      <div className="border-green flex w-full flex-col items-center gap-1 border-b-2 pb-4">
+        <h3 className="text-body text-green flex text-lg font-bold">
           나의 트리 방문
         </h3>
-        <h1 className="text-body text-fg-secondary">
-          지금 내 트리에 어떤 장식이 있을까요?
-        </h1>
       </div>
-      <div className="wrap flex flex-col items-center justify-center gap-6">
+      <div className="wrap flex flex-col items-center justify-center gap-4">
         <ul className="bg-green flex items-center gap-6 rounded-md px-3 py-6">
           {items.map((item, i) => (
             <motion.li
@@ -105,11 +102,11 @@ export function WelcomeBottomSheet({ isOwner }: WelcomeBottomSheetProps) {
           ))}
         </ul>
 
-        <h3 className="text-body text-fg-secondary">
-          <span className="text-green font-bold">
-            {user?.nickname ?? "정진영"}님
-          </span>
-          을 기다리고 있었어요!
+        <h3 className="text-body text-fg-secondary text-center">
+          설레는 마음으로, 장식들과 함께
+          <br />
+          <span className="text-green font-bold"> {user?.nickname}님</span>을
+          기다리고 있었어요!
         </h3>
       </div>
     </BottomSheet>
