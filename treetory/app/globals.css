@@ -118,6 +118,7 @@ body {
   height: 100vh;
   overflow: hidden;
   font-family: "GMarketSans";
+  background-color: #17395c;
 }
 
 /* scroll bar UI 삭제 클래스 */
