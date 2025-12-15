@@ -48,6 +48,7 @@ export function Tree({
   const treeH = treeImg.height * scale;
   const defaultW = defaultImg.width * scale;
 
+  // 트리 이미지 위치 보정값
   let diff = 0;
   if (theme === "SNOWY" && (size === 8 || size === 10)) {
     diff = 8;
@@ -63,36 +64,38 @@ export function Tree({
   }
 
   const x = (containerWidth - treeW) / 2 - diff * scale;
-
   const diffX = (treeW - defaultW) / 2 + diff * scale;
-  const canDrag = diffX > 0;
+
+  // 드래그 범위 제한
+  const overflowX = Math.max(0, treeW - containerWidth);
+  const canDragX = overflowX > 0;
+  const overflowY = Math.max(0, treeH - containerHeight);
+  const canDragY = overflowY > 0;
 
   const handleDragMove = (e: any) => {
-    if (!canDrag) return;
-
     const node = e.target;
 
-    const currentX = node.x();
-    const currentY = node.y();
+    let nextX = node.x();
+    let nextY = node.y();
 
-    // X축 이동 가능 범위
-    const minX = 2 * x;
-    const maxX = 0;
-
-    // Y축 이동 가능 범위
-    const overflowY = Math.max(0, treeH - containerHeight);
-    const minY = y - overflowY;
-    const maxY = y;
-
-    const clampedX = Math.min(Math.max(currentX, minX), maxX);
-    const clampedY = Math.min(Math.max(currentY, minY), maxY);
-
-    if (clampedX !== currentX || clampedY !== currentY) {
-      node.position({
-        x: clampedX,
-        y: clampedY,
-      });
+    console.log(diffX);
+    if (!canDragX) {
+      nextX = x;
+    } else {
+      const minX = 2 * x;
+      const maxX = 0;
+      nextX = Math.min(Math.max(nextX, minX), maxX);
     }
+
+    if (canDragY) {
+      const minY = y - overflowY;
+      const maxY = y;
+      nextY = Math.min(Math.max(nextY, minY), maxY);
+    } else {
+      nextY = y;
+    }
+
+    node.position({ x: nextX, y: nextY });
   };
 
   return (
@@ -100,7 +103,7 @@ export function Tree({
       ref={groupRef}
       x={x}
       y={y}
-      draggable={canDrag}
+      draggable={canDragX || canDragY}
       onDragMove={handleDragMove}
     >
       <KonvaImage image={treeImg} scale={{ x: scale, y: scale }} />

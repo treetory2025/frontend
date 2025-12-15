@@ -19,9 +19,6 @@ export default function TreePage() {
   const [treeWidth, setTreeWidth] = useState(0);
   const [treeSize, setTreeSize] = useState(3);
 
-  const [isOutOfBounds, setIsOutOfBounds] = useState(false);
-  const lastValidPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
-
   const MARGIN = {
     top: 0,
     bottom: 120,
@@ -120,7 +117,7 @@ export default function TreePage() {
               containerHeight={size.height}
               scale={1.0}
               theme={owner.treeTheme}
-              size={4}
+              size={owner.treeSize}
               onLoad={({ width, height }) => {
                 setTreeWidth(width);
                 setTreeHeight(height);
