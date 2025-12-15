@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "@/app/globals.css";
 import localFont from "next/font/local";
+import ClientRootLayout from "./ClientLayout";
 
 const treetoryFont = localFont({
   src: [
@@ -32,10 +33,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="kr" className={treetoryFont.variable}>
-      <body>
-        <div className="app-container">
-          <main className="h-full">{children}</main>
-        </div>
+      <body className="h-full w-full">
+        <ClientRootLayout>{children}</ClientRootLayout>
       </body>
     </html>
   );

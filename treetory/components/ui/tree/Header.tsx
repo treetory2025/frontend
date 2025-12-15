@@ -17,7 +17,7 @@ export default function TreeHeader() {
   const textColor = theme === "SILENT_NIGHT" ? "text-beige" : "text-navy";
 
   return (
-    <header className="flex flex-col gap-2 select-none">
+    <header className="flex flex-col gap-2 px-5 select-none">
       <div className="flex items-center justify-between">
         <div>
           <p className={`font-memoment text-body md:text-xl ${textColor}`}>

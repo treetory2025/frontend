@@ -11,6 +11,7 @@ import OrnamentBottomSheet from "@/components/ui/tree/OrnamentBottomSheet";
 import { useThemeStore } from "@/store/userStore";
 import Konva from "konva";
 import { useStageZoom } from "@/hooks/useStageZoom";
+import Background from "@/components/ui/tree/Background";
 
 export default function TreePage() {
   const { owner, uuid } = useOwner();
@@ -88,6 +89,9 @@ export default function TreePage() {
     setSelectedOrnament(ornament);
     open(); // 바텀시트 열기
   };
+  const overflowX = Math.max(0, treeWidth - size.width);
+  const canDragX = overflowX > 0;
+  console.log(canDragX);
 
   return (
     <div className={`relative h-full w-full`} ref={containerRef}>
@@ -108,8 +112,10 @@ export default function TreePage() {
             </span>
           </div>
         )}
+
         <Stage
           ref={stageRef}
+          draggable={canDragX}
           width={size.width}
           height={Math.max(size.height + 120, treeHeight + 120)}
           style={{
@@ -128,7 +134,8 @@ export default function TreePage() {
               containerHeight={size.height}
               scale={1}
               theme={owner.treeTheme}
-              size={10}
+              background={owner.treeBackground}
+              size={owner.treeSize}
               onLoad={({ width, height }) => {
                 setTreeWidth(width);
                 setTreeHeight(height);

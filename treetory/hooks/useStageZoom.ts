@@ -64,13 +64,18 @@ export function useStageZoom(
     if (!stage) return;
 
     const touches = e.evt.touches;
-    if (touches.length !== 2) return;
 
-    e.evt.preventDefault();
+    if (touches.length === 1) {
+      stage.draggable(false); // 터치 드래그 -> Tree 전가
+      return;
+    }
+
+    if (touches.length !== 2) return;
 
     // drag 완전 차단
     stage.stopDrag();
     stage.draggable(false);
+    e.evt.preventDefault();
 
     const [t1, t2] = touches;
 
@@ -121,7 +126,7 @@ export function useStageZoom(
     const stage = stageRef.current;
     if (!stage) return;
 
-    stage.draggable(true);
+    stage.draggable(false);
 
     lastDist.current = null;
     pinchAnchor.current = null;
