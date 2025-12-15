@@ -163,7 +163,7 @@ export default function TreePage() {
         onClose={close}
         ornament={selectedOrnament}
       />
-      <WelcomeBottomSheet isOwner={true} />
+      <WelcomeBottomSheet isOwner={isOwner} />
     </div>
   );
 }
