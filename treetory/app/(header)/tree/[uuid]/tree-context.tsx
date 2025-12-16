@@ -29,13 +29,7 @@ export function OwnerProvider({
   const [isSizeSheetOpen, setIsSizeSheetOpen] = useState(false);
   const setBookmarked = useBookmarkStore((s) => s.setBookmarked);
 
-  // 북마크 여부 확인 로직
-  useEffect(() => {
-    if (owner.isBookmarked !== undefined) {
-      setBookmarked(owner.isBookmarked);
-      console.log("실제 api 응답 :", owner.isBookmarked);
-    }
-  }, [owner.isBookmarked]);
+  const [hydrated, setHydrated] = useState(false);
 
   async function refreshOwner() {
     try {
@@ -58,6 +52,26 @@ export function OwnerProvider({
       throw new Error(error);
     }
   }
+
+  // 마운트 시 최신 owner를 반드시 다시 가져옴
+  useEffect(() => {
+    const init = async () => {
+      await refreshOwner();
+      setHydrated(true);
+    };
+
+    init();
+  }, []);
+
+  // 북마크 여부 확인 로직
+  useEffect(() => {
+    if (!hydrated) return;
+
+    if (owner.isBookmarked !== undefined) {
+      setBookmarked(owner.isBookmarked);
+      console.log("실제 api 응답 :", owner.isBookmarked);
+    }
+  }, [hydrated, owner.isBookmarked]);
 
   return (
     <OwnerContext.Provider
