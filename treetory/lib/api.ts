@@ -219,3 +219,41 @@ export async function getOrnamentDetail(
     return null;
   }
 }
+
+// 5. 오너먼트 이미지 업로드
+// POST /api/ornaments/images
+// Request: { image: string } (data URL or binary base64)
+// Response: { body: { url: string } }
+export async function uploadOrnamentImage(dataUrl: string): Promise<string | null> {
+  try {
+    // convert data URL to Blob
+    const [meta, base64] = dataUrl.split(',');
+    const mimeMatch = meta.match(/data:(.*);base64/);
+    const mime = mimeMatch?.[1] ?? 'image/png';
+    const binary = atob(base64 || '');
+    const len = binary.length;
+    const u8 = new Uint8Array(len);
+    for (let i = 0; i < len; i++) u8[i] = binary.charCodeAt(i);
+    const blob = new Blob([u8], { type: mime });
+
+    const fd = new FormData();
+    fd.append('image', blob, `ornament-${Date.now()}.${(mime.split('/')[1] || 'png')}`);
+
+    const res = await apiFetch(`/api/ornaments/images`, {
+      method: 'POST',
+      body: fd,
+    });
+
+    if (!res.ok) {
+      console.error('오너먼트 이미지 업로드 실패', res);
+      return null;
+    }
+
+    const data = await res.json();
+    // backend returns image URL in body.imgUrl
+    return data?.body?.imgUrl ?? data?.body?.url ?? null;
+  } catch (error: any) {
+    console.error('오너먼트 이미지 업로드 에러:', error);
+    return null;
+  }
+}

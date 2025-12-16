@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { checkOrnamentNameExists, createOrnament } from '@/lib/api';
+import { checkOrnamentNameExists, createOrnament, uploadOrnamentImage } from '@/lib/api';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -60,12 +60,21 @@ export default function CreateOrnamentPage() {
     if (!isPublic) {
       setIsLoading(true);
       try {
+        // previewUrl이 data URL이면 업로드해서 실제 URL을 얻는다
+        let imgUrl = previewUrl;
+        if (previewUrl?.startsWith('data:')) {
+          const uploaded = await uploadOrnamentImage(previewUrl);
+          if (!uploaded) throw new Error('이미지 업로드 실패');
+          imgUrl = uploaded;
+        }
+
         // name 없음, category는 PRIVATE, isPublic 미포함
-        const created = await createOrnament(undefined, 'PRIVATE', previewUrl);
+        const created = await createOrnament(undefined, 'PRIVATE', imgUrl);
         if (!created) throw new Error('오너먼트 생성 실패');
 
         alert('장식이 등록되었습니다.');
-        router.push(`/tree/${uuid}/decorate/nickname`);
+        const q = imgUrl ? `?imgUrl=${encodeURIComponent(imgUrl)}` : '';
+        router.push(`/tree/${uuid}/decorate/nickname${q}`);
       } catch (err) {
         console.error(err);
         alert('장식 등록 중 오류가 발생했습니다.');
@@ -124,11 +133,20 @@ export default function CreateOrnamentPage() {
 
     setIsLoading(true);
     try {
-      const created = await createOrnament(name, selectedCategory, previewUrl);
+      // previewUrl이 data URL이면 업로드
+      let imgUrl = previewUrl;
+      if (previewUrl?.startsWith('data:')) {
+        const uploaded = await uploadOrnamentImage(previewUrl);
+        if (!uploaded) throw new Error('이미지 업로드 실패');
+        imgUrl = uploaded;
+      }
+
+      const created = await createOrnament(name, selectedCategory, imgUrl);
       if (!created) throw new Error('오너먼트 생성 실패');
 
       alert('장식이 등록되었습니다.');
-        router.push(`/tree/${uuid}/decorate/nickname?imgUrl=${encodeURIComponent(previewUrl ?? '')}`);
+      const q = imgUrl ? `?imgUrl=${encodeURIComponent(imgUrl)}` : '';
+      router.push(`/tree/${uuid}/decorate/nickname${q}`);
     } catch (err) {
       console.error(err);
       alert('장식 등록 중 오류가 발생했습니다.');
