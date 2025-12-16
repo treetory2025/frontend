@@ -29,9 +29,13 @@ export function OwnerProvider({
   const [isSizeSheetOpen, setIsSizeSheetOpen] = useState(false);
   const setBookmarked = useBookmarkStore((s) => s.setBookmarked);
 
+  // 북마크 여부 확인 로직
   useEffect(() => {
-    setBookmarked(owner.isBookmarked ?? false);
-  }, [owner.isBookmarked, setBookmarked]);
+    if (owner.isBookmarked !== undefined) {
+      setBookmarked(owner.isBookmarked);
+      console.log("실제 api 응답 :", owner.isBookmarked);
+    }
+  }, [owner.isBookmarked]);
 
   async function refreshOwner() {
     try {
