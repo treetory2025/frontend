@@ -1,7 +1,6 @@
 "use client";
 
 import menuIcon from "@/public/icons/menu(default).svg";
-import cameraIcon from "@/public/icons/camera.svg";
 import rudolphIcon from "@/public/icons/rudolph.png";
 import santaIcon from "@/public/icons/santa.png";
 
@@ -19,7 +18,7 @@ import {
 import { useUserStore } from "@/store/userStore";
 import { useParams, usePathname } from "next/navigation";
 import { isLoggedIn } from "@/lib/auth";
-import { Star, StarOff } from "lucide-react";
+import { Star, StarOff, ImageDown } from "lucide-react";
 import { getBookmarks } from "@/lib/api";
 import { useCaptureStore } from "@/store/useCaptureStore";
 
@@ -88,10 +87,11 @@ export default function Header() {
         {/* 캡쳐 버튼 */}
         {isTreePage && isTreeOwner && (
           <button
-            className="bg-yellow flex h-10 w-10 cursor-pointer items-center justify-center rounded-full"
+            className="bg-yellow text-beige flex h-10 w-10 cursor-pointer items-center justify-center rounded-full"
             onClick={capture}
           >
-            <Image src={cameraIcon} alt="camera" />
+            {/* <Image src={cameraIcon} alt="camera" /> */}
+            <ImageDown size={24} strokeWidth={2} />
           </button>
         )}
         {/* 즐겨찾기 버튼 */}
