@@ -51,7 +51,6 @@ export default function BookmarksPage() {
         <SearchSection initialQuery={query} />
         {isLoading ? (
           <div className="flex h-full flex-col items-center justify-center gap-4">
-            <div className="text-muted-navy flex items-center rounded-full bg-white/50 p-4" />
             <h1 className="text-body text-fg-tertiary text-center">
               즐겨찾기 사용자 데이터를 조회중입니다.
             </h1>
