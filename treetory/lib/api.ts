@@ -144,13 +144,13 @@ export async function createOrnament(
   name: string | undefined,
   category: string,
   imgUrl: string
-): Promise<{ ornamentId: number } | null> {
+): Promise<any> {
   try {
     const payload: any = { category, imgUrl };
     if (name) {
       payload.name = name;
     }
-    
+
     const res = await apiFetch(`/api/ornaments`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -158,12 +158,21 @@ export async function createOrnament(
     });
 
     if (!res.ok) {
-      console.error('오너먼트 등록 실패', res);
+      // 로그에 응답 상태와 본문을 남겨 디버깅에 도움을 줌
+      const text = await res.text().catch(() => '<<no body>>');
+      console.error('오너먼트 등록 실패', { status: res.status, statusText: res.statusText, body: text });
       return null;
     }
 
-    const data = await res.json();
-    return data?.body;
+    // 성공 응답이지만 body가 비어있을 수 있음 -> 가능한 값을 반환하거나 성공 표시 객체를 반환
+    const data = await res.json().catch(() => ({}));
+    const body = data?.body;
+    if (body && Object.keys(body).length > 0) {
+      return body;
+    }
+
+    // body가 비어있어도 HTTP 2xx 이므로 성공으로 간주
+    return { success: true };
   } catch (error: any) {
     console.error('오너먼트 등록 에러:', error);
     return null;
