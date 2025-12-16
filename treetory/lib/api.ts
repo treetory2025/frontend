@@ -64,16 +64,19 @@ export async function getBookmarks({
   size: string;
 }) {
   try {
-    const params = new URLSearchParams({
-      page: String(page),
-      size: String(size),
-    });
+    let url = "/api/members/bookmarks";
 
+    // 🔑 query가 있을 때만 page, size 포함
     if (query && query.trim() !== "") {
-      params.append("query", query);
+      const params = new URLSearchParams({
+        query,
+        page: String(page),
+        size: String(size),
+      });
+      url += `?${params.toString()}`;
     }
 
-    const res = await apiFetch(`/api/members/bookmarks?${params.toString()}`, {
+    const res = await apiFetch(url, {
       credentials: "include",
     });
 
