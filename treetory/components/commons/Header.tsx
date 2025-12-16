@@ -19,8 +19,9 @@ import { useUserStore } from "@/store/userStore";
 import { useParams, usePathname } from "next/navigation";
 import { isLoggedIn } from "@/lib/auth";
 import { Star, StarOff, ImageDown } from "lucide-react";
-import { getBookmarks } from "@/lib/api";
 import { useCaptureStore } from "@/store/useCaptureStore";
+import { useBookmarkStore } from "@/store/useBookmarkStore";
+import { toggleBookmakApi } from "@/lib/bookmark";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,7 +34,6 @@ export default function Header() {
   const capture = useCaptureStore((s) => s.capture);
 
   const loggedIn = isLoggedIn();
-  const [isBookmarked, setIsBookmarked] = useState(false);
 
   // 유저 정보, 트리 소유자 정보 확인
   const pathname = usePathname();
@@ -53,17 +53,26 @@ export default function Header() {
     setDiffdays(diff);
   }, [isChristmas]);
 
-  useEffect(() => {
-    // 임시 북마크 해제
-    if (isTreePage && !isTreeOwner && loggedIn) {
-      setIsBookmarked(false);
-    }
-  }, [isBookmarked]);
-
   useCloseOnOutsideOrEsc(menuRef, {
     isOpen: isMenuOpen,
     onClose: () => setIsMenuOpen(false),
   });
+
+  // 즐겨찾기 여부 확인
+  const { isBookmarked, toggleBookmarked } = useBookmarkStore();
+  const onClickBookmark = async () => {
+    if (!treeUuid) return;
+
+    try {
+      toggleBookmarked();
+      await toggleBookmakApi({
+        targetMemberId: treeUuid,
+        isBookmarked,
+      });
+    } catch {
+      toggleBookmarked();
+    }
+  };
 
   return (
     <div className="flex w-full items-center justify-between px-5 pt-6 md:pt-12">
@@ -90,21 +99,23 @@ export default function Header() {
             className="bg-yellow text-beige flex h-10 w-10 cursor-pointer items-center justify-center rounded-full"
             onClick={capture}
           >
-            {/* <Image src={cameraIcon} alt="camera" /> */}
             <ImageDown size={24} strokeWidth={2} />
           </button>
         )}
         {/* 즐겨찾기 버튼 */}
-        {isTreePage && !isTreeOwner && (
+        {loggedIn && isTreePage && !isTreeOwner && (
           <div className="group relative">
-            <button className="text-yellow flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white">
+            <button
+              className="text-yellow flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white"
+              onClick={onClickBookmark}
+            >
               {isBookmarked ? <StarOff size={24} /> : <Star size={24} />}
             </button>
 
             <div
-              className={`pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 rounded-md ${isBookmarked ? "bg-muted-navy" : "bg-[#FF4800]"} px-2 py-1 text-xs whitespace-nowrap text-white opacity-0 transition-opacity group-hover:opacity-100`}
+              className={`pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 translate-y-1 rounded-md ${isBookmarked ? "bg-muted-navy" : "bg-[#FF4800]"} px-2 py-1 text-xs whitespace-nowrap text-white opacity-0 transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100`}
             >
-              {isBookmarked ? "즐겨찾기 해제" : "즐겨찾기를 해보세요!"}
+              {isBookmarked ? "즐겨찾기 해제" : "즐겨찾기 해보세요!"}
             </div>
           </div>
         )}
@@ -125,6 +136,7 @@ export default function Header() {
   );
 }
 
+// 크리스마스 배너
 type Props = {
   isChristmas: boolean;
 };
