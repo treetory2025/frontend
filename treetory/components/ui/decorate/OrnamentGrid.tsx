@@ -1,3 +1,5 @@
+import React from 'react';
+
 interface Ornament {
   ornamentId: number;
   name: string;
@@ -6,22 +8,27 @@ interface Ornament {
 
 interface OrnamentGridProps {
   ornaments: Ornament[];
+  onSelect?: (ornamentId: number) => void;
 }
 
-export default function OrnamentGrid({ ornaments }: OrnamentGridProps) {
+function OrnamentGrid({ ornaments, onSelect }: OrnamentGridProps) {
   return (
     <div className="grid grid-cols-3 gap-4 md:gap-6">
       {ornaments.length > 0 ? (
         ornaments.map((ornament) => (
           <button
             key={ornament.ornamentId}
+            onClick={() => onSelect?.(ornament.ornamentId)}
             className="group flex flex-col gap-2 rounded-lg p-2 transition-all duration-200 hover:scale-105 md:p-3"
+            type="button"
           >
             {/* 이미지 카드 */}
             <div className="relative w-full overflow-hidden rounded-lg bg-beige aspect-square">
               <img
                 src={ornament.imgUrl}
                 alt={ornament.name}
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover"
               />
               {/* 호버 오버레이 */}
@@ -35,11 +42,11 @@ export default function OrnamentGrid({ ornaments }: OrnamentGridProps) {
         ))
       ) : (
         <div className="col-span-3 py-12 text-center">
-          <p className="text-body text-fg-secondary">
-            검색 결과가 없습니다.
-          </p>
+          <p className="text-body text-fg-secondary">검색 결과가 없습니다.</p>
         </div>
       )}
     </div>
   );
 }
+
+export default React.memo(OrnamentGrid);

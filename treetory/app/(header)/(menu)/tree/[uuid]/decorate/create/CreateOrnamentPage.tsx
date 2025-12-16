@@ -1,12 +1,15 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
+import { checkOrnamentNameExists, createOrnament } from '@/lib/api';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function CreateOrnamentPage() {
   const router = useRouter();
+  const params = useParams();
+  const uuid = params.uuid as string;
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -42,39 +45,92 @@ export default function CreateOrnamentPage() {
     }
   };
 
-  const handleUpload = async () => {
-    if (!selectedFile || !ornamentName.trim()) {
-      alert('이미지와 이름을 입력해주세요.');
+  // flow: upload step -> name step -> complete
+  const [step, setStep] = useState<'upload' | 'name'>('upload');
+  const [nameCheckLoading, setNameCheckLoading] = useState(false);
+  const [nameAvailable, setNameAvailable] = useState<boolean | null>(null);
+
+  const handleNext = async () => {
+    if (!selectedFile) {
+      alert('이미지를 선택해주세요.');
+      return;
+    }
+
+    // 공유하지 않은 경우: 바로 API 호출 (name 없음, category = PRIVATE)
+    if (!isPublic) {
+      setIsLoading(true);
+      try {
+        // name 없음, category는 PRIVATE, isPublic 미포함
+        const created = await createOrnament(undefined, 'PRIVATE', previewUrl);
+        if (!created) throw new Error('오너먼트 생성 실패');
+
+        alert('장식이 등록되었습니다.');
+        router.push(`/tree/${uuid}/decorate/nickname`);
+      } catch (err) {
+        console.error(err);
+        alert('장식 등록 중 오류가 발생했습니다.');
+      } finally {
+        setIsLoading(false);
+      }
+      return;
+    }
+
+    // 공유한 경우: 이름 입력 화면으로 이동
+    setStep('name');
+  };
+
+  const handleCheckName = async () => {
+    const name = ornamentName.trim();
+    if (!name) {
+      alert('이름을 입력해주세요.');
+      return;
+    }
+
+    if (name.length > 10) {
+      alert('장식 이름은 10자 이하로 입력해주세요.');
+      return;
+    }
+
+    setNameCheckLoading(true);
+    try {
+      const exists = await checkOrnamentNameExists(name);
+      setNameAvailable(!exists);
+    } catch (err) {
+      console.error(err);
+      setNameAvailable(null);
+    } finally {
+      setNameCheckLoading(false);
+    }
+  };
+
+  const handleComplete = async () => {
+    const name = ornamentName.trim();
+    if (!selectedFile) {
+      alert('이미지를 선택해주세요.');
+      return;
+    }
+    if (!name) {
+      alert('이름을 입력해주세요.');
+      return;
+    }
+    if (name.length > 10) {
+      alert('장식 이름은 10자 이하로 입력해주세요.');
+      return;
+    }
+    if (nameAvailable === false) {
+      alert('이미 사용 중인 이름입니다. 다른 이름을 입력해주세요.');
       return;
     }
 
     setIsLoading(true);
-
     try {
-      const imageUrl = previewUrl;
+      const created = await createOrnament(name, selectedCategory, previewUrl);
+      if (!created) throw new Error('오너먼트 생성 실패');
 
-      const payload = {
-        name: ornamentName,
-        category: selectedCategory,
-        imgUrl: imageUrl,
-        isPublic,
-      };
-
-      const res = await fetch(`${BASE_URL}/api/ornaments`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) {
-        throw new Error('장식 등록 실패');
-      }
-
-      alert('장식이 등록되었습니다!');
-      router.back();
-    } catch (error) {
-      console.error('오류:', error);
+      alert('장식이 등록되었습니다.');
+        router.push(`/tree/${uuid}/decorate/nickname?imgUrl=${encodeURIComponent(previewUrl ?? '')}`);
+    } catch (err) {
+      console.error(err);
       alert('장식 등록 중 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
@@ -85,14 +141,17 @@ export default function CreateOrnamentPage() {
     <div style={{ backgroundColor: '#CCE8F3' }} className="flex-1 overflow-y-auto p-4 md:p-6">
       {/* 헤더 */}
       <div className="mb-6">
-        <div className="flex items-center justify-center py-4">
+        <div className="flex items-center justify-center py-4 w-fit mx-auto">
           <h1 className="text-xl md:text-2xl font-bold text-fg-primary">장식 만들기</h1>
         </div>
-        <div className="w-full h-1 bg-green rounded-full"></div>
+        <div className="h-1 bg-green rounded-full mx-auto" style={{ width: '133px' }}></div>
       </div>
 
-      {/* 이미지 업로드 */}
-      <div className="mb-8">
+      {/* 이미지 업로드 + 공유: 업로드 단계에서만 표시 */}
+      {step === 'upload' && (
+        <>
+        {/* 이미지 업로드 */}
+        <div className="mb-8">
         <h2 className="text-lg font-semibold text-fg-primary mb-3">이미지 업로드</h2>
         <p className="text-sm text-fg-secondary mb-4">
           배경이 제거된 이미지일수록 자연스럽게 장식됩니다.
@@ -138,67 +197,115 @@ export default function CreateOrnamentPage() {
           onChange={handleFileSelect}
           className="hidden"
         />
-
-        {selectedFile && (
-          <p className="text-xs text-fg-secondary mt-2">선택된 파일: {selectedFile.name}</p>
-        )}
-      </div>
-
-      {/* 이름 입력 */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold text-fg-primary mb-3">장식 이름</h2>
-        <input
-          type="text"
-          placeholder="장식의 이름을 입력하세요"
-          value={ornamentName}
-          onChange={(e) => setOrnamentName(e.target.value)}
-          className="w-full rounded-lg border-0 bg-beige py-3 px-4 text-body placeholder-fg-secondary focus:outline-none focus:ring-2 focus:ring-green"
-        />
-      </div>
-
-      {/* 프레임 선택 */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold text-fg-primary mb-3">프레임 선택</h2>
-        <p className="text-sm text-fg-secondary mb-4">
-          장식과 어울리는 프레임을 선택해 보세요!
-        </p>
-
-        <div className="grid grid-cols-4 gap-4">
-          {['선택안함', '프레임1', '프레임2', '프레임3'].map((label) => (
-            <button
-              key={label}
-              onClick={() => setSelectedCategory(label)}
-              className={`flex flex-col items-center gap-2 p-4 rounded-lg transition-all ${
-                selectedCategory === label
-                  ? 'bg-green text-beige'
-                  : 'bg-beige text-fg-primary hover:bg-gray-100'
-              }`}
-            >
-              <div className="text-3xl">
-                {label === '선택안함' ? '🎄' : '🦌'}
-              </div>
-              <p className="text-xs font-semibold text-center">{label}</p>
-            </button>
-          ))}
+        
         </div>
-      </div>
 
+        {/* 트리토리 장식 공유 */}
+        <div className="mb-8">
+        <h2 className="text-lg font-semibold text-fg-primary mb-3">트리토리 장식 공유</h2>
+        <button
+          onClick={() => setIsPublic(!isPublic)}
+          className={`w-full flex items-center justify-between p-4 rounded-lg border-2 transition-all ${
+            isPublic
+              ? 'bg-white border-green'
+              : 'bg-white border-gray-200 hover:border-gray-300'
+          }`}
+        >
+          <span className="text-fg-primary font-medium">다른 사용자들과 공유할까요?</span>
+          {isPublic && (
+            <div className="w-6 h-6 rounded-full bg-green flex items-center justify-center">
+              <span className="text-white text-sm">✓</span>
+            </div>
+          )}
+          {!isPublic && (
+            <div className="w-6 h-6 rounded-full border-2 border-gray-300"></div>
+          )}
+        </button>
+        </div>
+        </>
+      )}
+
+
+      {/* 이름 입력 단계 (피그마 화면) */}
+      {step === 'name' && (
+        <div>
+          <div className="flex items-center justify-center mb-4">
+            <div className="w-48 h-48 rounded-full bg-beige flex items-center justify-center">
+              {previewUrl ? (
+                <img src={previewUrl} alt="preview" className="w-full h-full object-cover rounded-full" />
+              ) : (
+                <div className="text-2xl">🖼</div>
+              )}
+            </div>
+          </div>
+
+          <label className="text-sm text-fg-secondary">장식 이름</label>
+          <div className="relative mt-2">
+            <input
+              value={ornamentName}
+              onChange={(e) => {
+                const v = e.target.value.slice(0, 10);
+                setOrnamentName(v);
+                setNameAvailable(null);
+              }}
+              placeholder="내가 만든 쿠키"
+              maxLength={10}
+              className="w-full p-3 rounded-lg border border-gray-200 bg-white pr-24"
+            />
+
+            <button
+              onClick={handleCheckName}
+              disabled={nameCheckLoading}
+              className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 bg-muted-navy text-beige rounded-lg font-semibold"
+            >
+              {nameCheckLoading ? '확인중...' : '확인'}
+            </button>
+          </div>
+
+          <div className="mt-2 text-sm">
+            {nameAvailable === true && <span className="text-green">사용 가능한 이름입니다.</span>}
+            {nameAvailable === false && <span className="text-red-600">이미 사용 중인 이름입니다.</span>}
+            {nameAvailable === null && <span className="text-fg-secondary">이름은 10자 이하로 입력해주세요.</span>}
+          </div>
+        </div>
+      )}
+
+      
       {/* 경고 */}
-      <div className="mb-8 flex gap-3 p-4 bg-yellow-100 border-l-4 border-yellow-400 rounded">
+      <div className="mt-4 mb-4 flex items-center gap-3 p-4 bg-yellow-100 border-l-4 border-yellow-400 rounded">
         <span className="text-xl">⚠️</span>
         <div>
           <p className="text-sm font-semibold text-fg-primary">운영정책에 따라 부적절한 장식은 삭제될 수 있습니다.</p>
         </div>
       </div>
 
-      {/* 완료 버튼 */}
-      <button 
-        onClick={handleUpload}
-        disabled={isLoading}
-        className="w-full bg-green text-beige py-4 rounded-lg font-semibold hover:opacity-90 disabled:opacity-50"
-      >
-        {isLoading ? '등록 중...' : '다음'}
-      </button>
+      {/* 하단 버튼: 업로드 단계에서는 다음, 이름 단계에서는 완료/이전 */}
+      {step === 'upload' ? (
+        <button
+          onClick={handleNext}
+          disabled={isLoading}
+          className="w-full bg-green text-beige py-4 rounded-lg font-semibold hover:opacity-90 disabled:opacity-50"
+        >
+          다음
+        </button>
+      ) : (
+        <div className="flex gap-3">
+          <button
+            onClick={() => setStep('upload')}
+            disabled={isLoading}
+            className="flex-1 bg-gray-200 text-fg-primary py-4 rounded-lg font-semibold hover:opacity-90 disabled:opacity-50"
+          >
+            이전
+          </button>
+          <button
+            onClick={handleComplete}
+            disabled={isLoading || nameAvailable === false || ornamentName.trim().length === 0}
+            className="flex-1 bg-green text-beige py-4 rounded-lg font-semibold hover:opacity-90 disabled:opacity-50"
+          >
+            {isLoading ? '등록 중...' : '완료'}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

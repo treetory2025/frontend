@@ -1,10 +1,12 @@
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
+import { useEffect, useState, useDeferredValue } from "react";
 import { Search } from 'lucide-react';
 import OrnamentTabs from '@/components/ui/decorate/OrnamentTabs';
 import OrnamentGrid from '@/components/ui/decorate/OrnamentGrid';
 import CreateOrnamentButton from '@/components/ui/decorate/CreateOrnamentButton';
+import { getOrnaments, Ornaments as ApiOrnaments } from '@/lib/api';
+import OrnamentDetailModal from '@/components/ui/decorate/OrnamentDetailModal';
 
 export interface Ornament {
   ornamentId: number;
@@ -12,119 +14,68 @@ export interface Ornament {
   imgUrl: string;
 }
 
-// Mock 데이터 - 실제 API 응답 구조 참고
-// GET /api/ornaments?word={word}&category={category}&page={page}
-// Response:
-// {
-//   "header": { "message": "OK" },
-//   "body": {
-//     "ornaments": {
-//       "content": [
-//         { "ornamentId": 1, "name": "name", "imgUrl": "url" }
-//       ],
-//       "pageNum": 0,
-//       "pageSize": 18,
-//       "totalPage": 1,
-//       "totalElements": 1
-//     }
-//   }
-// }
-const MOCK_ORNAMENTS: Ornament[] = [
-  {
-    ornamentId: 1,
-    name: '눈사람 장식',
-    imgUrl: 'https://treetory.s3.ap-northeast-2.amazonaws.com/members/b8a3eb59-b956-4df9-8a55-80784016b8d4/ornaments/dc8f6be5-9103-4122-bd4a-0d0fe1da3f41:upload_2025-12-09-15.42.02.png',
-  },
-  {
-    ornamentId: 2,
-    name: '금색 공 장식',
-    imgUrl: 'https://treetory.s3.ap-northeast-2.amazonaws.com/members/b8a3eb59-b956-4df9-8a55-80784016b8d4/ornaments/dc8f6be5-9103-4122-bd4a-0d0fe1da3f41:upload_2025-12-09-15.42.02.png',
-  },
-  {
-    ornamentId: 3,
-    name: '빨간 리본 장식',
-    imgUrl: 'https://treetory.s3.ap-northeast-2.amazonaws.com/members/b8a3eb59-b956-4df9-8a55-80784016b8d4/ornaments/dc8f6be5-9103-4122-bd4a-0d0fe1da3f41:upload_2025-12-09-15.42.02.png',
-  },
-  {
-    ornamentId: 4,
-    name: '별 장식',
-    imgUrl: 'https://treetory.s3.ap-northeast-2.amazonaws.com/members/b8a3eb59-b956-4df9-8a55-80784016b8d4/ornaments/dc8f6be5-9103-4122-bd4a-0d0fe1da3f41:upload_2025-12-09-15.42.02.png',
-  },
-  {
-    ornamentId: 5,
-    name: '종 장식',
-    imgUrl: 'https://treetory.s3.ap-northeast-2.amazonaws.com/members/b8a3eb59-b956-4df9-8a55-80784016b8d4/ornaments/dc8f6be5-9103-4122-bd4a-0d0fe1da3f41:upload_2025-12-09-15.42.02.png',
-  },
-  {
-    ornamentId: 6,
-    name: '캔디 스틱',
-    imgUrl: 'https://treetory.s3.ap-northeast-2.amazonaws.com/members/b8a3eb59-b956-4df9-8a55-80784016b8d4/ornaments/dc8f6be5-9103-4122-bd4a-0d0fe1da3f41:upload_2025-12-09-15.42.02.png',
-  },
-  {
-    ornamentId: 7,
-    name: '캔디 스틱',
-    imgUrl: 'https://treetory.s3.ap-northeast-2.amazonaws.com/members/b8a3eb59-b956-4df9-8a55-80784016b8d4/ornaments/dc8f6be5-9103-4122-bd4a-0d0fe1da3f41:upload_2025-12-09-15.42.02.png',
-  },
-  {
-    ornamentId: 8,
-    name: '캔디 스틱',
-    imgUrl: 'https://treetory.s3.ap-northeast-2.amazonaws.com/members/b8a3eb59-b956-4df9-8a55-80784016b8d4/ornaments/dc8f6be5-9103-4122-bd4a-0d0fe1da3f41:upload_2025-12-09-15.42.02.png',
-  },
-  {
-    ornamentId: 9,
-    name: '캔디 스틱',
-    imgUrl: 'https://treetory.s3.ap-northeast-2.amazonaws.com/members/b8a3eb59-b956-4df9-8a55-80784016b8d4/ornaments/dc8f6be5-9103-4122-bd4a-0d0fe1da3f41:upload_2025-12-09-15.42.02.png',
-  },
-  {
-    ornamentId: 10,
-    name: '캔디 스틱',
-    imgUrl: 'https://treetory.s3.ap-northeast-2.amazonaws.com/members/b8a3eb59-b956-4df9-8a55-80784016b8d4/ornaments/dc8f6be5-9103-4122-bd4a-0d0fe1da3f41:upload_2025-12-09-15.42.02.png',
-  },
-  {
-    ornamentId: 11,
-    name: '캔디 스틱',
-    imgUrl: 'https://treetory.s3.ap-northeast-2.amazonaws.com/members/b8a3eb59-b956-4df9-8a55-80784016b8d4/ornaments/dc8f6be5-9103-4122-bd4a-0d0fe1da3f41:upload_2025-12-09-15.42.02.png',
-  },
-  {
-    ornamentId: 12,
-    name: '캔디 스틱',
-    imgUrl: 'https://treetory.s3.ap-northeast-2.amazonaws.com/members/b8a3eb59-b956-4df9-8a55-80784016b8d4/ornaments/dc8f6be5-9103-4122-bd4a-0d0fe1da3f41:upload_2025-12-09-15.42.02.png',
-  },
-  {
-    ornamentId: 12,
-    name: '캔디 스틱',
-    imgUrl: 'https://treetory.s3.ap-northeast-2.amazonaws.com/members/b8a3eb59-b956-4df9-8a55-80784016b8d4/ornaments/dc8f6be5-9103-4122-bd4a-0d0fe1da3f41:upload_2025-12-09-15.42.02.png',
-  },
-];
-
 const CATEGORIES = [
   { id: 'all', label: '전체', icon: '🎄' },
-  { id: 'blue1', label: '분류', icon: '🦌' },
-  { id: 'blue2', label: '분류', icon: '🦌' },
-  { id: 'blue3', label: '분류', icon: '🦌' },
-  { id: 'blue4', label: '분류', icon: '🦌' },
+  { id: 'CHRISTMAS', label: '크리스마스', icon: '🎄' },
+  { id: 'FOOD', label: '음식', icon: '🦌' },
+  { id: 'ANIMAL', label: '동물', icon: '🦌' },
+  { id: 'ETC', label: '기타', icon: '🦌' },
 ];
 
 export default function DecoratePage() {
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  // 검색 입력과 실제 API에 보낼 검색어 분리
+  const [inputValue, setInputValue] = useState('');
+  const [searchWord, setSearchWord] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
-  const pageSize = 6;
 
-  // 검색어와 카테고리에 따라 장식 필터링
-  const filteredOrnaments = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    return MOCK_ORNAMENTS.filter((ornament) =>
-      ornament.name.toLowerCase().includes(q)
-    );
-  }, [searchQuery]);
+  // server-side data
+  const [ornaments, setOrnaments] = useState<Ornament[]>([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
 
-  // 페이지네이션 계산
-  const totalPages = Math.max(1, Math.ceil(filteredOrnaments.length / pageSize));
-  const paginatedOrnaments = useMemo(() => {
-    const start = currentPage * pageSize;
-    return filteredOrnaments.slice(start, start + pageSize);
-  }, [filteredOrnaments, currentPage]);
+  // defer ornaments to avoid blocking rendering when list updates
+  const deferredOrnaments = useDeferredValue(ornaments);
+  const [selectedOrnamentId, setSelectedOrnamentId] = useState<number | null>(null);
+
+  // API 호출: 규칙 - selectedCategory === 'all' 이면 word/category 모두 전송하지 않음
+  useEffect(() => {
+    let mounted = true;
+
+    async function fetchOrnaments() {
+      setLoading(true);
+      try {
+        // 검색은 버튼 클릭(또는 Enter)으로 설정된 searchWord만 전송합니다.
+        const wordToSend = searchWord.trim();
+        const categoryToSend = selectedCategory === 'all' ? '' : selectedCategory;
+
+        const res: ApiOrnaments | null = await getOrnaments(wordToSend, categoryToSend, currentPage);
+
+        if (!mounted) return;
+
+        if (res) {
+          setOrnaments(res.content || []);
+          // API가 totalPage를 제공하면 사용, 없으면 계산
+          const tp = (res.totalPage ?? Math.max(1, Math.ceil((res.totalElements ?? (res.content?.length||0)) / (res.pageSize || 6)))) || 1;
+          setTotalPages(tp);
+        } else {
+          setOrnaments([]);
+          setTotalPages(1);
+        }
+      } catch (e) {
+        setOrnaments([]);
+        setTotalPages(1);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+
+    fetchOrnaments();
+
+    return () => {
+      mounted = false;
+    };
+  }, [selectedCategory, searchWord, currentPage]);
 
   return (
     <div className="flex-1 overflow-y-auto p-4 md:p-6" style={{ backgroundColor: '#CCE8F3' }}>
@@ -136,14 +87,23 @@ export default function DecoratePage() {
             type="text"
             placeholder="장식 이름으로 검색해보세요!"
             className="w-full rounded-lg border-0 bg-beige py-3 pl-10 pr-4 text-body placeholder-fg-secondary focus:outline-none focus:ring-2 focus:ring-green"
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setCurrentPage(0);
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                setSearchWord(inputValue.trim());
+                setCurrentPage(0);
+              }
             }}
           />
         </div>
-        <button className="rounded-lg bg-muted-navy px-4 py-3 font-semibold text-beige hover:opacity-90">
+        <button
+          className="rounded-lg bg-muted-navy px-4 py-3 font-semibold text-beige hover:opacity-90"
+          onClick={() => {
+            setSearchWord(inputValue.trim());
+            setCurrentPage(0);
+          }}
+        >
           검색
         </button>
       </div>
@@ -167,7 +127,10 @@ export default function DecoratePage() {
       </div>
 
       {/* 장식 그리드 */}
-      <OrnamentGrid ornaments={paginatedOrnaments} />
+      <OrnamentGrid ornaments={deferredOrnaments} onSelect={(id) => setSelectedOrnamentId(id)} />
+
+      {/* 선택된 장식 모달 */}
+      <OrnamentDetailModal ornamentId={selectedOrnamentId} onClose={() => setSelectedOrnamentId(null)} />
 
       {/* 페이지네이션 */}
       {totalPages > 1 && (
