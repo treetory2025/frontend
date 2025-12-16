@@ -32,7 +32,11 @@ export default function ClientRootLayout({
 }) {
   const pathname = usePathname();
   const theme = useThemeStore((s) => s.theme);
-  const isTreeRoute = pathname.startsWith("/tree");
+
+  const THEME_ALLOWED_ROUTES = ["/tree", "/bookmarks", "/settings"];
+  const isThemeAllowedRoute = THEME_ALLOWED_ROUTES.some((path) =>
+    pathname.startsWith(path),
+  );
 
   const MIN_LOADING_TIME = 50;
 
@@ -51,7 +55,10 @@ export default function ClientRootLayout({
   }
 
   const bgClass =
-    isTreeRoute && theme ? (TREE_THEME_BG_MAP[theme] ?? "bg-navy") : "bg-navy";
+    theme && isThemeAllowedRoute
+      ? (TREE_THEME_BG_MAP[theme] ?? "bg-navy")
+      : "bg-navy";
+  console.log(theme, bgClass);
 
   return (
     <motion.div
