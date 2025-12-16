@@ -33,10 +33,10 @@ export function CancleButton({ onClick }: ButtonProps) {
 export function XButton({ onClick }: ButtonProps) {
   return (
     <button
-      className="bg-fg-secondary absolute top-1/2 right-4 flex size-7 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full md:size-8"
+      className="bg-fg-tertiary absolute top-1/2 right-4 flex size-7 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full"
       onClick={onClick}
     >
-      <X className="text-beige pointer-events-none size-5 md:size-6" />
+      <X className="text-beige pointer-events-none size-5" />
     </button>
   );
 }

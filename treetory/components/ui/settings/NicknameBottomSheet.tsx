@@ -10,6 +10,7 @@ import {
 import { useUserStore } from "@/store/userStore";
 import { useEffect, useMemo, useState } from "react";
 import { apiFetch } from "@/lib/api";
+import { Info } from "lucide-react";
 
 export default function NicknameBottomSheet({
   isOpen,
@@ -57,9 +58,11 @@ export default function NicknameBottomSheet({
 
       if (!res.ok) {
         if (res.status === 400) {
+          onClose();
           alert("유효하지 않는 닉네임입니다.");
           return;
         }
+        onClose();
         console.error("닉네임 변경 실패", res);
         return;
       }
@@ -73,37 +76,53 @@ export default function NicknameBottomSheet({
           const meData = await meRes.json();
           const me = meData?.body ?? meData;
           setUser(me);
+          alert("닉네임 변경 성공");
+          onClose();
         }
       } catch (error) {
         console.error("닉네임 변경 후 정보 조회 실패", error);
+        onClose();
       }
-
-      console.log("닉네임 변경 성공!");
-      onClose();
     } catch (error) {
       console.error(error);
+      onClose();
     }
   };
 
   return (
-    <BottomSheet isOpen={isOpen} onClose={onClose} className="gap-12">
-      <h3 className="text-subtitle md:text-title text-primary">
-        닉네임 <span className="text-green">변경</span>
-      </h3>
+    <BottomSheet
+      isOpen={isOpen}
+      onClose={onClose}
+      className="gap-12 select-none"
+    >
+      <div className="flex flex-col items-center gap-2">
+        <h3 className="text-subtitle md:text-title text-primary">
+          닉네임 <span className="text-green">변경</span>
+        </h3>
+        <p className="text-body text-fg-secondary text-center">
+          닉네임은 <span className="font-bold">6글자 이하</span>만 가능합니다.
+        </p>
+      </div>
       <div className="text-body text-fg-primary w-full space-y-2">
-        <p className="text-caption md:text-body text-muted-navy mb-2">닉네임</p>
+        <p className="text-caption md:text-body text-fg-secondary mb-3">
+          닉네임
+        </p>
         <div className="border-green relative border-b-4">
           <input
             placeholder={nickname}
             value={nickname}
             maxLength={6}
             onChange={onChangeInput}
-            className="p-2.5 focus:outline-none"
+            className="focus:bg-green/10 w-full cursor-text rounded-md px-5 py-2.5 transition focus:outline-none"
           />
           <XButton onClick={onHandleXButton} />
         </div>
-        <p className="text-muted-navy">글자수 : {nickname.length} / 6</p>
+
+        <p className="text-fg-tertiary pt-1">
+          글자수 : {nickname.length} / <span className="font-bold">6</span>
+        </p>
       </div>
+
       <div className="flex w-full flex-col gap-2">
         <ActionButton onClick={onChangeNickname} disabled={isDisabled}>
           변경
