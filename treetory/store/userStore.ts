@@ -38,8 +38,14 @@ interface ThemeState {
   setTheme: (theme: BackgroundType | null) => void;
 }
 
-export const useThemeStore = create<ThemeState>((set) => ({
-  // 디폴트 - 고요한 밤 임시 설정
-  theme: "SILENT_NIGHT",
-  setTheme: (theme) => set({ theme }),
-}));
+export const useThemeStore = create(
+  persist<ThemeState>(
+    (set) => ({
+      theme: null,
+      setTheme: (theme) => set({ theme }),
+    }),
+    {
+      name: "theme-storage",
+    },
+  ),
+);
