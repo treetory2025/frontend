@@ -1,11 +1,14 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Group, Image as KonvaImage } from "react-konva";
+import { Group, Image as KonvaImage, Rect } from "react-konva";
 import useImage from "use-image";
 import Ornaments from "./Ornaments";
 import type { Ornarment } from "@/types/ornarment";
 import Background from "./Background";
+import Konva from "konva";
+import { useCaptureStore } from "@/store/useCaptureStore";
+import { exportTreeImage } from "@/lib/capture";
 
 interface Props {
   containerWidth: number;
@@ -34,7 +37,41 @@ export function Tree({
   const [defaultImg] = useImage(defaultSrc);
   const [treeImg] = useImage(imgSrc);
 
-  const groupRef = useRef<any>(null);
+  const groupRef = useRef<Konva.Group | null>(null);
+
+  // 캡쳐 전역 상태 불러오기
+  const registerCapture = useCaptureStore((s) => s.registerCapture);
+  const clearCapture = useCaptureStore((s) => s.clear);
+  const captureTreeGroup = () => {
+    if (!groupRef.current) return;
+
+    const stage = groupRef.current.getStage();
+    if (!stage) return;
+
+    const rect = groupRef.current.getClientRect({
+      relativeTo: stage,
+    });
+
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    const dataURL = stage.toDataURL({
+      x: rect.x,
+      y: rect.y,
+      width: rect.width,
+      height: rect.height,
+      pixelRatio: isIOS ? 1 : 2,
+    });
+
+    exportTreeImage(dataURL);
+  };
+
+  useEffect(() => {
+    registerCapture(captureTreeGroup);
+
+    return () => {
+      clearCapture();
+    };
+  }, []);
 
   useEffect(() => {
     if (treeImg && onLoad) {
@@ -113,6 +150,20 @@ export function Tree({
       draggable={canDragX || canDragY}
       onDragMove={handleDragMove}
     >
+      {/* 배경 추가 */}
+      <Rect
+        x={-treeW * 0.3}
+        y={-25}
+        width={treeW * 1.6}
+        height={size && size < 5 ? treeH + 75 : treeH + 55}
+        fill={
+          background === "SNOWY_HILL"
+            ? "#C6E9F5"
+            : background === "SILENT_NIGHT"
+              ? "#17395C"
+              : "transparent"
+        }
+      />
       {background === "SNOWY_HILL" && (
         <Background
           x={x}
