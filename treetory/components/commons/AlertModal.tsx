@@ -12,11 +12,14 @@ export default function AlertModal() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-[320px] rounded-lg bg-white p-6 text-center">
-        <p className="mb-4">{message}</p>
+      <div className="bg-beige flex w-[320px] flex-col items-center justify-center gap-8 rounded-lg p-6 text-center">
+        <p className="text-body text-green border-green w-full border-b-2 pb-2 text-lg font-bold">
+          안내
+        </p>
+        <p className="text-body pt-2">{message}</p>
         <button
           onClick={handleConfirm}
-          className="rounded bg-blue-500 px-4 py-2 text-white"
+          className="bg-green text-beige text-button rounded px-12 py-2"
         >
           확인
         </button>
