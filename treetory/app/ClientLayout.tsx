@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import style from "@/app/clientLayoutCss.module.css";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import AlertModal from "@/components/commons/AlertModal";
 
 const TREE_THEME_BG_MAP: Record<string, string> = {
   SILENT_NIGHT: "bg-navy",
@@ -60,6 +61,7 @@ export default function ClientRootLayout({
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
       <div className={style.appContainer}>
+        <AlertModal />
         <main className="h-full">{children}</main>
       </div>
     </motion.div>

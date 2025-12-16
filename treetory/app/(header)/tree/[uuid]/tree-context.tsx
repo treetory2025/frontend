@@ -1,7 +1,8 @@
 "use client";
 
+import { useBookmarkStore } from "@/store/useBookmarkStore";
 import { Owner } from "@/types/user";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 type OwnerContextType = {
   owner: Owner;
@@ -26,6 +27,11 @@ export function OwnerProvider({
 }) {
   const [owner, setOwner] = useState<Owner>(initialOwner);
   const [isSizeSheetOpen, setIsSizeSheetOpen] = useState(false);
+  const setBookmarked = useBookmarkStore((s) => s.setBookmarked);
+
+  useEffect(() => {
+    setBookmarked(owner.isBookmarked ?? false);
+  }, [owner.isBookmarked, setBookmarked]);
 
   async function refreshOwner() {
     try {
