@@ -83,6 +83,7 @@ export async function getBookmarks({
     }
 
     const data = await res.json();
+    console.log("북마크조회", data);
     return data?.body;
   } catch (error) {
     console.error(error);
