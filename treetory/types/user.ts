@@ -11,6 +11,7 @@ export type User = {
 
 export type Owner = {
   nickname?: string;
+  isBookmarked?: boolean;
   treeSize?: number;
   treeTheme?: TreeType;
   treeBackground?: BackgroundType;
