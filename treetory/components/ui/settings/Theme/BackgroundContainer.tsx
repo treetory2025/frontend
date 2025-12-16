@@ -27,6 +27,7 @@ export default function BackgroundContainer({
   const [index, setIndex] = useState(initialIndex === -1 ? 0 : initialIndex);
 
   const shownTheme = themes[index];
+  const isSelected = currentBackground === shownTheme.value;
 
   // 선택한 테마가 가장 첫번째로 오도록 설정
   const canPrev = index > 0;
@@ -72,7 +73,8 @@ export default function BackgroundContainer({
 
       {/* 선택 버튼 */}
       <button
-        className="bg-green text-button text-beige mt-4 h-12 w-[60%] cursor-pointer rounded-md"
+        className={`bg-green text-button text-beige mt-4 h-12 w-[60%] rounded-md ${isSelected ? "cursor-not-allowed opacity-40" : "cursor-pointer"}`}
+        disabled={isSelected}
         onClick={() => {
           onSubmit(shownTheme.value);
         }}
