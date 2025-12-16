@@ -39,7 +39,7 @@ export function OrnamentItem({
   onSelectOrnament: (ornament: Ornarment) => void;
   diffX: number;
 }) {
-  const [imgSrc] = useImage(ornament.imgUrl);
+  const [imgSrc] = useImage(ornament.imgUrl, "anonymous");
 
   const radius =
     ornament.size === "SMALL" ? 22 : ornament.size === "MEDIUM" ? 30 : 38;
