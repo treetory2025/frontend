@@ -14,7 +14,7 @@ export default function CreateOrnamentPage() {
   
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [ornamentName, setOrnamentName] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('선택안함');
+  const [selectedCategory, setSelectedCategory] = useState('CHRISTMAS');
   const [isPublic, setIsPublic] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string>('');
@@ -265,19 +265,51 @@ export default function CreateOrnamentPage() {
           <div className="mt-2 text-sm">
             {nameAvailable === true && <span className="text-green">사용 가능한 이름입니다.</span>}
             {nameAvailable === false && <span className="text-red-600">이미 사용 중인 이름입니다.</span>}
-            {nameAvailable === null && <span className="text-fg-secondary">이름은 10자 이하로 입력해주세요.</span>}
           </div>
         </div>
       )}
 
       
       {/* 경고 */}
-      <div className="mt-4 mb-4 flex items-center gap-3 p-4 bg-yellow-100 border-l-4 border-yellow-400 rounded">
+      {step === 'upload' && (
+        
+        <div className="mt-4 mb-4 flex items-center gap-3 p-4 bg-yellow-100 border-l-4 border-yellow-400 rounded">
         <span className="text-xl">⚠️</span>
         <div>
           <p className="text-sm font-semibold text-fg-primary">운영정책에 따라 부적절한 장식은 삭제될 수 있습니다.</p>
         </div>
       </div>
+      )}
+
+      {/* 장식 분류 선택 */}
+      {step === 'name' && (
+      <div className="w-full mt-2 mb-4">
+        <div className="text-sm text-fg-secondary mb-2">장식 분류</div>
+        <div className="flex items-center justify-center gap-6">
+          {[
+            { id: 'CHRISTMAS', label: '크리스마스', icon: '🎄' },
+            { id: 'FOOD', label: '음식', icon: '🍪' },
+            { id: 'ANIMAL', label: '동물', icon: '🦌' },
+            { id: 'ETC', label: '기타', icon: '✨' },
+          ].map((c) => {
+            const selected = selectedCategory === c.id;
+            return (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => setSelectedCategory(c.id)}
+                className="flex flex-col items-center gap-1 focus:outline-none"
+              >
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center border ${selected ? 'border-4 border-green bg-navy text-green' : 'border-transparent bg-beige text-fg-primary'}`}>
+                  <span className="text-lg">{c.icon}</span>
+                </div>
+                <div className={`text-xs ${selected ? 'text-green' : 'text-fg-secondary'}`}>{c.label}</div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      )}
 
       {/* 하단 버튼: 업로드 단계에서는 다음, 이름 단계에서는 완료/이전 */}
       {step === 'upload' ? (
