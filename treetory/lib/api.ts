@@ -110,28 +110,28 @@ export interface Ornaments {
 }
 
 export async function getOrnaments(
-  word: string = '',
-  category: string = '',
-  page: number = 0
+  word: string = "",
+  category: string = "",
+  page: number = 0,
 ): Promise<Ornaments | null> {
   try {
     const params = new URLSearchParams();
-    if (word) params.append('word', word);
-    if (category && category !== 'all') params.append('category', category);
-    if (page > 0) params.append('page', page.toString());
+    if (word) params.append("word", word);
+    if (category && category !== "all") params.append("category", category);
+    if (page > 0) params.append("page", page.toString());
 
-    const url = `/api/ornaments${params.toString() ? '?' + params.toString() : ''}`;
+    const url = `/api/ornaments${params.toString() ? "?" + params.toString() : ""}`;
     const res = await apiFetch(url);
 
     if (!res.ok) {
-      console.log('오너먼트 조회 실패', res);
+      console.log("오너먼트 조회 실패", res);
       return null;
     }
 
     const data = await res.json();
     return data?.body.ornaments;
   } catch (error: any) {
-    console.error('오너먼트 조회 에러:', error);
+    console.error("오너먼트 조회 에러:", error);
     return null;
   }
 }
@@ -143,7 +143,7 @@ export async function getOrnaments(
 export async function createOrnament(
   name: string | undefined,
   category: string,
-  imgUrl: string
+  imgUrl: string,
 ): Promise<any> {
   try {
     const payload: any = { category, imgUrl };
@@ -152,15 +152,19 @@ export async function createOrnament(
     }
 
     const res = await apiFetch(`/api/ornaments`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
     if (!res.ok) {
       // 로그에 응답 상태와 본문을 남겨 디버깅에 도움을 줌
-      const text = await res.text().catch(() => '<<no body>>');
-      console.error('오너먼트 등록 실패', { status: res.status, statusText: res.statusText, body: text });
+      const text = await res.text().catch(() => "<<no body>>");
+      console.error("오너먼트 등록 실패", {
+        status: res.status,
+        statusText: res.statusText,
+        body: text,
+      });
       return null;
     }
 
@@ -174,7 +178,7 @@ export async function createOrnament(
     // body가 비어있어도 HTTP 2xx 이므로 성공으로 간주
     return { success: true };
   } catch (error: any) {
-    console.error('오너먼트 등록 에러:', error);
+    console.error("오너먼트 등록 에러:", error);
     return null;
   }
 }
@@ -188,14 +192,14 @@ export async function checkOrnamentNameExists(name: string): Promise<boolean> {
     const res = await apiFetch(`/api/ornaments/exists?${params.toString()}`);
 
     if (!res.ok) {
-      console.log('오너먼트 이름 중복 조회 실패', res);
+      console.log("오너먼트 이름 중복 조회 실패", res);
       return false;
     }
 
     const data = await res.json();
     return data?.isExists ?? false;
   } catch (error: any) {
-    console.error('오너먼트 이름 중복 조회 에러:', error);
+    console.error("오너먼트 이름 중복 조회 에러:", error);
     return false;
   }
 }
@@ -211,20 +215,20 @@ export interface OrnamentDetail {
 }
 
 export async function getOrnamentDetail(
-  ornamentId: number
+  ornamentId: number,
 ): Promise<OrnamentDetail | null> {
   try {
     const res = await apiFetch(`/api/ornaments/${ornamentId}`);
 
     if (!res.ok) {
-      console.log('오너먼트 상세 조회 실패', res);
+      console.log("오너먼트 상세 조회 실패", res);
       return null;
     }
 
     const data = await res.json();
     return data?.body;
   } catch (error: any) {
-    console.error('오너먼트 상세 조회 에러:', error);
+    console.error("오너먼트 상세 조회 에러:", error);
     return null;
   }
 }
@@ -233,28 +237,34 @@ export async function getOrnamentDetail(
 // POST /api/ornaments/images
 // Request: { image: string } (data URL or binary base64)
 // Response: { body: { url: string } }
-export async function uploadOrnamentImage(dataUrl: string): Promise<string | null> {
+export async function uploadOrnamentImage(
+  dataUrl: string,
+): Promise<string | null> {
   try {
     // convert data URL to Blob
-    const [meta, base64] = dataUrl.split(',');
+    const [meta, base64] = dataUrl.split(",");
     const mimeMatch = meta.match(/data:(.*);base64/);
-    const mime = mimeMatch?.[1] ?? 'image/png';
-    const binary = atob(base64 || '');
+    const mime = mimeMatch?.[1] ?? "image/png";
+    const binary = atob(base64 || "");
     const len = binary.length;
     const u8 = new Uint8Array(len);
     for (let i = 0; i < len; i++) u8[i] = binary.charCodeAt(i);
     const blob = new Blob([u8], { type: mime });
 
     const fd = new FormData();
-    fd.append('image', blob, `ornament-${Date.now()}.${(mime.split('/')[1] || 'png')}`);
+    fd.append(
+      "image",
+      blob,
+      `ornament-${Date.now()}.${mime.split("/")[1] || "png"}`,
+    );
 
     const res = await apiFetch(`/api/ornaments/images`, {
-      method: 'POST',
+      method: "POST",
       body: fd,
     });
 
     if (!res.ok) {
-      console.error('오너먼트 이미지 업로드 실패', res);
+      console.error("오너먼트 이미지 업로드 실패", res);
       return null;
     }
 
@@ -262,7 +272,7 @@ export async function uploadOrnamentImage(dataUrl: string): Promise<string | nul
     // backend returns image URL in body.imgUrl
     return data?.body?.imgUrl ?? data?.body?.url ?? null;
   } catch (error: any) {
-    console.error('오너먼트 이미지 업로드 에러:', error);
+    console.error("오너먼트 이미지 업로드 에러:", error);
     return null;
   }
 }

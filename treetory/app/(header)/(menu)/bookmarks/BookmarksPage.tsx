@@ -29,6 +29,7 @@ export default function BookmarksPage() {
       });
 
       if (!data.body) return;
+      console.log(data);
       setMembers(data.body.members.content);
       setTotalPage(data.body.totalPage);
     };
