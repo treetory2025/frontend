@@ -28,10 +28,10 @@ export default function BookmarksPage() {
         size: "6",
       });
 
-      if (!data.body) return;
+      if (!data) return;
       console.log(data);
-      setMembers(data.body.members.content);
-      setTotalPage(data.body.totalPage);
+      setMembers(data.members.content);
+      setTotalPage(data.totalPage);
     };
 
     fetchData();
