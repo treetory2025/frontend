@@ -5,8 +5,8 @@ import BookmarksPage from "@/app/(header)/(menu)/bookmarks/BookmarksPage";
 
 export default function Page() {
   return (
-    <Suspense fallback={null}>
+    <>
       <BookmarksPage />
-    </Suspense>
+    </>
   );
 }
