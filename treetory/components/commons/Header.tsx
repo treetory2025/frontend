@@ -63,12 +63,15 @@ export default function Header() {
   const onClickBookmark = async () => {
     if (!treeUuid) return;
 
+    const current = isBookmarked;
+
     try {
       toggleBookmarked();
       await toggleBookmakApi({
         targetMemberId: treeUuid,
-        isBookmarked,
+        isBookmarked: current,
       });
+      console.log("북마크 api 성공");
     } catch {
       toggleBookmarked();
     }
