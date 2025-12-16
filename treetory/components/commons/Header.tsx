@@ -1,7 +1,6 @@
 "use client";
 
 import menuIcon from "@/public/icons/menu(default).svg";
-import cameraIcon from "@/public/icons/camera.svg";
 import rudolphIcon from "@/public/icons/rudolph.png";
 import santaIcon from "@/public/icons/santa.png";
 
@@ -19,18 +18,24 @@ import {
 import { useUserStore } from "@/store/userStore";
 import { useParams, usePathname } from "next/navigation";
 import { isLoggedIn } from "@/lib/auth";
-import { Star, StarOff } from "lucide-react";
+import { Star, StarOff, ImageDown } from "lucide-react";
 import { getBookmarks } from "@/lib/api";
+import { useCaptureStore } from "@/store/useCaptureStore";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [diffdays, setDiffdays] = useState(0);
+
   const menuRef = useRef<HTMLDivElement | null>(null);
   const isChristmas = isChristmas2025InKorea();
-  const loggedIn = isLoggedIn();
 
+  // 캡쳐 state
+  const capture = useCaptureStore((s) => s.capture);
+
+  const loggedIn = isLoggedIn();
   const [isBookmarked, setIsBookmarked] = useState(false);
 
+  // 유저 정보, 트리 소유자 정보 확인
   const pathname = usePathname();
   const isTreePage = pathname.startsWith("/tree/");
 
@@ -78,10 +83,15 @@ export default function Header() {
             </div>
           )}
         </div>
+
         {/* 캡쳐 버튼 */}
         {isTreePage && isTreeOwner && (
-          <button className="bg-yellow flex h-10 w-10 cursor-pointer items-center justify-center rounded-full">
-            <Image src={cameraIcon} alt="camera" />
+          <button
+            className="bg-yellow text-beige flex h-10 w-10 cursor-pointer items-center justify-center rounded-full"
+            onClick={capture}
+          >
+            {/* <Image src={cameraIcon} alt="camera" /> */}
+            <ImageDown size={24} strokeWidth={2} />
           </button>
         )}
         {/* 즐겨찾기 버튼 */}
