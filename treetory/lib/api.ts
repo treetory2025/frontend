@@ -88,3 +88,134 @@ export async function getBookmarks({
     console.error(error);
   }
 }
+
+// ============================================
+// 오너먼트 관련 API
+// ============================================
+
+// 1. 오너먼트 조회
+// GET /api/ornaments?word={word}&category={category}&page={page}
+export interface Ornament {
+  ornamentId: number;
+  name: string;
+  imgUrl: string;
+}
+
+export interface Ornaments {
+  content: Ornament[];
+  pageNum: number;
+  pageSize: number;
+  totalPage: number;
+  totalElements: number;
+}
+
+export async function getOrnaments(
+  word: string = '',
+  category: string = '',
+  page: number = 0
+): Promise<Ornaments | null> {
+  try {
+    const params = new URLSearchParams();
+    if (word) params.append('word', word);
+    if (category && category !== 'all') params.append('category', category);
+    if (page > 0) params.append('page', page.toString());
+
+    const url = `${BASE_URL}/ornaments${params.toString() ? '?' + params.toString() : ''}`;
+    const res = await apiFetch(url);
+
+    if (!res.ok) {
+      console.log('오너먼트 조회 실패', res);
+      return null;
+    }
+
+    const data = await res.json();
+    return data?.body.ornaments;
+  } catch (error: any) {
+    console.error('오너먼트 조회 에러:', error);
+    return null;
+  }
+}
+
+// 2. 오너먼트 등록
+// POST /api/ornaments
+// Request: { name?: string, category: string, imgUrl: string }
+// 백엔드에서 name 없으면 isPublic=false, name 있으면 isPublic=true로 판단
+export async function createOrnament(
+  name: string | undefined,
+  category: string,
+  imgUrl: string
+): Promise<{ ornamentId: number } | null> {
+  try {
+    const payload: any = { category, imgUrl };
+    if (name) {
+      payload.name = name;
+    }
+    
+    const res = await apiFetch(`${BASE_URL}/ornaments`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      console.error('오너먼트 등록 실패', res);
+      return null;
+    }
+
+    const data = await res.json();
+    return data?.body;
+  } catch (error: any) {
+    console.error('오너먼트 등록 에러:', error);
+    return null;
+  }
+}
+
+// 3. 오너먼트 이름 중복 조회
+// GET /api/ornaments/exists?name={name}
+// 필요: 로그인
+export async function checkOrnamentNameExists(name: string): Promise<boolean> {
+  try {
+    const params = new URLSearchParams({ name });
+    const res = await apiFetch(`${BASE_URL}/ornaments/exists?${params.toString()}`);
+
+    if (!res.ok) {
+      console.log('오너먼트 이름 중복 조회 실패', res);
+      return false;
+    }
+
+    const data = await res.json();
+    return data?.isExists ?? false;
+  } catch (error: any) {
+    console.error('오너먼트 이름 중복 조회 에러:', error);
+    return false;
+  }
+}
+
+// 4. 오너먼트 상세 조회
+// GET /api/ornaments/{ornamentId}
+export interface OrnamentDetail {
+  name: string;
+  category: string;
+  imgUrl: string;
+  userNickname: string;
+  createdDate: string;
+}
+
+export async function getOrnamentDetail(
+  ornamentId: number
+): Promise<OrnamentDetail | null> {
+  try {
+    const res = await apiFetch(`${BASE_URL}/ornaments/${ornamentId}`);
+
+    if (!res.ok) {
+      console.log('오너먼트 상세 조회 실패', res);
+      return null;
+    }
+
+    const data = await res.json();
+    return data?.body;
+  } catch (error: any) {
+    console.error('오너먼트 상세 조회 에러:', error);
+    return null;
+  }
+}
