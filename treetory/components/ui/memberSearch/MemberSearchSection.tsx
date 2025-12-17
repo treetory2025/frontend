@@ -43,8 +43,8 @@ export default function MemberSearchSection({ close }: { close: () => void }) {
         if (!data?.body) return;
 
         setMembers(data.body.members.content);
-        setTotalPage(data.body.members.totalPage);
-        setTotalElements(data.body.members.totalElements);
+        setTotalPage(data.body.totalPage);
+        setTotalElements(data.body.totalElements);
       } catch (error) {
         console.error("사용자 검색 실패", error);
       } finally {

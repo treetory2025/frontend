@@ -10,6 +10,7 @@ import { useUserStore } from "@/store/userStore";
 
 import { useBottomSheet } from "@/hooks/useBottomSheet";
 import NicknameBottomSheet from "@/components/ui/settings/NicknameBottomSheet";
+import { useAlert } from "@/hooks/useAlert";
 
 export default function Page() {
   const router = useRouter();
@@ -18,7 +19,20 @@ export default function Page() {
   // 닉네임 바텀 시트 상태 관리
   const { isOpen, open, close } = useBottomSheet();
 
-  console.log("user: ", user);
+  const alert = useAlert();
+  if (!user) {
+    alert("로그인이 필요합니다.", () => router.back());
+    return (
+      <>
+        <PageHeading title="설정" />
+        <ContentSection className="no-scrollbar relative flex h-full flex-col space-y-4 overflow-y-auto md:space-y-6">
+          <div className="text-navy text-subtitle flex h-full items-center justify-center text-center">
+            사용자 정보 확인 중
+          </div>
+        </ContentSection>
+      </>
+    );
+  }
 
   if (!hasHydrated) {
     return (

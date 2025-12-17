@@ -5,6 +5,10 @@ import { usePathname } from "next/navigation";
 import style from "@/app/clientLayoutCss.module.css";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import AlertModal from "@/components/commons/AlertModal";
+import InviteModal from "@/components/ui/menu/InviteModal";
+import MusicProvider from "./MusicProvider";
+import BGMButton from "@/components/ui/menu/BGMButton";
 
 const TREE_THEME_BG_MAP: Record<string, string> = {
   SILENT_NIGHT: "bg-navy",
@@ -31,7 +35,11 @@ export default function ClientRootLayout({
 }) {
   const pathname = usePathname();
   const theme = useThemeStore((s) => s.theme);
-  const isTreeRoute = pathname.startsWith("/tree");
+
+  const THEME_ALLOWED_ROUTES = ["/tree", "/bookmarks", "/settings"];
+  const isThemeAllowedRoute = THEME_ALLOWED_ROUTES.some((path) =>
+    pathname.startsWith(path),
+  );
 
   const MIN_LOADING_TIME = 50;
 
@@ -50,18 +58,27 @@ export default function ClientRootLayout({
   }
 
   const bgClass =
-    isTreeRoute && theme ? (TREE_THEME_BG_MAP[theme] ?? "bg-navy") : "bg-navy";
+    theme && isThemeAllowedRoute
+      ? (TREE_THEME_BG_MAP[theme] ?? "bg-navy")
+      : "bg-navy";
+  console.log(theme, bgClass);
 
   return (
-    <motion.div
-      className={`flex h-full w-full flex-col items-center justify-center ${bgClass}`}
-      initial={{ opacity: 0.3 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-    >
-      <div className={style.appContainer}>
-        <main className="h-full">{children}</main>
-      </div>
-    </motion.div>
+    <MusicProvider>
+      <motion.div
+        className={`flex h-full w-full flex-col items-center justify-center ${bgClass}`}
+        initial={{ opacity: 0.3 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+      >
+        <div className={style.appContainer}>
+          <AlertModal />
+          <InviteModal />
+
+          <main className="h-full">{children}</main>
+          <BGMButton />
+        </div>
+      </motion.div>
+    </MusicProvider>
   );
 }

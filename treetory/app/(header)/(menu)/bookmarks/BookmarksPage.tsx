@@ -19,18 +19,26 @@ export default function BookmarksPage() {
 
   const [members, setMembers] = useState([]);
   const [totalPage, setTotalPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getBookmarks({
-        query: query,
-        page: String(page),
-        size: "6",
-      });
+      setIsLoading(true);
 
-      if (!data.body) return;
-      setMembers(data.body.members.content);
-      setTotalPage(data.body.totalPage);
+      try {
+        const data = await getBookmarks({
+          query,
+          page: String(page),
+          size: "6",
+        });
+
+        if (!data) return;
+
+        setMembers(data.members.content);
+        setTotalPage(data.totalPage);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchData();
@@ -41,7 +49,13 @@ export default function BookmarksPage() {
       <PageHeading title="즐겨찾기" />
       <ContentSection className="no-scrollbar flex h-full flex-col overflow-y-auto md:p-10">
         <SearchSection initialQuery={query} />
-        {members.length === 0 && (
+        {isLoading ? (
+          <div className="flex h-full flex-col items-center justify-center gap-4">
+            <h1 className="text-body text-fg-tertiary text-center">
+              즐겨찾기 사용자 데이터를 조회중입니다.
+            </h1>
+          </div>
+        ) : members.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-4">
             <div className="text-muted-navy flex items-center rounded-full bg-white/50 p-4">
               <User size={32} />
@@ -50,8 +64,9 @@ export default function BookmarksPage() {
               즐겨찾기한 사용자가 없습니다.
             </h1>
           </div>
+        ) : (
+          <BookmarksMembersList members={members} />
         )}
-        <BookmarksMembersList members={members} />
         <PaginationSection page={page} totalPage={totalPage} query={query} />
       </ContentSection>
     </>

@@ -1,7 +1,8 @@
 "use client";
 
+import { useBookmarkStore } from "@/store/useBookmarkStore";
 import { Owner } from "@/types/user";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 type OwnerContextType = {
   owner: Owner;
@@ -26,6 +27,9 @@ export function OwnerProvider({
 }) {
   const [owner, setOwner] = useState<Owner>(initialOwner);
   const [isSizeSheetOpen, setIsSizeSheetOpen] = useState(false);
+  const setBookmarked = useBookmarkStore((s) => s.setBookmarked);
+
+  const [hydrated, setHydrated] = useState(false);
 
   async function refreshOwner() {
     try {
@@ -48,6 +52,26 @@ export function OwnerProvider({
       throw new Error(error);
     }
   }
+
+  // 마운트 시 최신 owner를 반드시 다시 가져옴
+  useEffect(() => {
+    const init = async () => {
+      await refreshOwner();
+      setHydrated(true);
+    };
+
+    init();
+  }, []);
+
+  // 북마크 여부 확인 로직
+  useEffect(() => {
+    if (!hydrated) return;
+
+    if (owner.isBookmarked !== undefined) {
+      setBookmarked(owner.isBookmarked);
+      console.log("실제 api 응답 :", owner.isBookmarked);
+    }
+  }, [hydrated, owner.isBookmarked]);
 
   return (
     <OwnerContext.Provider

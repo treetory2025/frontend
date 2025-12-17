@@ -16,6 +16,8 @@ import {
   TREE_OPTIONS,
 } from "@/types/theme";
 
+import { useAlert } from "@/hooks/useAlert";
+
 const THEME_TABS = [
   { label: "배경", value: "background" },
   { label: "트리", value: "tree" },
@@ -40,7 +42,6 @@ export default function Page() {
   }, [hasHydrated, user]);
 
   // 사용자 정보 갱신 콜백
-
   const refreshMe = useCallback(async () => {
     const res = await apiFetch(`/api/members/me`, {
       credentials: "include",
@@ -72,6 +73,7 @@ export default function Page() {
 
       await refreshMe();
       setBackground(background);
+      alert("배경 테마 변경 완료");
     } catch (error) {
       console.error("배경 테마 변경 실패", error);
     }
@@ -94,6 +96,7 @@ export default function Page() {
 
       await refreshMe();
       setTree(tree);
+      alert("트리 테마 변경 완료");
     } catch (error) {
       console.error("트리 테마 변경 실패", error);
     }
