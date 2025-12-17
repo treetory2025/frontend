@@ -3,11 +3,13 @@
 import { useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
+import PreviewModal from '@/components/ui/decorate/nickname/PreviewModal';
 
 export default function NicknameRegisterPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const imgUrl = searchParams.get('imgUrl');
+  const ornamentId = searchParams.get('ornamentId');
 
   const [nickname, setNickname] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -31,14 +33,27 @@ export default function NicknameRegisterPage() {
       // TODO: 닉네임 저장 API 호출
       // await saveNickname(trimmedNickname);
 
-      alert('닉네임이 등록되었습니다.');
-      router.back();
+      // reset slide and show preview modal
+      setSlideIndex(0);
+      setShowPreview(true);
     } catch (err) {
       console.error(err);
       alert('닉네임 등록 중 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const [showPreview, setShowPreview] = useState(false);
+  const [slideIndex, setSlideIndex] = useState(0);
+
+  const goToLetter = () => {
+    const base = (typeof window !== 'undefined' && window.location.pathname.split('/decorate')[0]) || '';
+    const params = new URLSearchParams();
+    if (imgUrl) params.set('imgUrl', imgUrl);
+    if (nickname.trim()) params.set('nickname', nickname.trim());
+    if (ornamentId) params.set('ornamentId', ornamentId);
+    router.push(`${base}/letter?${params.toString()}`);
   };
 
   return (
@@ -49,12 +64,25 @@ export default function NicknameRegisterPage() {
       </div>
 
       {imgUrl && (
-      <div className="absolute left-1/2 top-3/8 -translate-x-1/2 -translate-y-1/2 z-20">
+      <div className="absolute left-1/2 top-3/8 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center">
         <img
           src={imgUrl}
           alt="ornament preview"
           className="w-24 h-24 rounded-full object-cover"
         />
+        {/* 실시간 닉네임 미리보기 (이미지 바로 아래) */}
+        {nickname.trim() && (
+        <div className="mt-2">
+          <div
+            className="inline-block px-3 py-1 shadow-sm"
+            style={{ backgroundColor: 'rgba(230,243,249,0.2)', borderRadius: 8 }}
+          >
+            <span className="text-sm font-normal text-white">
+              {nickname.trim() || '\u00A0'}
+            </span>
+          </div>
+        </div>
+        )}
       </div>
       )}
 
@@ -95,6 +123,16 @@ export default function NicknameRegisterPage() {
           </button>
         </div>
       </div>
+      {/* 미리보기 모달 */}
+      <PreviewModal
+        open={showPreview}
+        onClose={() => setShowPreview(false)}
+        imgUrl={imgUrl}
+        slideIndex={slideIndex}
+        setSlideIndex={setSlideIndex}
+        onConfirm={goToLetter}
+      />
     </div>
+
   );
 }

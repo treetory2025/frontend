@@ -23,7 +23,7 @@ function OrnamentGrid({ ornaments, onSelect }: OrnamentGridProps) {
             type="button"
           >
             {/* 이미지 카드 */}
-            <div className="relative w-full overflow-hidden rounded-lg bg-beige aspect-square">
+            <div className="relative w-full overflow-hidden rounded-3xl bg-beige aspect-square">
               <img
                 src={ornament.imgUrl}
                 alt={ornament.name}

@@ -59,7 +59,7 @@ export function OrnamentsButton() {
     <button
       className="bg-skyblue text-button text-navy absolute right-5 bottom-5 left-auto translate-x-0 cursor-pointer rounded-full border-4 border-white px-6 py-5 font-bold md:right-10 md:bottom-10"
       onClick={() => {
-        window.location.href = `/tree/${uuid}/ornaments`;
+        window.location.href = `/tree/${uuid}/decorate`;
       }}
     >
       장식하기

@@ -68,9 +68,10 @@ export default function OrnamentDetailModal({ ornamentId, onClose }: Props) {
 
           <button className="mt-4 inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-medium" onClick={() => { 
             onClose();
-            router.push(
-              `/tree/${uuid}/decorate/nickname?imgUrl=${encodeURIComponent(detail?.imgUrl ?? '')}`
-            );
+            const params = new URLSearchParams();
+            if (detail?.imgUrl) params.set('imgUrl', detail.imgUrl);
+            if (ornamentId != null) params.set('ornamentId', String(ornamentId));
+            router.push(`/tree/${uuid}/decorate/nickname?${params.toString()}`);
           }}>
             해당 장식으로 진행하기
             <span className="ml-2">→</span>

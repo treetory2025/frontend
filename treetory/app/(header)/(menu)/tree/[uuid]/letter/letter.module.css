@@ -1,0 +1,29 @@
+@import url('//fonts.googleapis.com/earlyaccess/nanumpenscript.css');
+
+@font-face {
+  font-family: 'GangwonEducationSaeum';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEduSaeeum_OTFMediumA.woff') format('woff');
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'OngleipWFontList';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2501-1@1.1/Ownglyph_wiseelist-Rg.woff2') format('woff2');
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'OngleipTterom';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/Ownglyph_ttaerom-Rg.woff2') format('woff2');
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'KotraHope';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/KOTRAHOPE.woff2') format('woff2');
+  font-weight: normal;
+  font-display: swap;
+}
