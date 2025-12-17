@@ -174,7 +174,7 @@ export default function TreePage() {
       <button
         className="bg-skyblue text-button text-navy absolute right-4 bottom-20 left-auto translate-x-0 cursor-pointer rounded-full border-4 border-white px-6 py-5 font-bold md:bottom-10"
         onClick={() => {
-          router.push(`/tree/${uuid}/ornaments`);
+          router.push(`/tree/${uuid}/decorate`);
         }}
       >
         장식하기
