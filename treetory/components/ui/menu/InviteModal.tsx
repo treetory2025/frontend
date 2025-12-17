@@ -38,7 +38,7 @@ export default function InviteModal() {
           트리토리 초대
         </p>
         <p className="text-body text-navy">
-          나의 트리토리 초대 링크를 복사합니다.
+          나의 트리토리 초대 링크를 복사할까요?
         </p>
         <button
           onClick={handleCopyLink}
