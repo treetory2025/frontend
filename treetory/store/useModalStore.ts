@@ -27,3 +27,15 @@ export const useModalStore = create<ModalState>((set) => ({
       onConfirm: undefined,
     }),
 }));
+
+interface InviteModalState {
+  isOpen: boolean;
+  openModal: () => void;
+  closeModal: () => void;
+}
+
+export const useInviteModalStore = create<InviteModalState>((set) => ({
+  isOpen: false,
+  openModal: () => set({ isOpen: true }),
+  closeModal: () => set({ isOpen: false }),
+}));
