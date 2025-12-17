@@ -104,6 +104,8 @@ export default function TreeSizeAddGuideBottomSheet({
 
       if (res.ok) {
         await refreshOwner();
+        onClose();
+
         return;
       }
 
@@ -118,6 +120,7 @@ export default function TreeSizeAddGuideBottomSheet({
           alert("트리 사이즈 변경 중 알 수 없는 오류가 발생했습니다.");
           console.log("트리 사이즈 변경 실패 ", res);
       }
+      onClose();
     } catch (error) {
       console.error("트리 사이즈 변경 중 네트워크 에러", error);
       alert("네트워크 오류로 트리 사이즈 변경에 실패했습니다.");
