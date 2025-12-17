@@ -52,6 +52,26 @@ export default function TreePage() {
 
   const router = useRouter();
 
+  // 휠 클릭 이벤트 방지
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const preventWheelClick = (e: MouseEvent) => {
+      if (e.button === 1) {
+        e.preventDefault();
+      }
+    };
+
+    el.addEventListener("mousedown", preventWheelClick);
+    el.addEventListener("auxclick", preventWheelClick);
+
+    return () => {
+      el.removeEventListener("mousedown", preventWheelClick);
+      el.removeEventListener("auxclick", preventWheelClick);
+    };
+  });
+
   // 트리 사이즈 확인
   useEffect(() => {
     //  storeOwner가 아직 없으면 바로 저장
@@ -106,7 +126,7 @@ export default function TreePage() {
           height: size.height,
           zIndex: 1,
         }}
-        className="no-scrollbar overflow-y-hidden"
+        className="no-scrollbar overflow-hidden"
       >
         {!isTreeReady && (
           <div className="absolute inset-0 z-10 flex h-full items-center justify-center">
@@ -152,7 +172,7 @@ export default function TreePage() {
         </Stage>
       </div>
       <button
-        className="bg-skyblue text-button text-navy absolute right-0 bottom-20 left-auto translate-x-0 cursor-pointer rounded-full border-4 border-white px-6 py-5 font-bold md:bottom-10"
+        className="bg-skyblue text-button text-navy absolute right-4 bottom-44 left-auto translate-x-0 cursor-pointer rounded-full border-4 border-white px-6 py-5 font-bold md:bottom-10"
         onClick={() => {
           router.push(`/tree/${uuid}/ornaments`);
         }}
