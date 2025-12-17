@@ -19,7 +19,7 @@ export default function AlertModal() {
         <p className="text-body pt-2">{message}</p>
         <button
           onClick={handleConfirm}
-          className="bg-green text-beige text-button rounded px-12 py-2"
+          className="bg-green text-beige text-button cursor-pointer rounded-lg px-16 py-2"
         >
           확인
         </button>

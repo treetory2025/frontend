@@ -6,6 +6,7 @@ import style from "@/app/clientLayoutCss.module.css";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import AlertModal from "@/components/commons/AlertModal";
+import InviteModal from "@/components/ui/menu/InviteModal";
 
 const TREE_THEME_BG_MAP: Record<string, string> = {
   SILENT_NIGHT: "bg-navy",
@@ -69,6 +70,8 @@ export default function ClientRootLayout({
     >
       <div className={style.appContainer}>
         <AlertModal />
+        <InviteModal />
+
         <main className="h-full">{children}</main>
       </div>
     </motion.div>

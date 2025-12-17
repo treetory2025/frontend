@@ -1,12 +1,12 @@
 import { MenuItem } from "@/components/ui/menu/MunuItem";
 
-import { MoveRight, Copy, LogIn, LogOut, Search } from "lucide-react";
+import { MoveRight, Copy, LogIn, LogOut, Search, Star } from "lucide-react";
 
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { isLoggedIn } from "@/lib/auth";
 import { useUserStore } from "@/store/userStore";
 import { useMemberSearchSheet } from "@/store/useMemberSearchSheet";
-import { useAlert } from "@/hooks/useAlert";
+import { useAlert, useInviteAlert } from "@/hooks/useAlert";
 
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -28,6 +28,7 @@ export default function HeaderMenu({ onClose }: { onClose: () => void }) {
   const clearUser = useUserStore((s) => s.clearUser);
 
   const alert = useAlert();
+  const inviteAlert = useInviteAlert();
 
   const open = useMemberSearchSheet((s) => s.open);
 
@@ -57,8 +58,8 @@ export default function HeaderMenu({ onClose }: { onClose: () => void }) {
           alert("로그인이 필요합니다.");
           return;
         }
-        navigator.clipboard.writeText(window.location.href);
         onClose();
+        inviteAlert();
       },
     },
 
@@ -115,9 +116,20 @@ export default function HeaderMenu({ onClose }: { onClose: () => void }) {
 
         if (!user) {
           console.log("유저 인식 실패");
+          onClose();
+
           return;
         }
+
+        const params = useParams();
+        const currentUuid = params?.uuid;
         onClose();
+
+        if (currentUuid === user.uuid) {
+          alert("현재 나의 트리토리입니다.");
+          return;
+        }
+
         router.push(`/tree/${user.uuid}`);
       },
     },
@@ -126,7 +138,7 @@ export default function HeaderMenu({ onClose }: { onClose: () => void }) {
 
     {
       label: "즐겨찾기",
-      icon: MoveRight,
+      icon: Star,
       disabled: !loggedIn,
       onClick: () => {
         if (!loggedIn) {
