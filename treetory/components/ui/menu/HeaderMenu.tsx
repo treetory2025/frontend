@@ -23,6 +23,8 @@ type Menu =
 
 export default function HeaderMenu({ onClose }: { onClose: () => void }) {
   const router = useRouter();
+  const params = useParams();
+
   const loggedIn = isLoggedIn();
   const user = useUserStore((s) => s.user);
   const clearUser = useUserStore((s) => s.clearUser);
@@ -121,11 +123,9 @@ export default function HeaderMenu({ onClose }: { onClose: () => void }) {
           return;
         }
 
-        const params = useParams();
-        const currentUuid = params?.uuid;
         onClose();
 
-        if (currentUuid === user.uuid) {
+        if (params?.uuid === user.uuid) {
           alert("현재 나의 트리토리입니다.");
           return;
         }
