@@ -72,9 +72,14 @@ export default function CreateOrnamentPage() {
         const created = await createOrnament(undefined, 'PRIVATE', imgUrl);
         if (!created) throw new Error('오너먼트 생성 실패');
 
+        // backend returns { header: { message }, body: { ornamentId } }
+        const ornamentId = (created as any)?.body?.ornamentId ?? (created as any)?.ornamentId ?? null;
+
         alert('장식이 등록되었습니다.');
-        const q = imgUrl ? `?imgUrl=${encodeURIComponent(imgUrl)}` : '';
-        router.push(`/tree/${uuid}/decorate/nickname${q}`);
+        const params = new URLSearchParams();
+        if (imgUrl) params.set('imgUrl', imgUrl);
+        if (ornamentId) params.set('ornamentId', String(ornamentId));
+        router.push(`/tree/${uuid}/decorate/nickname?${params.toString()}`);
       } catch (err) {
         console.error(err);
         alert('장식 등록 중 오류가 발생했습니다.');
@@ -144,9 +149,13 @@ export default function CreateOrnamentPage() {
       const created = await createOrnament(name, selectedCategory, imgUrl);
       if (!created) throw new Error('오너먼트 생성 실패');
 
+      const ornamentId = (created as any)?.body?.ornamentId ?? (created as any)?.ornamentId ?? null;
+
       alert('장식이 등록되었습니다.');
-      const q = imgUrl ? `?imgUrl=${encodeURIComponent(imgUrl)}` : '';
-      router.push(`/tree/${uuid}/decorate/nickname${q}`);
+      const params = new URLSearchParams();
+      if (imgUrl) params.set('imgUrl', imgUrl);
+      if (ornamentId) params.set('ornamentId', String(ornamentId));
+      router.push(`/tree/${uuid}/decorate/nickname?${params.toString()}`);
     } catch (err) {
       console.error(err);
       alert('장식 등록 중 오류가 발생했습니다.');
@@ -184,7 +193,6 @@ export default function CreateOrnamentPage() {
               <img src={previewUrl} alt="preview" className="w-full h-full object-cover rounded-full" />
             ) : (
               <div className="text-center">
-                <div className="text-4xl mb-2">🖼</div>
                 <p className="text-xs text-fg-secondary">이미지 선택</p>
               </div>
             )}

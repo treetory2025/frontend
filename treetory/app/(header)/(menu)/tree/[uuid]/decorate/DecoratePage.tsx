@@ -49,14 +49,36 @@ export default function DecoratePage() {
         const wordToSend = searchWord.trim();
         const categoryToSend = selectedCategory === 'all' ? '' : selectedCategory;
 
-        const res: ApiOrnaments | null = await getOrnaments(wordToSend, categoryToSend, currentPage);
+        const FRONT_PAGE_SIZE = 6;
+        const BACKEND_PAGE_SIZE = 18;
+
+        const backendPage = Math.floor((currentPage * FRONT_PAGE_SIZE) / BACKEND_PAGE_SIZE);
+
+        const res: ApiOrnaments | null = await getOrnaments(wordToSend, categoryToSend, backendPage);
 
         if (!mounted) return;
 
         if (res) {
-          setOrnaments(res.content || []);
-          // API가 totalPage를 제공하면 사용, 없으면 계산
-          const tp = (res.totalPage ?? Math.max(1, Math.ceil((res.totalElements ?? (res.content?.length||0)) / (res.pageSize || 6)))) || 1;
+          const backendContent = res.content || [];
+
+          const overallStart = currentPage * FRONT_PAGE_SIZE;
+          const backendStartIndex = backendPage * (res.pageSize ?? BACKEND_PAGE_SIZE);
+          const offsetInBackend = Math.max(0, overallStart - backendStartIndex);
+
+          let pageItems = backendContent.slice(offsetInBackend, offsetInBackend + FRONT_PAGE_SIZE);
+
+          if (pageItems.length < FRONT_PAGE_SIZE) {
+            const nextBackendPage = backendPage + 1;
+            const nextRes: ApiOrnaments | null = await getOrnaments(wordToSend, categoryToSend, nextBackendPage);
+            const nextContent = nextRes?.content || [];
+            const combined = backendContent.concat(nextContent);
+            pageItems = combined.slice(offsetInBackend, offsetInBackend + FRONT_PAGE_SIZE);
+          }
+
+          setOrnaments(pageItems);
+
+          const totalElements = res.totalElements ?? (res.totalPage && res.pageSize ? res.totalPage * res.pageSize : backendContent.length);
+          const tp = Math.max(1, Math.ceil((totalElements ?? backendContent.length) / FRONT_PAGE_SIZE));
           setTotalPages(tp);
         } else {
           setOrnaments([]);
@@ -78,7 +100,7 @@ export default function DecoratePage() {
   }, [selectedCategory, searchWord, currentPage]);
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 md:p-6" style={{ backgroundColor: '#CCE8F3' }}>
+    <div className="flex-1 overflow-y-auto p-4 md:p-6 pb-20" style={{ backgroundColor: '#CCE8F3' }}>
       {/* 검색 섹션 */}
       <div className="mb-6 flex gap-3">
         <div className="relative flex-1">
@@ -125,45 +147,41 @@ export default function DecoratePage() {
         </p>
         <CreateOrnamentButton />
       </div>
-
+      
       {/* 장식 그리드 */}
       <OrnamentGrid ornaments={deferredOrnaments} onSelect={(id) => setSelectedOrnamentId(id)} />
 
       {/* 선택된 장식 모달 */}
       <OrnamentDetailModal ornamentId={selectedOrnamentId} onClose={() => setSelectedOrnamentId(null)} />
 
+      
       {/* 페이지네이션 */}
-      {totalPages > 1 && (
-        <div className="mt-6 flex items-center justify-center gap-2">
+      {totalPages > 0 && (
+        <div className="fixed left-1/2 bottom-6 z-30 -translate-x-1/2">
+          <div className="flex items-center justify-center gap-4 bg-transparent">
           <button
+            disabled={currentPage <= 0}
             onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
-            disabled={currentPage === 0}
-            className="px-3 py-1 rounded disabled:opacity-50 border"
+            className="bg-muted-navy text-beige cursor-pointer rounded-full px-3 py-1 disabled:opacity-30"
           >
-            &lt;
+            이전
           </button>
 
-          {Array.from({ length: totalPages }).map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentPage(idx)}
-              className={`px-3 py-1 rounded font-semibold ${
-                idx === currentPage ? 'bg-muted-navy text-beige' : 'bg-beige text-fg-primary'
-              }`}
-            >
-              {idx + 1}
-            </button>
-          ))}
+          <span className="text-body font-bold">
+            {currentPage + 1} / {totalPages}
+          </span>
 
           <button
+            disabled={currentPage >= totalPages - 1}
             onClick={() => setCurrentPage(Math.min(totalPages - 1, currentPage + 1))}
-            disabled={currentPage === totalPages - 1}
-            className="px-3 py-1 rounded disabled:opacity-50 border"
+            className="bg-muted-navy text-beige cursor-pointer rounded-full px-3 py-1 disabled:opacity-30"
           >
-            &gt;
+            다음
           </button>
+          </div>
         </div>
       )}
+      
     </div>
   );
 }
