@@ -1,8 +1,8 @@
 import { MenuItem } from "@/components/ui/menu/MunuItem";
 
-import { MoveRight, Copy, LogIn, LogOut, Search } from "lucide-react";
+import { MoveRight, Copy, LogIn, LogOut, Search, Star } from "lucide-react";
 
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { isLoggedIn } from "@/lib/auth";
 import { useUserStore } from "@/store/userStore";
 import { useMemberSearchSheet } from "@/store/useMemberSearchSheet";
@@ -120,7 +120,16 @@ export default function HeaderMenu({ onClose }: { onClose: () => void }) {
 
           return;
         }
+
+        const params = useParams();
+        const currentUuid = params?.uuid;
         onClose();
+
+        if (currentUuid === user.uuid) {
+          alert("현재 나의 트리토리입니다.");
+          return;
+        }
+
         router.push(`/tree/${user.uuid}`);
       },
     },
@@ -129,7 +138,7 @@ export default function HeaderMenu({ onClose }: { onClose: () => void }) {
 
     {
       label: "즐겨찾기",
-      icon: MoveRight,
+      icon: Star,
       disabled: !loggedIn,
       onClick: () => {
         if (!loggedIn) {
