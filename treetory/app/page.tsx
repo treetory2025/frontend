@@ -1,7 +1,20 @@
+"use client";
+
+import { useUserStore } from "@/store/userStore";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
 export default function Home() {
-  return (
-    <div className="flex items-center justify-center">
-      <h1 className="text-caption text-foreground">Title</h1>
-    </div>
-  );
+  const router = useRouter();
+  const user = useUserStore((s) => s.user);
+
+  useEffect(() => {
+    if (!user) {
+      router.replace("/login");
+      return;
+    }
+    router.replace(`/tree/${user.uuid}`);
+  }, [user, router]);
+
+  return null;
 }
