@@ -280,3 +280,23 @@ export async function uploadOrnamentImage(
     return null;
   }
 }
+
+export async function getTreeOwnerInLetter(uuid: string) {
+  try {
+    const res = await fetch(`/api/trees/${uuid}`, {
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      console.log("api 불러오기 실패", res);
+      return;
+    }
+
+    const data = await res.json();
+    const owner = data?.body;
+
+    return owner;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+}

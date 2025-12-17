@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect, useRef } from 'react'
-import { getTreeOwner } from '@/lib/api'
+import { getTreeOwner, getTreeOwnerInLetter } from '@/lib/api'
 import { useRouter, useSearchParams } from 'next/navigation'
 import styles from './letter.module.css'
 
@@ -51,9 +51,10 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
   useEffect(() => {
     // load tree owner nickname when uuid available
     if (!uuid) return
+    console.log('fetching owner nickname for uuid:', uuid)
     ;(async () => {
       try {
-        const owner = await getTreeOwner(uuid)
+        const owner = await getTreeOwnerInLetter(uuid)
         // backend may return nickname under different keys
         const nick = owner?.nickname ?? owner?.userNickname ?? owner?.nick ?? null
         console.log('owner nickname fetch', nick)
