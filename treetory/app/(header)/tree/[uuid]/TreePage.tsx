@@ -106,7 +106,7 @@ export default function TreePage() {
           height: size.height,
           zIndex: 1,
         }}
-        className="no-scrollbar overflow-y-hidden"
+        className="no-scrollbar overflow-hidden"
       >
         {!isTreeReady && (
           <div className="absolute inset-0 z-10 flex h-full items-center justify-center">
