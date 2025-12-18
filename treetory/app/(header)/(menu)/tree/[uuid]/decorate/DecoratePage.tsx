@@ -149,6 +149,9 @@ export default function DecoratePage() {
       </div>
       
       {/* 장식 그리드 */}
+      <div className="-mx-4 md:-mx-6">
+        <div className="h-px bg-white my-4" />
+      </div>
       <OrnamentGrid ornaments={deferredOrnaments} onSelect={(id) => setSelectedOrnamentId(id)} />
 
       {/* 선택된 장식 모달 */}
