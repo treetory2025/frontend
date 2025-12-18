@@ -124,7 +124,7 @@ export async function getOrnaments(
     if (category && category !== "all") params.append("category", category);
     if (page > 0) params.append("page", page.toString());
 
-    const url = `/api/ornaments${params.toString() ? "?" + params.toString() : ""}`;
+    const url = `https://develop.bacinf.com/api/ornaments${params.toString() ? "?" + params.toString() : ""}`;
     const res = await apiFetch(url);
 
     if (!res.ok) {

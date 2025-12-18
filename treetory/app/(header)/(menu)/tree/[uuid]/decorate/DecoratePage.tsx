@@ -162,7 +162,7 @@ export default function DecoratePage() {
             <button
               disabled={currentPage <= 0}
               onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
-              className="bg-muted-navy text-beige cursor-pointer rounded-full px-3 py-1 disabled:opacity-30"
+              className="bg-muted-navy text-beige cursor-pointer rounded-full px-3 py-1 disabled:opacity-30 disabled:cursor-not-allowed"
             >
               이전
             </button>
@@ -174,7 +174,7 @@ export default function DecoratePage() {
             <button
               disabled={currentPage >= totalPages - 1}
               onClick={() => setCurrentPage(Math.min(totalPages - 1, currentPage + 1))}
-              className="bg-muted-navy text-beige cursor-pointer rounded-full px-3 py-1 disabled:opacity-30"
+              className="bg-muted-navy text-beige cursor-pointer rounded-full px-3 py-1 disabled:opacity-30 disabled:cursor-not-allowed"
             >
               다음
             </button>
