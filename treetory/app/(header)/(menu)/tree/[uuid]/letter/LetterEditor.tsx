@@ -1,6 +1,8 @@
 "use client"
 
 import React, { useState, useEffect, useRef } from 'react'
+import { ArrowBigDown } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { getTreeOwner, getTreeOwnerInLetter } from '@/lib/api'
 import { useRouter, useSearchParams } from 'next/navigation'
 import styles from './letter.module.css'
@@ -72,8 +74,8 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
   const ornamentSize = text.length <= 100 ? 44 : text.length <= 200 ? 60 : 76
 
   return (
-    <div className="max-w-md mt-6">
-        <div className="px-4 py-2 relative">
+    <div className="flex-1 overflow-y-auto">
+        <div className="relative px-4 py-2">
             <div className="flex items-center gap-3">
                 <p className="text-md text-green font-lightbold m-0" style={{ fontFamily: fontFamilyMap[selectedFont] }}>
                 {fontOptions.find(f => f.key === selectedFont)?.label}로 편지를 쓰고 있습니다
@@ -82,12 +84,13 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
                 <button
                 type="button"
                 onClick={() => setIsFontOpen(prev => !prev)}
-                className="text-sm text-white font-base underline"
+                className="text-sm text-white font-base flex items-center gap-1"
                 >
-                변경하기 ↓
+                <span>변경하기</span>
+                <ArrowBigDown size={16} strokeWidth={2.5} />
                 </button>
             </div>
-            <div className="absolute ml-84 top-1/100 -translate-y-1/2 z-50">
+            <div className="absolute right-4 top-[-32px] z-50">
               <div
                 role="button"
                 tabIndex={0}
@@ -104,25 +107,33 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
               </div>
             </div>
 
-            {/* 드롭다운 */}
+            {/* 드롭다운 (framer-motion) */}
+            <AnimatePresence>
             {isFontOpen && (
-                <div className="absolute mt-2 bg-white border-green border-2 rounded-md shadow w-48 z-10">
-                {fontOptions.map(option => (
-                    <button
-                    key={option.key}
-                    type="button"
-                    onClick={() => {
-                        setSelectedFont(option.key)
-                        setIsFontOpen(false)
-                    }}
-                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-                    style={{ fontFamily: fontFamilyMap[option.key] }}
-                    >
-                    {option.label}
-                    </button>
-                ))}
-                </div>
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.18 }}
+                className="absolute mt-2 ml-28 bg-white border-green border-2 rounded-md shadow w-48 z-10 origin-top"
+              >
+              {fontOptions.map(option => (
+                <button
+                key={option.key}
+                type="button"
+                onClick={() => {
+                  setSelectedFont(option.key)
+                  setIsFontOpen(false)
+                }}
+                className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                style={{ fontFamily: fontFamilyMap[option.key] }}
+                >
+                {option.label}
+                </button>
+              ))}
+              </motion.div>
             )}
+            </AnimatePresence>
         </div>
         {/* Preview modal triggered by snowman */}
         {showPreview && (
@@ -176,7 +187,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
 
         {/* 현재 글자수 */}
         <div className="absolute top-16 right-4 flex items-center gap-3">
-          <div className="text-sm text-gray-600">현재 글자수&nbsp; {text.length}/300</div>
+          <div className="text-sm text-muted-navy">현재 글자수&nbsp; {text.length}/300</div>
         </div>
 
         {/* transparent textarea positioned to match letter lines */}
@@ -187,7 +198,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
             rows={12}
             placeholder={'마음을 담아 편지를 작성해주세요.'}
             maxLength={300}
-            className={`w-full bg-transparent resize-y outline-none text-base`}
+            className={`w-full bg-transparent resize-y outline-none text-base text-xl`}
             style={{
               lineHeight: `${lineHeight}px`,
               resize: "none",
@@ -204,7 +215,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
 
         {/* footer row: 작성일 (left) and From (right) */}
         <div className="w-full px-6 mb-12 flex items-center justify-between">
-          <div className="text-sm text-gray-600 mt-10">작성일 {formattedDate}</div>
+          <div className="text-sm text-muted-navy mt-10">작성일 {formattedDate}</div>
           <div className={`text-3xl ${styles.fontNanumPen}`}>From. {ownerNickname ?? '내가누구'}</div>
         </div>
       </div>
