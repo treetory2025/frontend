@@ -2,14 +2,18 @@
 import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
 import { useUserStore } from "@/store/userStore";
 import { List, RotateCw } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { AddTreeButton } from "@/components//ui/tree/Button";
 import { useThemeStore } from "@/store/userStore";
+import { p } from "motion/react-client";
 
 export default function TreeHeader() {
   const { owner, refreshOwner, uuid, openSizeSheet } = useOwner();
   const user = useUserStore().user;
   const router = useRouter();
+  const pathname = usePathname();
+
+  const isPlacement = pathname.endsWith("/placement");
 
   const theme = useThemeStore((s) => s.theme);
   const isOwner = user?.uuid === uuid;
@@ -36,24 +40,33 @@ export default function TreeHeader() {
       <div
         className={`${theme === "SILENT_NIGHT" ? "bg-skyblue/20" : "bg-navy/30"} ${textColor} text-caption flex w-full items-center justify-between rounded-md px-6 py-1.5`}
       >
-        <p className="flex items-center gap-2">
-          현재 등록된 장식
-          <span className="font-bold">{owner.ornamentsRes?.length}개</span>
-        </p>
-        <div className="flex items-center gap-3 md:gap-4">
-          <button
-            className="bg-beige text-muted-navy cursor-pointer rounded-2xl p-2"
-            onClick={() => router.push(`/tree/${uuid}/my-ornaments`)}
-          >
-            <List size={20} strokeWidth={3} />
-          </button>
-          <button
-            className="bg-muted-navy text-beige cursor-pointer rounded-full p-2"
-            onClick={refreshOwner}
-          >
-            <RotateCw size={20} strokeWidth={3} />
-          </button>
-        </div>
+        {isPlacement ? (
+          <p>
+            장식이 완료되면 우측 하단{" "}
+            <span className="font-bold">장식 완료</span> 버튼을 눌러주세요!
+          </p>
+        ) : (
+          <>
+            <p className="flex items-center gap-2">
+              현재 등록된 장식
+              <span className="font-bold">{owner.ornamentsRes?.length}개</span>
+            </p>
+            <div className="flex items-center gap-3 md:gap-4">
+              <button
+                className="bg-beige text-muted-navy cursor-pointer rounded-2xl p-2"
+                onClick={() => router.push(`/tree/${uuid}/my-ornaments`)}
+              >
+                <List size={20} strokeWidth={3} />
+              </button>
+              <button
+                className="bg-muted-navy text-beige cursor-pointer rounded-full p-2"
+                onClick={refreshOwner}
+              >
+                <RotateCw size={20} strokeWidth={3} />
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </header>
   );
