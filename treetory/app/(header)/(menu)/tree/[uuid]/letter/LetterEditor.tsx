@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react'
-import { ArrowBigDown } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { getTreeOwner, getTreeOwnerInLetter } from '@/lib/api'
-import { useRouter, useSearchParams } from 'next/navigation'
-import styles from './letter.module.css'
+import React, { useState, useEffect, useRef } from "react";
+import { ArrowBigDown, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { getTreeOwner, getTreeOwnerInLetter } from "@/lib/api";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import styles from "./letter.module.css";
 
 interface Props {
   uuid: string;
@@ -102,22 +102,91 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
 
   return (
     <div className="flex-1 overflow-y-auto">
-        <div className="relative px-4 py-2">
-            <div className="flex items-center gap-3">
-                <p className="text-md text-green font-lightbold m-0" style={{ fontFamily: fontFamilyMap[selectedFont] }}>
-                {fontOptions.find(f => f.key === selectedFont)?.label}로 편지를 쓰고 있습니다
-                </p>
+      <div className="relative px-4 py-2">
+        <div className="flex items-center gap-3">
+          <p
+            className="text-md text-green font-lightbold m-0"
+            style={{ fontFamily: fontFamilyMap[selectedFont] }}
+          >
+            {fontOptions.find((f) => f.key === selectedFont)?.label}로 편지를
+            쓰고 있습니다
+          </p>
 
-                <button
-                type="button"
-                onClick={() => setIsFontOpen(prev => !prev)}
-                className="text-sm text-white font-base flex items-center gap-1"
-                >
-                <span>변경하기</span>
-                <ArrowBigDown size={16} strokeWidth={2.5} />
-                </button>
+          <button
+            type="button"
+            onClick={() => setIsFontOpen((prev) => !prev)}
+            className="font-base flex items-center gap-1 text-sm text-white"
+          >
+            <span>변경하기</span>
+            <ArrowBigDown size={16} strokeWidth={2.5} />
+          </button>
+        </div>
+        <div className="absolute top-[-32px] right-4 z-50">
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setShowPreview(true)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") setShowPreview(true);
+            }}
+            className="relative cursor-pointer"
+          >
+            <div className="bg-skyblue flex h-20 w-20 items-center justify-center rounded-full border-6 border-white shadow-md">
+              <img
+                src="/icons/snowman.png"
+                alt="snowman"
+                className="mt-10 h-12 w-12"
+              />
             </div>
-            <div className="absolute right-4 top-[-32px] z-50">
+            <div className="font-base absolute -top-3 right-0 rounded bg-red-400 px-2 py-1 text-xs text-white">
+              장식 확인!
+            </div>
+          </div>
+        </div>
+
+        {/* 드롭다운 (framer-motion) */}
+        <AnimatePresence>
+          {isFontOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.18 }}
+              className="border-green absolute z-10 mt-2 ml-28 w-48 origin-top rounded-md border-2 bg-white shadow"
+            >
+              {fontOptions.map((option) => (
+                <button
+                  key={option.key}
+                  type="button"
+                  onClick={() => {
+                    setSelectedFont(option.key);
+                    setIsFontOpen(false);
+                  }}
+                  className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
+                  style={{ fontFamily: fontFamilyMap[option.key] }}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+      {/* Preview modal triggered by snowman */}
+      {showPreview && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setShowPreview(false)}
+          />
+          <div
+            ref={modalContentRef}
+            className="relative z-50 w-11/12 max-w-md overflow-hidden rounded-xl border-4 border-white bg-white shadow-lg"
+          >
+            <div className="bg-sky-200 py-3 text-center font-medium text-sky-800">
+              미리보기
+            </div>
+            <div className="flex w-full flex-col items-center justify-center">
               <div
                 className="border-green relative h-64 w-full border-t-4 border-b-4 bg-[#0f3b5a]"
                 style={{
@@ -143,67 +212,14 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
                 )}
               </div>
             </div>
-
-            {/* 드롭다운 (framer-motion) */}
-            <AnimatePresence>
-            {isFontOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.18 }}
-                className="absolute mt-2 ml-28 bg-white border-green border-2 rounded-md shadow w-48 z-10 origin-top"
-              >
-              {fontOptions.map(option => (
-                <button
-                key={option.key}
+            <div className="bg-slate-100 p-4">
+              <button
                 type="button"
-                onClick={() => {
-                  setSelectedFont(option.key)
-                  setIsFontOpen(false)
-                }}
-                className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-                style={{ fontFamily: fontFamilyMap[option.key] }}
-                >
-                {option.label}
-                </button>
-              ))}
-              </motion.div>
-            )}
-            </AnimatePresence>
-        </div>
-        {/* Preview modal triggered by snowman */}
-        {showPreview && (
-          <div className="fixed inset-0 z-40 flex items-center justify-center">
-            <div className="absolute inset-0 bg-black/40" onClick={() => setShowPreview(false)} />
-            <div ref={modalContentRef} className="relative z-50 w-11/12 max-w-md bg-white rounded-xl border-4 border-white overflow-hidden shadow-lg">
-              <div className="text-center bg-sky-200 text-sky-800 py-3 font-medium">미리보기</div>
-              <div className="w-full flex flex-col items-center justify-center">
-                <div
-                  className="w-full h-64 relative bg-[#0f3b5a] border-t-4 border-b-4 border-green"
-                  style={{
-                    backgroundImage: `url('/images/tree_login2.png')`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'center',
-                    backgroundSize: 'contain',
-                  }}
-                >
-                  {imgUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={imgUrl}
-                      alt="preview"
-                      style={{ width: ornamentSize, height: ornamentSize }}
-                      className="absolute left-1/2 top-1/2 object-cover -translate-x-1/2 -translate-y-1/2"
-                    />
-                  ) : (
-                    <div className="absolute left-1/2 top-1/2 rounded-full bg-beige -translate-x-1/2 -translate-y-1/2" style={{ width: ornamentSize, height: ornamentSize }} />
-                  )}
-                </div>
-              </div>
-              <div className="p-4 bg-slate-100">
-                <button type="button" onClick={() => setShowPreview(false)} className="w-full py-2 bg-slate-400 text-white rounded">닫기</button>
-              </div>
+                onClick={() => setShowPreview(false)}
+                className="w-full rounded bg-slate-400 py-2 text-white"
+              >
+                닫기
+              </button>
             </div>
           </div>
         </div>
@@ -230,7 +246,9 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
 
         {/* 현재 글자수 */}
         <div className="absolute top-16 right-4 flex items-center gap-3">
-          <div className="text-sm text-muted-navy">현재 글자수&nbsp; {text.length}/300</div>
+          <div className="text-muted-navy text-sm">
+            현재 글자수&nbsp; {text.length}/300
+          </div>
         </div>
 
         {/* transparent textarea positioned to match letter lines */}
@@ -241,7 +259,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
             rows={12}
             placeholder={"마음을 담아 편지를 작성해주세요."}
             maxLength={300}
-            className={`w-full bg-transparent resize-y outline-none text-base text-xl`}
+            className={`w-full resize-y bg-transparent text-base text-xl outline-none`}
             style={{
               lineHeight: `${lineHeight}px`,
               resize: "none",
@@ -257,9 +275,6 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
         </div>
 
         {/* footer row: 작성일 (left) and From (right) */}
-        <div className="w-full px-6 mb-12 flex items-center justify-between">
-          <div className="text-sm text-muted-navy mt-10">작성일 {formattedDate}</div>
-          <div className={`text-3xl ${styles.fontNanumPen}`}>From. {ownerNickname ?? '내가누구'}</div>
         <div className="mb-12 flex w-full items-center justify-between px-6">
           <div className="flex flex-col items-start gap-3">
             <div className="mt-10 text-sm text-gray-600">

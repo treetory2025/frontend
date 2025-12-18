@@ -1,11 +1,15 @@
-'use client';
+"use client";
 
-import { useState, useRef, useCallback } from 'react';
-import { Upload, Check, X } from 'lucide-react';
-import Cropper from 'react-easy-crop';
-import { Area } from 'react-easy-crop';
-import { useRouter, useParams } from 'next/navigation';
-import { checkOrnamentNameExists, createOrnament, uploadOrnamentImage } from '@/lib/api';
+import { useState, useRef, useCallback } from "react";
+import { Upload, Check, X } from "lucide-react";
+import Cropper from "react-easy-crop";
+import { Area } from "react-easy-crop";
+import { useRouter, useParams } from "next/navigation";
+import {
+  checkOrnamentNameExists,
+  createOrnament,
+  uploadOrnamentImage,
+} from "@/lib/api";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -223,7 +227,7 @@ export default function CreateOrnamentPage() {
     // 특수문자(이모지 포함) 허용하지 않음: 한글, 영문, 숫자, 언더바(_)만 허용
     const invalidChar = /[^\p{L}\p{N}_\s]/u.test(name);
     if (invalidChar) {
-      alert('한글, 영문, 숫자, 언더바(_)만 허용됩니다.');
+      alert("한글, 영문, 숫자, 언더바(_)만 허용됩니다.");
       return;
     }
 
@@ -293,40 +297,46 @@ export default function CreateOrnamentPage() {
       {/* 이미지 업로드 + 공유: 업로드 단계에서만 표시 */}
       {step === "upload" && (
         <>
-        {/* 이미지 업로드 */}
-        <div className="mb-8">
-        <h2 className="text-lg font-semibold text-fg-primary mb-3">이미지 업로드</h2>
-        <p className="text-sm text-fg-secondary mb-4">
-          배경이 제거된 이미지일수록 자연스럽게 장식됩니다.
-        </p>
+          {/* 이미지 업로드 */}
+          <div className="mb-8">
+            <h2 className="text-fg-primary mb-3 text-lg font-semibold">
+              이미지 업로드
+            </h2>
+            <p className="text-fg-secondary mb-4 text-sm">
+              배경이 제거된 이미지일수록 자연스럽게 장식됩니다.
+            </p>
 
-        <div className="flex justify-around items-center gap-12">
-          <div 
-            className="w-48 h-48 rounded-full bg-beige flex items-center justify-center flex-shrink-0 cursor-pointer hover:opacity-80"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            {previewUrl ? (
-              <img src={previewUrl} alt="preview" className="w-full h-full object-cover" />
-            ) : (
-              <div className="text-center">
-                <p className="text-xs text-fg-secondary">이미지 선택</p>
+            <div className="flex items-center justify-around gap-12">
+              <div
+                className="bg-beige flex h-48 w-48 flex-shrink-0 cursor-pointer items-center justify-center rounded-full hover:opacity-80"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                {previewUrl ? (
+                  <img
+                    src={previewUrl}
+                    alt="preview"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="text-center">
+                    <p className="text-fg-secondary text-xs">이미지 선택</p>
+                  </div>
+                )}
               </div>
 
-            <button 
-              onClick={() => fileInputRef.current?.click()}
-              className="flex items-center justify-center gap-2 bg-muted-navy text-beige px-4 py-2 rounded-lg font-base hover:opacity-90 w-fit"
-            >
-              <Upload className="w-5 h-5 text-beige" />
-              파일선택
-            </button>
-          </div>
-        </div>
+              <div className="flex flex-col gap-3">
+                <div className="text-fg-secondary text-sm">
+                  <p className="font-semibold">지원 파일 형식</p>
+                  <p>JPG, PNG, JPEG</p>
+                  <p className="mt-2 font-semibold">최대 용량</p>
+                  <p>10MB 이하</p>
+                </div>
 
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="bg-muted-navy text-beige flex w-fit items-center justify-center gap-2 rounded-lg px-4 py-2 font-semibold hover:opacity-90"
+                  className="bg-muted-navy text-beige font-base flex w-fit items-center justify-center gap-2 rounded-lg px-4 py-2 hover:opacity-90"
                 >
-                  <span>📁</span>
+                  <Upload className="text-beige h-5 w-5" />
                   파일선택
                 </button>
               </div>
@@ -456,20 +466,20 @@ export default function CreateOrnamentPage() {
               {nameCheckLoading ? "확인중..." : "확인"}
             </button>
           </div>
-          <div className="mt-2 text-xs text-fg-secondary">
+          <div className="text-fg-secondary mt-2 text-xs">
             한글, 영어, 숫자 포함 최소 2글자 ~ 최대 12글자 '_'만 가능
           </div>
 
-          <div className="mt-1 text-sm text-center">
+          <div className="mt-1 text-center text-sm">
             {nameAvailable === true && (
-              <span className="inline-flex items-center justify-center gap-2 text-green">
-                <Check className="w-4 h-4" />
+              <span className="text-green inline-flex items-center justify-center gap-2">
+                <Check className="h-4 w-4" />
                 <span>사용 가능한 이름입니다.</span>
               </span>
             )}
             {nameAvailable === false && (
               <span className="inline-flex items-center justify-center gap-2 text-red-600">
-                <X className="w-4 h-4" />
+                <X className="h-4 w-4" />
                 <span>이미 사용 중인 이름입니다.</span>
               </span>
             )}
@@ -490,31 +500,38 @@ export default function CreateOrnamentPage() {
       )}
 
       {/* 장식 분류 선택 */}
-      {step === 'name' && (
-      <div className="w-full mt-4 mb-4">
-        <div className="text-md text-fg-secondary mb-2">장식 분류</div>
-        <div className="flex items-center justify-center gap-6">
-          {[
-            { id: 'CHRISTMAS', label: '크리스마스', icon: '🎄' },
-            { id: 'FOOD', label: '음식', icon: '🍪' },
-            { id: 'ANIMAL', label: '동물', icon: '🦌' },
-            { id: 'ETC', label: '기타', icon: '✨' },
-          ].map((c) => {
-            const selected = selectedCategory === c.id;
-            return (
-              <button
-                key={c.id}
-                type="button"
-                onClick={() => setSelectedCategory(c.id)}
-                className="flex flex-col items-center gap-1 focus:outline-none"
-              >
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center border ${selected ? 'border-4 border-green bg-navy text-green' : 'border-transparent bg-beige text-fg-primary'}`}>
-                  <span className="text-lg">{c.icon}</span>
-                </div>
-                <div className={`text-xs ${selected ? 'text-green' : 'text-fg-secondary'}`}>{c.label}</div>
-              </button>
-            );
-          })}
+      {step === "name" && (
+        <div className="mt-4 mb-4 w-full">
+          <div className="text-md text-fg-secondary mb-2">장식 분류</div>
+          <div className="flex items-center justify-center gap-6">
+            {[
+              { id: "CHRISTMAS", label: "크리스마스", icon: "🎄" },
+              { id: "FOOD", label: "음식", icon: "🍪" },
+              { id: "ANIMAL", label: "동물", icon: "🦌" },
+              { id: "ETC", label: "기타", icon: "✨" },
+            ].map((c) => {
+              const selected = selectedCategory === c.id;
+              return (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => setSelectedCategory(c.id)}
+                  className="flex flex-col items-center gap-1 focus:outline-none"
+                >
+                  <div
+                    className={`flex h-12 w-12 items-center justify-center rounded-full border ${selected ? "border-green bg-navy text-green border-4" : "bg-beige text-fg-primary border-transparent"}`}
+                  >
+                    <span className="text-lg">{c.icon}</span>
+                  </div>
+                  <div
+                    className={`text-xs ${selected ? "text-green" : "text-fg-secondary"}`}
+                  >
+                    {c.label}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
       )}
 

@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import PageHeading from '@/components/ui/tree/PageHeading';
-import CreateOrnamentPage from './CreateOrnamentPage';
+import PageHeading from "@/components/ui/tree/PageHeading";
+import CreateOrnamentPage from "./CreateOrnamentPage";
 
 export default function Page() {
   return (
-    <div className="flex flex-col h-screen bg-light-blue">
+    <div className="bg-light-blue flex h-screen flex-col">
       <PageHeading />
       <CreateOrnamentPage />
     </div>
