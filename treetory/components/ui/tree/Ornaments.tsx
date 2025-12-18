@@ -4,7 +4,7 @@ import { Group, Image as KonvaImage } from "react-konva";
 import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
 import type { Ornarment } from "@/types/ornarment";
 import useImage from "use-image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Ornaments({
   onSelectOrnament,
@@ -79,22 +79,26 @@ export function OrnamentItem({
 
 // 등록할 장식
 export function PlacementOrnament({
-  ornament,
+  imgUrl,
+  ornamentSize,
   onDragStateChange,
   diffX,
   onPositionChange,
 }: {
-  ornament: Ornarment;
+  imgUrl?: string;
+  ornamentSize?: string;
   onDragStateChange: (dragging: boolean) => void;
   onPositionChange: (pos: { x: number; y: number }) => void;
 
   diffX: number;
 }) {
-  const [imgSrc] = useImage(ornament.imgUrl);
+  if (!imgUrl || !ornamentSize) return;
+
+  const [imgSrc] = useImage(imgUrl, "anonymous");
   const [pos, setPos] = useState({ x: 0, y: 0 });
 
   const radius =
-    ornament.size === "SMALL" ? 22 : ornament.size === "MEDIUM" ? 30 : 38;
+    ornamentSize === "SMALL" ? 22 : ornamentSize === "MEDIUM" ? 30 : 38;
 
   return (
     <Group
@@ -106,19 +110,15 @@ export function PlacementOrnament({
       draggable
       onDragStart={() => onDragStateChange(true)}
       onDragMove={(e) => {
-        const group = e.target.getParent(); // Tree Group
-        if (!group) return;
-
-        const localPos = group.getRelativePointerPosition();
-        if (!localPos) return;
+        const node = e.target;
 
         const next = {
-          x: Math.round(localPos.x),
-          y: Math.round(localPos.y),
+          x: Math.round(node.x() - diffX),
+          y: Math.round(node.y()),
         };
 
         setPos(next);
-        onPositionChange(next); //  tree-local 좌표
+        onPositionChange(next);
       }}
       onDragEnd={() => onDragStateChange(false)}
     >

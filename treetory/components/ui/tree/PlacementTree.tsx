@@ -9,6 +9,7 @@ import Ornaments, { PlacementOrnament } from "./Ornaments";
 import Background from "./Background";
 import type { Ornarment } from "@/types/ornarment";
 import { TestOrnament } from "@/app/(header)/tree/[uuid]/decorate/placement/PlacementPage";
+import { useSearchParams } from "next/navigation";
 
 interface Props {
   containerWidth: number;
@@ -34,6 +35,13 @@ export function PlacementTree({
   onPositionChange,
 }: Props) {
   const [isDraggingOrnament, setIsDraggingOrnament] = useState(false);
+  const searchParams = useSearchParams();
+
+  const imgUrl = searchParams.get("imgUrl");
+  const nickname = searchParams.get("nickname");
+  const ornamentId = searchParams.get("ornamentId");
+  const message = searchParams.get("text");
+  const ornamentSize = searchParams.get("size");
 
   const defaultSrc = `/images/theme/tree/${theme}/Size3.png`;
   const imgSrc = `/images/theme/tree/${theme}/Size${size}.png`;
@@ -146,14 +154,13 @@ export function PlacementTree({
       {/* 기존 장식 */}
       <Ornaments diffX={diffX} onSelectOrnament={onSelectOrnament} />
       {/* 등록할 장식 */}
-      {/* <PlacementOrnament
-        ornament={testOrnament}
+      <PlacementOrnament
+        imgUrl={imgUrl ?? ""}
+        ornamentSize={ornamentSize ?? "SMALL"}
         diffX={diffX}
-        treeGroupRef={groupRef}
-        onPositionChange={(pos) => onPositionChange(testOrnament.id, pos)}
-      /> */}
-      {/* 테스트용 장식 */}
-      <TestOrnament diffX={diffX} onDragStateChange={setIsDraggingOrnament} />
+        onDragStateChange={setIsDraggingOrnament}
+        onPositionChange={(pos) => onPositionChange(ornamentId ?? "", pos)}
+      />
     </Group>
   );
 }

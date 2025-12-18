@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { Layer, Group, Image as KonvaImage, Text } from "react-konva";
 import { Tree } from "@/components/ui/tree/Tree";
 import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Ornarment } from "@/types/ornarment";
 import { useThemeStore } from "@/store/userStore";
 import Konva from "konva";
@@ -14,12 +14,17 @@ import useImage from "use-image";
 import { PlacementTree } from "@/components/ui/tree/PlacementTree";
 
 export default function PlacementPage() {
+  const searchParams = useSearchParams();
   const { owner, uuid } = useOwner(); // 해당 트리 소유자 정보
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [treeHeight, setTreeHeight] = useState(0);
   const [treeWidth, setTreeWidth] = useState(0);
+
+  const nickname = searchParams.get("nickname");
+  const ornamentId = searchParams.get("ornamentId");
+  const message = searchParams.get("");
 
   // 등록할 장식 좌표
   const [placedPositions, setPlacedPositions] = useState<
@@ -93,9 +98,9 @@ export default function PlacementPage() {
   }, []);
 
   // 선택된 장식 정보 상태 저장
-  const handleSelectOrnament = (ornament: Ornarment) => {};
-  const overflowX = Math.max(0, treeWidth - size.width);
-  const canDragX = overflowX > 0;
+  const handleSelectOrnament = (ornament: Ornarment) => {
+    console.log(ornament);
+  };
 
   return (
     <div className={`relative h-full w-full`} ref={containerRef}>
@@ -153,7 +158,9 @@ export default function PlacementPage() {
       </div>
       <button
         className="bg-skyblue text-button text-navy absolute right-4 bottom-20 left-auto translate-x-0 cursor-pointer rounded-full border-4 border-white px-6 py-5 font-bold md:bottom-10"
-        onClick={() => {}}
+        onClick={() => {
+          console.log(placedPositions);
+        }}
       >
         장식완료
       </button>
