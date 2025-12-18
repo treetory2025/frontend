@@ -49,8 +49,8 @@ export default function DecoratePage() {
         const wordToSend = searchWord.trim();
         const categoryToSend = selectedCategory === 'all' ? '' : selectedCategory;
 
-        const FRONT_PAGE_SIZE = 6;
-        const BACKEND_PAGE_SIZE = 18;
+        const FRONT_PAGE_SIZE = 12;
+        const BACKEND_PAGE_SIZE = 12;
 
         const backendPage = Math.floor((currentPage * FRONT_PAGE_SIZE) / BACKEND_PAGE_SIZE);
 

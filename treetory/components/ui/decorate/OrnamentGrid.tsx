@@ -13,10 +13,10 @@ interface OrnamentGridProps {
 
 function OrnamentGrid({ ornaments, onSelect }: OrnamentGridProps) {
   return (
-    <div className="grid grid-cols-3 gap-4 md:gap-6 min-h-[18rem] md:min-h-[20rem]">
+    <div className="grid grid-cols-3 gap-4 md:gap-6 min-h-[28rem] md:min-h-[32rem]">
       {ornaments.length > 0 ? (
-        // show only first 6 items (3 per row × 2 rows)
-        ornaments.slice(0, 6).map((ornament) => (
+        // show only first 12 items (3 per row × 4 rows)
+        ornaments.slice(0, 12).map((ornament) => (
           <button
             key={ornament.ornamentId}
             onClick={() => onSelect?.(ornament.ornamentId)}
