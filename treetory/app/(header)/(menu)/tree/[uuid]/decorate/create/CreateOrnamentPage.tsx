@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
+import Cropper from 'react-easy-crop';
+import { Area } from 'react-easy-crop';
 import { useRouter, useParams } from 'next/navigation';
 import { checkOrnamentNameExists, createOrnament, uploadOrnamentImage } from '@/lib/api';
 
@@ -18,6 +20,10 @@ export default function CreateOrnamentPage() {
   const [isPublic, setIsPublic] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string>('');
+  const [showCrop, setShowCrop] = useState(false);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -39,9 +45,63 @@ export default function CreateOrnamentPage() {
       
       const reader = new FileReader();
       reader.onload = (event) => {
-        setPreviewUrl(event.target?.result as string);
+        const dataUrl = event.target?.result as string;
+        setPreviewUrl(dataUrl);
+        // open crop modal for user to adjust
+        setShowCrop(true);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const onCropComplete = useCallback((_: Area, croppedAreaPixelsParam: Area) => {
+    setCroppedAreaPixels(croppedAreaPixelsParam);
+  }, []);
+
+  const createImage = (url: string) =>
+    new Promise<HTMLImageElement>((resolve, reject) => {
+      const img = new Image();
+      img.addEventListener('load', () => resolve(img));
+      img.addEventListener('error', (e) => reject(e));
+      img.setAttribute('crossOrigin', 'anonymous');
+      img.src = url;
+    });
+
+  const getCroppedImg = async (imageSrc: string, pixelCrop: Area) => {
+    const image = await createImage(imageSrc);
+    const canvas = document.createElement('canvas');
+    canvas.width = pixelCrop.width;
+    canvas.height = pixelCrop.height;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('No canvas context');
+
+    ctx.drawImage(
+      image,
+      pixelCrop.x,
+      pixelCrop.y,
+      pixelCrop.width,
+      pixelCrop.height,
+      0,
+      0,
+      pixelCrop.width,
+      pixelCrop.height
+    );
+
+    return canvas.toDataURL('image/png');
+  };
+
+  const applyCrop = async () => {
+    if (!previewUrl || !croppedAreaPixels) {
+      setShowCrop(false);
+      return;
+    }
+    try {
+      const croppedDataUrl = await getCroppedImg(previewUrl, croppedAreaPixels);
+      setPreviewUrl(croppedDataUrl);
+    } catch (e) {
+      console.error('crop error', e);
+    } finally {
+      setShowCrop(false);
     }
   };
 
@@ -223,6 +283,38 @@ export default function CreateOrnamentPage() {
           onChange={handleFileSelect}
           className="hidden"
         />
+        {/* Crop modal */}
+        {showCrop && previewUrl && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div className="absolute inset-0 bg-black/50" onClick={() => setShowCrop(false)} />
+            <div className="relative z-60 w-11/12 max-w-lg bg-white rounded-lg p-4">
+              <div className="w-full h-64 relative bg-gray-100">
+                <Cropper
+                  image={previewUrl}
+                  crop={crop}
+                  zoom={zoom}
+                  aspect={1}
+                  onCropChange={setCrop}
+                  onZoomChange={setZoom}
+                  onCropComplete={onCropComplete}
+                />
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <input
+                  type="range"
+                  min={1}
+                  max={3}
+                  step={0.1}
+                  value={zoom}
+                  onChange={(e) => setZoom(Number(e.target.value))}
+                />
+                <div className="flex-1" />
+                <button type="button" onClick={() => setShowCrop(false)} className="px-3 py-2 bg-gray-200 rounded">취소</button>
+                <button type="button" onClick={applyCrop} className="px-3 py-2 bg-green text-white rounded">확인</button>
+              </div>
+            </div>
+          </div>
+        )}
         
         </div>
 
