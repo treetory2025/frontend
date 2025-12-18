@@ -63,6 +63,8 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
   const linesBackground = `repeating-linear-gradient(to bottom, transparent 0px, transparent ${lineHeight - 1}px, rgba(0,0,0,0.08) ${lineHeight - 1}px, rgba(0,0,0,0.08) ${lineHeight}px)`;
 
   const canPush = text.length > 0;
+  const size =
+    text.length > 100 ? "MEDIUM" : text.length > 200 ? "LARGE" : "SMALL";
 
   useEffect(() => {
     // optional: prefill or other init
@@ -273,6 +275,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
                       nickname,
                       ornamentId,
                       text,
+                      size,
                     }).toString(),
                 )
               }
