@@ -41,10 +41,20 @@ export default function TreeHeader() {
         className={`${theme === "SILENT_NIGHT" ? "bg-skyblue/20" : "bg-navy/30"} ${textColor} text-caption flex w-full items-center justify-between rounded-md px-6 py-1.5`}
       >
         {isPlacement ? (
-          <p>
-            장식이 완료되면 우측 하단{" "}
-            <span className="font-bold">장식 완료</span> 버튼을 눌러주세요!
-          </p>
+          <>
+            <p>
+              장식이 완료되면 우측 하단
+              <span className="font-bold"> 장식 완료</span> 버튼을 눌러주세요!
+            </p>
+            <div className="flex items-center gap-3 md:gap-4">
+              <button
+                className="bg-muted-navy text-beige cursor-pointer rounded-full p-2"
+                onClick={refreshOwner}
+              >
+                <RotateCw size={20} strokeWidth={3} />
+              </button>
+            </div>
+          </>
         ) : (
           <>
             <p className="flex items-center gap-2">
