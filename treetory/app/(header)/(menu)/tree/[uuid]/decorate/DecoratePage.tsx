@@ -142,7 +142,7 @@ export default function DecoratePage() {
 
       {/* 메시지와 버튼 */}
       <div className="mb-6 flex items-center justify-around gap-4">
-        <p className="text-body text-fg-secondary" style={{ fontSize: '14px' }}>
+        <p className="text-body text-fg-secondary text-sm md:text-xl">
           나만의 특별한 장식이 필요하신가요?
         </p>
         <CreateOrnamentButton />
