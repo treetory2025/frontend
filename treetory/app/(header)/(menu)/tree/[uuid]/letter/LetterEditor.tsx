@@ -276,6 +276,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
                       ornamentId,
                       text,
                       size,
+                      font: selectedFont,
                     }).toString(),
                 )
               }
