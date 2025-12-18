@@ -13,7 +13,7 @@ interface OrnamentGridProps {
 
 function OrnamentGrid({ ornaments, onSelect }: OrnamentGridProps) {
   return (
-    <div className="grid grid-cols-3 gap-4 md:gap-6">
+    <div className="grid grid-cols-3 gap-4 md:gap-6 min-h-[18rem] md:min-h-[20rem]">
       {ornaments.length > 0 ? (
         // show only first 6 items (3 per row × 2 rows)
         ornaments.slice(0, 6).map((ornament) => (
@@ -25,7 +25,7 @@ function OrnamentGrid({ ornaments, onSelect }: OrnamentGridProps) {
           >
             {/* 이미지 카드 */}
             <div className="relative flex items-center justify-center rounded-full bg-beige">
-              <div className="w-28 h-28 md:w-28 md:h-28 overflow-hidden rounded-full">
+              <div className="w-24 h-24 md:w-24 md:h-24 overflow-hidden rounded-full">
                 <img
                   src={ornament.imgUrl}
                   alt={ornament.name}
