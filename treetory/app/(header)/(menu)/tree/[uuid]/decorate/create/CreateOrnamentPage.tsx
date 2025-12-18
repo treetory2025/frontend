@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import { Upload } from 'lucide-react';
+import { Upload, Check, X } from 'lucide-react';
 import Cropper from 'react-easy-crop';
 import { Area } from 'react-easy-crop';
 import { useRouter, useParams } from 'next/navigation';
@@ -174,8 +174,8 @@ export default function CreateOrnamentPage() {
       return;
     }
 
-    // 특수문자(이모지 포함) 허용하지 않음: 한글, 영문, 숫자, 공백만 허용
-    const invalidChar = /[^\p{L}\p{N}\s]/u.test(name);
+    // 특수문자(이모지 포함) 허용하지 않음: 한글, 영문, 숫자, 공백과 언더바(_)만 허용
+    const invalidChar = /[^\p{L}\p{N}_\s]/u.test(name);
     if (invalidChar) {
       alert('특수문자는 사용할 수 없습니다. 한글, 영문, 숫자만 허용됩니다.');
       return;
@@ -214,10 +214,10 @@ export default function CreateOrnamentPage() {
       return;
     }
 
-    // 특수문자(이모지 포함) 허용하지 않음: 한글, 영문, 숫자, 공백만 허용
-    const invalidChar = /[^\p{L}\p{N}\s]/u.test(name);
+    // 특수문자(이모지 포함) 허용하지 않음: 한글, 영문, 숫자, 언더바(_)만 허용
+    const invalidChar = /[^\p{L}\p{N}_\s]/u.test(name);
     if (invalidChar) {
-      alert('특수문자는 사용할 수 없습니다. 한글, 영문, 숫자만 허용됩니다.');
+      alert('한글, 영문, 숫자, 언더바(_)만 허용됩니다.');
       return;
     }
 
@@ -396,7 +396,7 @@ export default function CreateOrnamentPage() {
             </div>
           </div>
 
-          <label className="text-sm text-fg-secondary">장식 이름</label>
+          <label className="text-md text-fg-secondary">장식 이름</label>
           <div className="relative mt-2">
             <input
               value={ornamentName}
@@ -418,10 +418,23 @@ export default function CreateOrnamentPage() {
               {nameCheckLoading ? '확인중...' : '확인'}
             </button>
           </div>
+          <div className="mt-2 text-xs text-fg-secondary">
+            한글, 영어, 숫자 포함 최소 2글자 ~ 최대 12글자 '_'만 가능
+          </div>
 
-          <div className="mt-2 text-sm">
-            {nameAvailable === true && <span className="text-green">사용 가능한 이름입니다.</span>}
-            {nameAvailable === false && <span className="text-red-600">이미 사용 중인 이름입니다.</span>}
+          <div className="mt-1 text-sm text-center">
+            {nameAvailable === true && (
+              <span className="inline-flex items-center justify-center gap-2 text-green">
+                <Check className="w-4 h-4" />
+                <span>사용 가능한 이름입니다.</span>
+              </span>
+            )}
+            {nameAvailable === false && (
+              <span className="inline-flex items-center justify-center gap-2 text-red-600">
+                <X className="w-4 h-4" />
+                <span>이미 사용 중인 이름입니다.</span>
+              </span>
+            )}
           </div>
         </div>
       )}
@@ -440,8 +453,8 @@ export default function CreateOrnamentPage() {
 
       {/* 장식 분류 선택 */}
       {step === 'name' && (
-      <div className="w-full mt-2 mb-4">
-        <div className="text-sm text-fg-secondary mb-2">장식 분류</div>
+      <div className="w-full mt-4 mb-4">
+        <div className="text-md text-fg-secondary mb-2">장식 분류</div>
         <div className="flex items-center justify-center gap-6">
           {[
             { id: 'CHRISTMAS', label: '크리스마스', icon: '🎄' },
