@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { X } from 'lucide-react';
-import { getOrnamentDetail, OrnamentDetail as ApiOrnamentDetail } from '@/lib/api';
-import OrnamentPreviewModal from './OrnamentPreviewModal';
+import { X } from "lucide-react";
+import {
+  getOrnamentDetail,
+  OrnamentDetail as ApiOrnamentDetail,
+} from "@/lib/api";
+import OrnamentPreviewModal from "./OrnamentPreviewModal";
 
 interface Props {
   ornamentId: number | null;
@@ -40,48 +43,76 @@ export default function OrnamentDetailModal({ ornamentId, onClose }: Props) {
 
   return (
     <>
-    <div className="fixed inset-0 z-50 flex items-end justify-center">
-      {/* backdrop */}
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="fixed inset-0 z-50 flex items-end justify-center">
+        {/* backdrop */}
+        <div className="absolute inset-0 bg-black/40" onClick={onClose} />
 
-      {/* modal sheet */}
-      <div className="relative w-full max-w-md rounded-t-2xl bg-beige p-6 pb-8 shadow-xl" style={{ transform: 'translateY(0)' }}>
-        <button className="absolute right-4 top-4 p-2" onClick={onClose} aria-label="닫기">
-          <X />
-        </button>
-
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-40 h-40 rounded-full bg-white/60 flex items-center justify-center">
-            {loading ? (
-              <div className="text-sm text-fg-secondary">로딩...</div>
-            ) : (
-              <button type="button" onClick={() => setShowPreview(true)} className="w-36 h-36 rounded-full overflow-hidden">
-                <img src={detail?.imgUrl} alt={detail?.name} className="w-full h-full object-cover" />
-              </button>
-            )}
-          </div>
-
-          <div className="w-full">
-            <div className="text-sm text-fg-secondary text-green">장식 이름</div>
-            <div className="mt-1 border-b border-green pb-2 font-semibold text-2xl text-fg-primary">{detail?.name ?? '-'}</div>
-          </div>
-
-          <button className="mt-6 w-full rounded-md bg-green px-4 py-3 text-beige font-light" onClick={() => { 
-            onClose();
-            const params = new URLSearchParams();
-            if (detail?.imgUrl) params.set('imgUrl', detail.imgUrl);
-            if (ornamentId != null) params.set('ornamentId', String(ornamentId));
-            router.push(`/tree/${uuid}/decorate/nickname?${params.toString()}`);
-          }}>
-            해당 장식으로 진행하기
-            <span className="ml-2">→</span>
+        {/* modal sheet */}
+        <div
+          className="bg-beige relative w-full max-w-md rounded-t-2xl p-6 pb-8 shadow-xl"
+          style={{ transform: "translateY(0)" }}
+        >
+          <button
+            className="absolute top-4 right-4 p-2"
+            onClick={onClose}
+            aria-label="닫기"
+          >
+            <X />
           </button>
+
+          <div className="flex flex-col items-center gap-4">
+            <div className="flex h-40 w-40 items-center justify-center rounded-full bg-white/60">
+              {loading ? (
+                <div className="text-fg-secondary text-sm">로딩...</div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowPreview(true)}
+                  className="h-36 w-36 overflow-hidden rounded-full"
+                >
+                  <img
+                    src={detail?.imgUrl}
+                    alt={detail?.name}
+                    className="h-full w-full object-cover"
+                  />
+                </button>
+              )}
+            </div>
+
+            <div className="w-full">
+              <div className="text-fg-secondary text-green text-sm">
+                장식 이름
+              </div>
+              <div className="border-green text-fg-primary mt-1 border-b pb-2 text-2xl font-semibold">
+                {detail?.name ?? "-"}
+              </div>
+            </div>
+
+            <button
+              className="bg-green text-beige mt-6 w-full rounded-md px-4 py-3 font-light"
+              onClick={() => {
+                onClose();
+                const params = new URLSearchParams();
+                if (detail?.imgUrl) params.set("imgUrl", detail.imgUrl);
+                if (ornamentId != null)
+                  params.set("ornamentId", String(ornamentId));
+                router.push(
+                  `/tree/${uuid}/decorate/nickname?${params.toString()}`,
+                );
+              }}
+            >
+              해당 장식으로 진행하기
+              <span className="ml-2">→</span>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-    {showPreview && (
-      <OrnamentPreviewModal detail={detail} onClose={() => setShowPreview(false)} />
-    )}
+      {showPreview && (
+        <OrnamentPreviewModal
+          detail={detail}
+          onClose={() => setShowPreview(false)}
+        />
+      )}
     </>
   );
 }

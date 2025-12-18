@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface Ornament {
   ornamentId: number;
@@ -20,12 +20,12 @@ function OrnamentGrid({ ornaments, onSelect }: OrnamentGridProps) {
           <button
             key={ornament.ornamentId}
             onClick={() => onSelect?.(ornament.ornamentId)}
-            className="group flex flex-col gap-2 items-center rounded-lg p-2 transition-all duration-200 hover:scale-105 md:p-3"
+            className="group flex flex-col items-center gap-2 rounded-lg p-2 transition-all duration-200 hover:scale-105 md:p-3"
             type="button"
           >
             {/* 이미지 카드 */}
-            <div className="relative flex items-center justify-center rounded-full bg-beige">
-              <div className="w-24 h-24 md:w-24 md:h-24 overflow-hidden rounded-full">
+            <div className="bg-beige relative flex items-center justify-center rounded-full">
+              <div className="h-28 w-28 overflow-hidden rounded-full md:h-28 md:w-28">
                 <img
                   src={ornament.imgUrl}
                   alt={ornament.name}
@@ -38,7 +38,7 @@ function OrnamentGrid({ ornaments, onSelect }: OrnamentGridProps) {
               <div className="absolute inset-0 bg-black opacity-0 transition-opacity duration-200 group-hover:opacity-10" />
             </div>
             {/* 이름 */}
-            <div className="truncate text-xs md:text-sm text-fg-primary font-semibold text-center max-w-[6rem]">
+            <div className="text-fg-primary max-w-[6rem] truncate text-center text-xs font-semibold md:text-sm">
               {ornament.name}
             </div>
           </button>

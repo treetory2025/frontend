@@ -1,10 +1,10 @@
 // "use client";
 
-import { Group, Image as KonvaImage } from "react-konva";
+import { Group, Image as KonvaImage, Circle } from "react-konva";
 import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
 import type { Ornarment } from "@/types/ornarment";
 import useImage from "use-image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Ornaments({
   onSelectOrnament,
@@ -79,56 +79,101 @@ export function OrnamentItem({
 
 // 등록할 장식
 export function PlacementOrnament({
-  ornament,
+  initialPos,
+  imgUrl,
+  ornamentSize,
   onDragStateChange,
   diffX,
   onPositionChange,
 }: {
-  ornament: Ornarment;
+  initialPos: { x: number; y: number };
+  imgUrl?: string;
+  ornamentSize?: string;
   onDragStateChange: (dragging: boolean) => void;
   onPositionChange: (pos: { x: number; y: number }) => void;
 
   diffX: number;
 }) {
-  const [imgSrc] = useImage(ornament.imgUrl);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
+  if (!imgUrl || !ornamentSize) return;
+
+  const [imgSrc] = useImage(imgUrl, "anonymous");
+  const [pos, setPos] = useState(initialPos);
 
   const radius =
-    ornament.size === "SMALL" ? 22 : ornament.size === "MEDIUM" ? 30 : 38;
+    ornamentSize === "SMALL" ? 22 : ornamentSize === "MEDIUM" ? 30 : 38;
+
+  const handleMouseOver = (e: any) => {
+    e.target.getStage().container().style.cursor = "pointer";
+  };
+
+  const handleMouseOut = (e: any) => {
+    e.target.getStage().container().style.cursor = "default";
+  };
+
+  const handleDragEnd = (e: any) => {
+    const node = e.target;
+
+    //장식을 둘 때 살짝 커지는 효과
+    node.to({
+      scaleX: 1.15,
+      scaleY: 1.15,
+      duration: 0.08,
+      onFinish: () => {
+        node.to({
+          scaleX: 1,
+          scaleY: 1,
+          duration: 0.12,
+        });
+      },
+    });
+
+    onDragStateChange(false);
+  };
 
   return (
     <Group
       x={pos.x + diffX}
       y={pos.y}
-      clipFunc={(ctx) => {
-        ctx.arc(0, 0, radius, 0, Math.PI * 2);
-      }}
       draggable
+      onMouseOver={handleMouseOver}
+      onMouseOut={handleMouseOut}
       onDragStart={() => onDragStateChange(true)}
       onDragMove={(e) => {
-        const group = e.target.getParent(); // Tree Group
-        if (!group) return;
-
-        const localPos = group.getRelativePointerPosition();
-        if (!localPos) return;
+        const node = e.target;
 
         const next = {
-          x: Math.round(localPos.x),
-          y: Math.round(localPos.y),
+          x: Math.round(node.x() - diffX),
+          y: Math.round(node.y()),
         };
 
         setPos(next);
-        onPositionChange(next); //  tree-local 좌표
+        onPositionChange(next);
       }}
-      onDragEnd={() => onDragStateChange(false)}
+      onDragEnd={handleDragEnd}
     >
-      <KonvaImage
-        image={imgSrc}
-        width={radius * 2}
-        height={radius * 2}
-        offsetX={radius}
-        offsetY={radius}
+      <Circle
+        radius={radius * 1.05}
+        fill="#FFFFFF"
+        shadowColor="#FFFFFF"
+        shadowBlur={8}
+        shadowOpacity={0.9}
+        shadowOffsetX={0}
+        shadowOffsetY={0}
+        listening={false}
       />
+      <Group
+        clipFunc={(ctx) => {
+          ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        }}
+      >
+        <KonvaImage
+          image={imgSrc}
+          width={radius * 2}
+          height={radius * 2}
+          offsetX={radius}
+          offsetY={radius}
+        />
+      </Group>
     </Group>
   );
 }

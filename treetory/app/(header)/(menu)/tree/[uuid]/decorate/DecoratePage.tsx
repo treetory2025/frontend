@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState, useDeferredValue } from "react";
-import { Search } from 'lucide-react';
-import OrnamentTabs from '@/components/ui/decorate/OrnamentTabs';
-import OrnamentGrid from '@/components/ui/decorate/OrnamentGrid';
-import CreateOrnamentButton from '@/components/ui/decorate/CreateOrnamentButton';
-import { getOrnaments, Ornaments as ApiOrnaments } from '@/lib/api';
-import OrnamentDetailModal from '@/components/ui/decorate/OrnamentDetailModal';
+import { Search } from "lucide-react";
+import OrnamentTabs from "@/components/ui/decorate/OrnamentTabs";
+import OrnamentGrid from "@/components/ui/decorate/OrnamentGrid";
+import CreateOrnamentButton from "@/components/ui/decorate/CreateOrnamentButton";
+import { getOrnaments, Ornaments as ApiOrnaments } from "@/lib/api";
+import OrnamentDetailModal from "@/components/ui/decorate/OrnamentDetailModal";
 
 export interface Ornament {
   ornamentId: number;
@@ -15,18 +15,18 @@ export interface Ornament {
 }
 
 const CATEGORIES = [
-  { id: 'all', label: '전체', icon: '/icons/santa.png' },
-  { id: 'CHRISTMAS', label: '크리스마스', icon: '/icons/rudolph.png' },
-  { id: 'FOOD', label: '음식', icon: '/icons/rudolph.png' },
-  { id: 'ANIMAL', label: '동물', icon: '/icons/rudolph.png' },
-  { id: 'ETC', label: '기타', icon: '/icons/rudolph.png' },
+  { id: "all", label: "전체", icon: "/icons/santa.png" },
+  { id: "CHRISTMAS", label: "크리스마스", icon: "/icons/rudolph.png" },
+  { id: "FOOD", label: "음식", icon: "/icons/rudolph.png" },
+  { id: "ANIMAL", label: "동물", icon: "/icons/rudolph.png" },
+  { id: "ETC", label: "기타", icon: "/icons/rudolph.png" },
 ];
 
 export default function DecoratePage() {
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState("all");
   // 검색 입력과 실제 API에 보낼 검색어 분리
-  const [inputValue, setInputValue] = useState('');
-  const [searchWord, setSearchWord] = useState('');
+  const [inputValue, setInputValue] = useState("");
+  const [searchWord, setSearchWord] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
 
   // server-side data
@@ -36,7 +36,9 @@ export default function DecoratePage() {
 
   // defer ornaments to avoid blocking rendering when list updates
   const deferredOrnaments = useDeferredValue(ornaments);
-  const [selectedOrnamentId, setSelectedOrnamentId] = useState<number | null>(null);
+  const [selectedOrnamentId, setSelectedOrnamentId] = useState<number | null>(
+    null,
+  );
 
   // API 호출: 규칙 - selectedCategory === 'all' 이면 word/category 모두 전송하지 않음
   useEffect(() => {
@@ -47,14 +49,21 @@ export default function DecoratePage() {
       try {
         // 검색은 버튼 클릭(또는 Enter)으로 설정된 searchWord만 전송합니다.
         const wordToSend = searchWord.trim();
-        const categoryToSend = selectedCategory === 'all' ? '' : selectedCategory;
+        const categoryToSend =
+          selectedCategory === "all" ? "" : selectedCategory;
 
         const FRONT_PAGE_SIZE = 12;
         const BACKEND_PAGE_SIZE = 12;
 
-        const backendPage = Math.floor((currentPage * FRONT_PAGE_SIZE) / BACKEND_PAGE_SIZE);
+        const backendPage = Math.floor(
+          (currentPage * FRONT_PAGE_SIZE) / BACKEND_PAGE_SIZE,
+        );
 
-        const res: ApiOrnaments | null = await getOrnaments(wordToSend, categoryToSend, backendPage);
+        const res: ApiOrnaments | null = await getOrnaments(
+          wordToSend,
+          categoryToSend,
+          backendPage,
+        );
 
         if (!mounted) return;
 
@@ -62,23 +71,43 @@ export default function DecoratePage() {
           const backendContent = res.content || [];
 
           const overallStart = currentPage * FRONT_PAGE_SIZE;
-          const backendStartIndex = backendPage * (res.pageSize ?? BACKEND_PAGE_SIZE);
+          const backendStartIndex =
+            backendPage * (res.pageSize ?? BACKEND_PAGE_SIZE);
           const offsetInBackend = Math.max(0, overallStart - backendStartIndex);
 
-          let pageItems = backendContent.slice(offsetInBackend, offsetInBackend + FRONT_PAGE_SIZE);
+          let pageItems = backendContent.slice(
+            offsetInBackend,
+            offsetInBackend + FRONT_PAGE_SIZE,
+          );
 
           if (pageItems.length < FRONT_PAGE_SIZE) {
             const nextBackendPage = backendPage + 1;
-            const nextRes: ApiOrnaments | null = await getOrnaments(wordToSend, categoryToSend, nextBackendPage);
+            const nextRes: ApiOrnaments | null = await getOrnaments(
+              wordToSend,
+              categoryToSend,
+              nextBackendPage,
+            );
             const nextContent = nextRes?.content || [];
             const combined = backendContent.concat(nextContent);
-            pageItems = combined.slice(offsetInBackend, offsetInBackend + FRONT_PAGE_SIZE);
+            pageItems = combined.slice(
+              offsetInBackend,
+              offsetInBackend + FRONT_PAGE_SIZE,
+            );
           }
 
           setOrnaments(pageItems);
 
-          const totalElements = res.totalElements ?? (res.totalPage && res.pageSize ? res.totalPage * res.pageSize : backendContent.length);
-          const tp = Math.max(1, Math.ceil((totalElements ?? backendContent.length) / FRONT_PAGE_SIZE));
+          const totalElements =
+            res.totalElements ??
+            (res.totalPage && res.pageSize
+              ? res.totalPage * res.pageSize
+              : backendContent.length);
+          const tp = Math.max(
+            1,
+            Math.ceil(
+              (totalElements ?? backendContent.length) / FRONT_PAGE_SIZE,
+            ),
+          );
           setTotalPages(tp);
         } else {
           setOrnaments([]);
@@ -100,19 +129,22 @@ export default function DecoratePage() {
   }, [selectedCategory, searchWord, currentPage]);
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 md:p-6 pb-6" style={{ backgroundColor: '#CCE8F3' }}>
+    <div
+      className="flex-1 overflow-y-auto p-4 pb-6 md:p-6"
+      style={{ backgroundColor: "#CCE8F3" }}
+    >
       {/* 검색 섹션 */}
       <div className="mb-6 flex gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 size-5 -translate-y-1/2 text-fg-secondary" />
+          <Search className="text-fg-secondary absolute top-1/2 left-3 size-5 -translate-y-1/2" />
           <input
             type="text"
             placeholder="장식 이름으로 검색해보세요!"
-            className="w-full rounded-lg border-0 bg-beige py-3 pl-10 pr-4 text-body placeholder-fg-secondary focus:outline-none focus:ring-2 focus:ring-green"
+            className="bg-beige text-body placeholder-fg-secondary focus:ring-green w-full rounded-lg border-0 py-3 pr-4 pl-10 focus:ring-2 focus:outline-none"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') {
+              if (e.key === "Enter") {
                 setSearchWord(inputValue.trim());
                 setCurrentPage(0);
               }
@@ -120,7 +152,7 @@ export default function DecoratePage() {
           />
         </div>
         <button
-          className="rounded-lg bg-muted-navy px-4 py-3 font-semibold text-beige hover:opacity-90"
+          className="bg-muted-navy text-beige rounded-lg px-4 py-3 font-semibold hover:opacity-90"
           onClick={() => {
             setSearchWord(inputValue.trim());
             setCurrentPage(0);
@@ -147,7 +179,7 @@ export default function DecoratePage() {
         </p>
         <CreateOrnamentButton />
       </div>
-      
+
       {/* 장식 그리드 */}
       <div className="-mx-4 md:-mx-6">
         <div className="h-px bg-white my-4" />
@@ -155,12 +187,14 @@ export default function DecoratePage() {
       <OrnamentGrid ornaments={deferredOrnaments} onSelect={(id) => setSelectedOrnamentId(id)} />
 
       {/* 선택된 장식 모달 */}
-      <OrnamentDetailModal ornamentId={selectedOrnamentId} onClose={() => setSelectedOrnamentId(null)} />
+      <OrnamentDetailModal
+        ornamentId={selectedOrnamentId}
+        onClose={() => setSelectedOrnamentId(null)}
+      />
 
-      
       {/* 페이지네이션 */}
       {totalPages > 0 && (
-        <div className="w-full mt-6">
+        <div className="mt-6 w-full">
           <div className="flex items-center justify-center gap-4">
             <button
               disabled={currentPage <= 0}
@@ -184,7 +218,6 @@ export default function DecoratePage() {
           </div>
         </div>
       )}
-      
     </div>
   );
 }
