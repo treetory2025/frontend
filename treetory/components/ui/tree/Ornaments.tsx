@@ -1,6 +1,6 @@
 // "use client";
 
-import { Group, Image as KonvaImage } from "react-konva";
+import { Group, Image as KonvaImage, Circle } from "react-konva";
 import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
 import type { Ornarment } from "@/types/ornarment";
 import useImage from "use-image";
@@ -79,12 +79,14 @@ export function OrnamentItem({
 
 // 등록할 장식
 export function PlacementOrnament({
+  initialPos,
   imgUrl,
   ornamentSize,
   onDragStateChange,
   diffX,
   onPositionChange,
 }: {
+  initialPos: { x: number; y: number };
   imgUrl?: string;
   ornamentSize?: string;
   onDragStateChange: (dragging: boolean) => void;
@@ -95,19 +97,46 @@ export function PlacementOrnament({
   if (!imgUrl || !ornamentSize) return;
 
   const [imgSrc] = useImage(imgUrl, "anonymous");
-  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [pos, setPos] = useState(initialPos);
 
   const radius =
     ornamentSize === "SMALL" ? 22 : ornamentSize === "MEDIUM" ? 30 : 38;
+
+  const handleMouseOver = (e: any) => {
+    e.target.getStage().container().style.cursor = "pointer";
+  };
+
+  const handleMouseOut = (e: any) => {
+    e.target.getStage().container().style.cursor = "default";
+  };
+
+  const handleDragEnd = (e: any) => {
+    const node = e.target;
+
+    //장식을 둘 때 살짝 커지는 효과
+    node.to({
+      scaleX: 1.15,
+      scaleY: 1.15,
+      duration: 0.08,
+      onFinish: () => {
+        node.to({
+          scaleX: 1,
+          scaleY: 1,
+          duration: 0.12,
+        });
+      },
+    });
+
+    onDragStateChange(false);
+  };
 
   return (
     <Group
       x={pos.x + diffX}
       y={pos.y}
-      clipFunc={(ctx) => {
-        ctx.arc(0, 0, radius, 0, Math.PI * 2);
-      }}
       draggable
+      onMouseOver={handleMouseOver}
+      onMouseOut={handleMouseOut}
       onDragStart={() => onDragStateChange(true)}
       onDragMove={(e) => {
         const node = e.target;
@@ -120,15 +149,31 @@ export function PlacementOrnament({
         setPos(next);
         onPositionChange(next);
       }}
-      onDragEnd={() => onDragStateChange(false)}
+      onDragEnd={handleDragEnd}
     >
-      <KonvaImage
-        image={imgSrc}
-        width={radius * 2}
-        height={radius * 2}
-        offsetX={radius}
-        offsetY={radius}
+      <Circle
+        radius={radius * 1.05}
+        fill="#FFFFFF"
+        shadowColor="#FFFFFF"
+        shadowBlur={8}
+        shadowOpacity={0.9}
+        shadowOffsetX={0}
+        shadowOffsetY={0}
+        listening={false}
       />
+      <Group
+        clipFunc={(ctx) => {
+          ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        }}
+      >
+        <KonvaImage
+          image={imgSrc}
+          width={radius * 2}
+          height={radius * 2}
+          offsetX={radius}
+          offsetY={radius}
+        />
+      </Group>
     </Group>
   );
 }
