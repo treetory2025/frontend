@@ -15,11 +15,11 @@ export interface Ornament {
 }
 
 const CATEGORIES = [
-  { id: 'all', label: '전체', icon: '🎄' },
-  { id: 'CHRISTMAS', label: '크리스마스', icon: '🎄' },
-  { id: 'FOOD', label: '음식', icon: '🦌' },
-  { id: 'ANIMAL', label: '동물', icon: '🦌' },
-  { id: 'ETC', label: '기타', icon: '🦌' },
+  { id: 'all', label: '전체', icon: '/icons/santa.png' },
+  { id: 'CHRISTMAS', label: '크리스마스', icon: '/icons/rudolph.png' },
+  { id: 'FOOD', label: '음식', icon: '/icons/rudolph.png' },
+  { id: 'ANIMAL', label: '동물', icon: '/icons/rudolph.png' },
+  { id: 'ETC', label: '기타', icon: '/icons/rudolph.png' },
 ];
 
 export default function DecoratePage() {

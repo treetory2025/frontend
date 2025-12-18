@@ -75,14 +75,14 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
     <div className="max-w-md mt-6">
         <div className="px-4 py-2 relative">
             <div className="flex items-center gap-3">
-                <p className="text-sm text-white font-light m-0">
+                <p className="text-sm text-green font-lightbold m-0" style={{ fontFamily: fontFamilyMap[selectedFont] }}>
                 {fontOptions.find(f => f.key === selectedFont)?.label}로 편지를 쓰고 있습니다
                 </p>
 
                 <button
                 type="button"
                 onClick={() => setIsFontOpen(prev => !prev)}
-                className="text-sm text-white font-light underline"
+                className="text-sm text-white font-base underline"
                 >
                 변경하기 ↓
                 </button>
@@ -106,7 +106,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
 
             {/* 드롭다운 */}
             {isFontOpen && (
-                <div className="absolute mt-2 bg-white rounded-md shadow w-48 z-10">
+                <div className="absolute mt-2 bg-white border-green border-2 rounded-md shadow w-48 z-10">
                 {fontOptions.map(option => (
                     <button
                     key={option.key}
@@ -146,7 +146,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
                       src={imgUrl}
                       alt="preview"
                       style={{ width: ornamentSize, height: ornamentSize }}
-                      className="absolute left-1/2 top-1/2 rounded-full object-cover -translate-x-1/2 -translate-y-1/2"
+                      className="absolute left-1/2 top-1/2 object-cover -translate-x-1/2 -translate-y-1/2"
                     />
                   ) : (
                     <div className="absolute left-1/2 top-1/2 rounded-full bg-beige -translate-x-1/2 -translate-y-1/2" style={{ width: ornamentSize, height: ornamentSize }} />
@@ -190,6 +190,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
             className={`w-full bg-transparent resize-y outline-none text-base`}
             style={{
               lineHeight: `${lineHeight}px`,
+              resize: "none",
               backgroundImage: linesBackground,
               backgroundRepeat: 'repeat',
               backgroundAttachment: 'local',

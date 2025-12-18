@@ -62,11 +62,11 @@ export default function OrnamentDetailModal({ ornamentId, onClose }: Props) {
           </div>
 
           <div className="w-full">
-            <div className="text-xs text-fg-secondary">장식 이름</div>
-            <div className="mt-1 border-b pb-2 font-semibold text-lg text-fg-primary">{detail?.name ?? '-'}</div>
+            <div className="text-sm text-fg-secondary text-green">장식 이름</div>
+            <div className="mt-1 border-b border-green pb-2 font-semibold text-2xl text-fg-primary">{detail?.name ?? '-'}</div>
           </div>
 
-          <button className="mt-4 inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-medium" onClick={() => { 
+          <button className="mt-6 w-full rounded-md bg-green px-4 py-3 text-beige font-light" onClick={() => { 
             onClose();
             const params = new URLSearchParams();
             if (detail?.imgUrl) params.set('imgUrl', detail.imgUrl);
@@ -76,8 +76,6 @@ export default function OrnamentDetailModal({ ornamentId, onClose }: Props) {
             해당 장식으로 진행하기
             <span className="ml-2">→</span>
           </button>
-
-          <button className="mt-6 w-full rounded-md bg-green px-4 py-3 text-beige font-semibold" onClick={onClose}>확인</button>
         </div>
       </div>
     </div>

@@ -193,7 +193,7 @@ export async function createOrnament(
 export async function checkOrnamentNameExists(name: string): Promise<boolean> {
   try {
     const params = new URLSearchParams({ name });
-    const res = await apiFetch(`https://develop.bacinf.com/api/ornaments/exists?${params.toString()}`);
+    const res = await apiFetch(`/api/ornaments/exists?${params.toString()}`);
 
     if (!res.ok) {
       console.log("오너먼트 이름 중복 조회 실패", res);
@@ -222,7 +222,7 @@ export async function getOrnamentDetail(
   ornamentId: number,
 ): Promise<OrnamentDetail | null> {
   try {
-    const res = await apiFetch(`https://develop.bacinf.com/api/ornaments/${ornamentId}`);
+    const res = await apiFetch(`/api/ornaments/${ornamentId}`);
 
     if (!res.ok) {
       console.log("오너먼트 상세 조회 실패", res);
