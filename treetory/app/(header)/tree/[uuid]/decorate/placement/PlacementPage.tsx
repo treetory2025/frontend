@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Layer } from "react-konva";
+import { Layer, Group, Image as KonvaImage, Text } from "react-konva";
 import { Tree } from "@/components/ui/tree/Tree";
 import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
 import { useRouter } from "next/navigation";
@@ -10,6 +10,8 @@ import { useThemeStore } from "@/store/userStore";
 import Konva from "konva";
 import { useStageZoom } from "@/hooks/useStageZoom";
 import StageLayout from "@/components/ui/tree/StageLayout";
+import useImage from "use-image";
+import { PlacementTree } from "@/components/ui/tree/PlacementTree";
 
 export default function PlacementPage() {
   const { owner, uuid } = useOwner(); // 해당 트리 소유자 정보
@@ -112,16 +114,16 @@ export default function PlacementPage() {
 
         <StageLayout
           stageRef={stageRef}
-          draggable={canDragX}
+          draggable={false}
           width={size.width}
           height={Math.max(size.height + 120, treeHeight + 120)}
         >
           <Layer
-            // onWheel={handleWheel}
+            onWheel={handleWheel}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            <Tree
+            <PlacementTree
               containerWidth={size.width}
               containerHeight={size.height}
               scale={1}
@@ -142,8 +144,37 @@ export default function PlacementPage() {
         className="bg-skyblue text-button text-navy absolute right-4 bottom-20 left-auto translate-x-0 cursor-pointer rounded-full border-4 border-white px-6 py-5 font-bold md:bottom-10"
         onClick={() => {}}
       >
-        장식하기
+        장식완료
       </button>
     </div>
+  );
+}
+
+export function TestOrnament({
+  diffX,
+  onDragStateChange,
+}: {
+  diffX: number;
+  onDragStateChange: (dragging: boolean) => void;
+}) {
+  const [image] = useImage("/icons/santa.png", "anonymous"); // public에 테스트 이미지 하나
+  const [pos, setPos] = useState({ x: 400, y: 400 });
+  const radius = 30;
+  return (
+    <Group
+      x={pos.x + diffX}
+      y={pos.y}
+      draggable
+      onDragStart={() => onDragStateChange(true)}
+      onDragEnd={() => onDragStateChange(false)}
+    >
+      <KonvaImage
+        image={image}
+        width={radius * 2}
+        height={radius * 2}
+        offsetX={radius}
+        offsetY={radius}
+      />
+    </Group>
   );
 }
