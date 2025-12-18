@@ -5,7 +5,7 @@ import { Group, Image as KonvaImage, Rect } from "react-konva";
 import useImage from "use-image";
 import Konva from "konva";
 
-import Ornaments from "./Ornaments";
+import Ornaments, { PlacementOrnament } from "./Ornaments";
 import Background from "./Background";
 import type { Ornarment } from "@/types/ornarment";
 import { TestOrnament } from "@/app/(header)/tree/[uuid]/decorate/placement/PlacementPage";
@@ -19,6 +19,7 @@ interface Props {
   size?: number;
   onLoad?: (size: { width: number; height: number }) => void;
   onSelectOrnament: (ornament: Ornarment) => void;
+  onPositionChange: (ornamentId: string, pos: { x: number; y: number }) => void;
 }
 
 export function PlacementTree({
@@ -30,6 +31,7 @@ export function PlacementTree({
   size,
   onLoad,
   onSelectOrnament,
+  onPositionChange,
 }: Props) {
   const [isDraggingOrnament, setIsDraggingOrnament] = useState(false);
 
@@ -127,7 +129,6 @@ export function PlacementTree({
               : "transparent"
         }
       />
-
       {background && (
         <Background
           x={x}
@@ -141,13 +142,17 @@ export function PlacementTree({
           theme={background}
         />
       )}
-
       <KonvaImage image={treeImg} scale={{ x: scale, y: scale }} />
-
-      {/* 🔥 장식들 */}
+      {/* 기존 장식 */}
       <Ornaments diffX={diffX} onSelectOrnament={onSelectOrnament} />
-
-      {/* 테스트 장식 */}
+      {/* 등록할 장식 */}
+      {/* <PlacementOrnament
+        ornament={testOrnament}
+        diffX={diffX}
+        treeGroupRef={groupRef}
+        onPositionChange={(pos) => onPositionChange(testOrnament.id, pos)}
+      /> */}
+      {/* 테스트용 장식 */}
       <TestOrnament diffX={diffX} onDragStateChange={setIsDraggingOrnament} />
     </Group>
   );

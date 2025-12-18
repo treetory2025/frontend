@@ -21,6 +21,11 @@ export default function PlacementPage() {
   const [treeHeight, setTreeHeight] = useState(0);
   const [treeWidth, setTreeWidth] = useState(0);
 
+  // 등록할 장식 좌표
+  const [placedPositions, setPlacedPositions] = useState<
+    Record<string, { x: number; y: number }>
+  >({});
+
   const stageRef = useRef<Konva.Stage | null>(null);
 
   const { handleWheel, handleTouchMove, handleTouchEnd } = useStageZoom(
@@ -136,6 +141,12 @@ export default function PlacementPage() {
                 setIsTreeReady(true);
               }}
               onSelectOrnament={handleSelectOrnament}
+              onPositionChange={(ornamentId, pos) => {
+                setPlacedPositions((prev) => ({
+                  ...prev,
+                  [ornamentId]: pos,
+                }));
+              }}
             />
           </Layer>
         </StageLayout>
@@ -160,6 +171,7 @@ export function TestOrnament({
   const [image] = useImage("/icons/santa.png", "anonymous"); // public에 테스트 이미지 하나
   const [pos, setPos] = useState({ x: 400, y: 400 });
   const radius = 30;
+
   return (
     <Group
       x={pos.x + diffX}
