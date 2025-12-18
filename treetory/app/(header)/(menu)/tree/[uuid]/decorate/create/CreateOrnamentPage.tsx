@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
+import { Upload } from 'lucide-react';
 import Cropper from 'react-easy-crop';
 import { Area } from 'react-easy-crop';
 import { useRouter, useParams } from 'next/navigation';
@@ -282,9 +283,9 @@ export default function CreateOrnamentPage() {
           배경이 제거된 이미지일수록 자연스럽게 장식됩니다.
         </p>
 
-        <div className="flex justify-center items-center gap-12">
+        <div className="flex justify-around items-center gap-12">
           <div 
-            className="w-32 h-32 rounded-full bg-beige flex items-center justify-center flex-shrink-0 cursor-pointer hover:opacity-80"
+            className="w-48 h-48 rounded-full bg-beige flex items-center justify-center flex-shrink-0 cursor-pointer hover:opacity-80"
             onClick={() => fileInputRef.current?.click()}
           >
             {previewUrl ? (
@@ -306,9 +307,9 @@ export default function CreateOrnamentPage() {
 
             <button 
               onClick={() => fileInputRef.current?.click()}
-              className="flex items-center justify-center gap-2 bg-muted-navy text-beige px-4 py-2 rounded-lg font-semibold hover:opacity-90 w-fit"
+              className="flex items-center justify-center gap-2 bg-muted-navy text-beige px-4 py-2 rounded-lg font-base hover:opacity-90 w-fit"
             >
-              <span>📁</span>
+              <Upload className="w-5 h-5 text-beige" />
               파일선택
             </button>
           </div>
