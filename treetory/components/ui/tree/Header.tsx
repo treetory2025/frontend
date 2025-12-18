@@ -14,6 +14,7 @@ export default function TreeHeader() {
   const pathname = usePathname();
 
   const isPlacement = pathname.endsWith("/placement");
+  const isMyOrnaments = pathname.endsWith("/my-ornaments");
 
   const theme = useThemeStore((s) => s.theme);
   const isOwner = user?.uuid === uuid;
@@ -22,6 +23,8 @@ export default function TreeHeader() {
   const welcomeStr = isOwner
     ? "나의 트리를 둘러보세요!"
     : "나만의 장식을 남겨보세요!";
+
+  if (isMyOrnaments) return; // 나의 등록된 장식 목록에서는 노출하지 않음
 
   return (
     <header className="flex flex-col gap-2 px-5 select-none">
