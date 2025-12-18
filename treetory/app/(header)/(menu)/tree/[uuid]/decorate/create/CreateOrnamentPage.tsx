@@ -75,17 +75,6 @@ export default function CreateOrnamentPage() {
     const ctx = canvas.getContext('2d');
     if (!ctx) throw new Error('No canvas context');
 
-    // 원형으로 자르기
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.save();
-    const cx = canvas.width / 2;
-    const cy = canvas.height / 2;
-    const radius = Math.min(canvas.width, canvas.height) / 2;
-    ctx.beginPath();
-    ctx.arc(cx, cy, radius, 0, Math.PI * 2, true);
-    ctx.closePath();
-    ctx.clip();
-
     ctx.drawImage(
       image,
       pixelCrop.x,
@@ -97,8 +86,6 @@ export default function CreateOrnamentPage() {
       pixelCrop.width,
       pixelCrop.height
     );
-
-    ctx.restore();
 
     return canvas.toDataURL('image/png');
   };
@@ -173,20 +160,8 @@ export default function CreateOrnamentPage() {
       return;
     }
 
-    // 특수문자(이모지 포함) 허용하지 않음: 한글, 영문, 숫자, 공백만 허용
-    const invalidChar = /[^\p{L}\p{N}\s]/u.test(name);
-    if (invalidChar) {
-      alert('특수문자는 사용할 수 없습니다. 한글, 영문, 숫자만 허용됩니다.');
-      return;
-    }
-
-    if (name.length < 2) {
-      alert('장식 이름은 2자 이상으로 입력해주세요.');
-      return;
-    }
-    
-    if (name.length > 12) {
-      alert('장식 이름은 12자 이하로 입력해주세요.');
+    if (name.length > 10) {
+      alert('장식 이름은 10자 이하로 입력해주세요.');
       return;
     }
 
@@ -212,21 +187,8 @@ export default function CreateOrnamentPage() {
       alert('이름을 입력해주세요.');
       return;
     }
-
-    // 특수문자(이모지 포함) 허용하지 않음: 한글, 영문, 숫자, 공백만 허용
-    const invalidChar = /[^\p{L}\p{N}\s]/u.test(name);
-    if (invalidChar) {
-      alert('특수문자는 사용할 수 없습니다. 한글, 영문, 숫자만 허용됩니다.');
-      return;
-    }
-
-    if (name.length < 2) {
-      alert('장식 이름은 2자 이상으로 입력해주세요.');
-      return;
-    }
-    
-    if (name.length > 12) {
-      alert('장식 이름은 12자 이하로 입력해주세요.');
+    if (name.length > 10) {
+      alert('장식 이름은 10자 이하로 입력해주세요.');
       return;
     }
     if (nameAvailable === false) {
@@ -288,7 +250,7 @@ export default function CreateOrnamentPage() {
             onClick={() => fileInputRef.current?.click()}
           >
             {previewUrl ? (
-              <img src={previewUrl} alt="preview" className="w-full h-full object-cover" />
+              <img src={previewUrl} alt="preview" className="w-full h-full object-cover rounded-full" />
             ) : (
               <div className="text-center">
                 <p className="text-xs text-fg-secondary">이미지 선택</p>
@@ -405,7 +367,7 @@ export default function CreateOrnamentPage() {
                 setNameAvailable(null);
               }}
               placeholder="내가 만든 쿠키"
-              maxLength={12}
+              maxLength={10}
               className="w-full p-3 rounded-lg border border-gray-200 bg-white pr-24"
             />
 
@@ -487,7 +449,7 @@ export default function CreateOrnamentPage() {
           </button>
           <button
             onClick={handleComplete}
-            disabled={!nameAvailable}
+            disabled={isLoading || nameAvailable === false || ornamentName.trim().length === 0}
             className="flex-1 bg-green text-beige py-4 rounded-lg font-semibold hover:opacity-90 disabled:opacity-50"
           >
             {isLoading ? '등록 중...' : '완료'}

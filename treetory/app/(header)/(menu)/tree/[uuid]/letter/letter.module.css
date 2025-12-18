@@ -1,13 +1,6 @@
 @import url('//fonts.googleapis.com/earlyaccess/nanumpenscript.css');
 
 @font-face {
-  font-family: 'Nanum Pen Script';
-  src: url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap') format('woff2');
-  font-weight: normal;
-  font-display: swap;
-}
-
-@font-face {
   font-family: 'GangwonEducationSaeum';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEduSaeeum_OTFMediumA.woff') format('woff');
   font-weight: normal;
@@ -33,8 +26,4 @@
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/KOTRAHOPE.woff2') format('woff2');
   font-weight: normal;
   font-display: swap;
-}
-
-.fontNanumPen {
-  font-family: 'Nanum Pen Script', cursive;
 }

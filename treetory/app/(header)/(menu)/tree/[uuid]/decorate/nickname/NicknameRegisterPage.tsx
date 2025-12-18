@@ -104,6 +104,12 @@ export default function NicknameRegisterPage() {
               maxLength={maxLength}
               className="flex-1 p-3 rounded-lg border border-gray-200 bg-white"
             />
+            <button
+              onClick={() => { /* 확인 버튼: 추후 중복 검사 연결 */ }}
+              className="px-4 py-2 bg-muted-navy text-beige rounded-lg font-semibold"
+            >
+              확인
+            </button>
           </div>
 
           <p className="text-xs text-fg-secondary mt-3 mb-10">글자 수 {nickname.length}/{maxLength}</p>
