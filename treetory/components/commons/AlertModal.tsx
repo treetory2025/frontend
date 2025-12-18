@@ -11,7 +11,7 @@ export default function AlertModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="fixed inset-0 z-500 flex items-center justify-center bg-black/40">
       <div className="bg-beige flex w-[320px] flex-col items-center justify-center gap-8 rounded-lg p-6 text-center">
         <p className="text-body text-green border-green w-full border-b-2 pb-2 text-lg font-bold">
           안내
