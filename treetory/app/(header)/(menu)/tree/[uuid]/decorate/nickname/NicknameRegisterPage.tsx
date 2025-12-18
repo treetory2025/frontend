@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import Image from 'next/image';
-import PreviewModal from '@/components/ui/decorate/nickname/PreviewModal';
+import { useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import Image from "next/image";
+import PreviewModal from "@/components/ui/decorate/nickname/PreviewModal";
 
 export default function NicknameRegisterPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const imgUrl = searchParams.get('imgUrl');
-  const ornamentId = searchParams.get('ornamentId');
+  const imgUrl = searchParams.get("imgUrl");
+  const ornamentId = searchParams.get("ornamentId");
 
-  const [nickname, setNickname] = useState('');
+  const [nickname, setNickname] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const maxLength = 6;
 
@@ -19,7 +19,7 @@ export default function NicknameRegisterPage() {
     const trimmedNickname = nickname.trim();
 
     if (!trimmedNickname) {
-      alert('닉네임을 입력해주세요.');
+      alert("닉네임을 입력해주세요.");
       return;
     }
 
@@ -38,7 +38,7 @@ export default function NicknameRegisterPage() {
       setShowPreview(true);
     } catch (err) {
       console.error(err);
-      alert('닉네임 등록 중 오류가 발생했습니다.');
+      alert("닉네임 등록 중 오류가 발생했습니다.");
     } finally {
       setIsLoading(false);
     }
@@ -48,52 +48,67 @@ export default function NicknameRegisterPage() {
   const [slideIndex, setSlideIndex] = useState(0);
 
   const goToLetter = () => {
-    const base = (typeof window !== 'undefined' && window.location.pathname.split('/decorate')[0]) || '';
+    const base =
+      (typeof window !== "undefined" &&
+        window.location.pathname.split("/decorate")[0]) ||
+      "";
     const params = new URLSearchParams();
-    if (imgUrl) params.set('imgUrl', imgUrl);
-    if (nickname.trim()) params.set('nickname', nickname.trim());
-    if (ornamentId) params.set('ornamentId', ornamentId);
+    if (imgUrl) params.set("imgUrl", imgUrl);
+    if (nickname.trim()) params.set("nickname", nickname.trim());
+    if (ornamentId) params.set("ornamentId", ornamentId);
     router.push(`${base}/letter?${params.toString()}`);
   };
 
   return (
     <div>
       {/* 큰 트리 배경 (상단 중앙) */}
-      <div className="absolute inset-0 mb-50 flex items-center justify-center pointer-events-none z-0">
-        <Image src="/images/theme1.png" alt="tree" width={360} height={420} priority className="object-contain" />
+      <div className="pointer-events-none absolute inset-0 z-0 mb-50 flex items-center justify-center">
+        <Image
+          src="/images/theme1.png"
+          alt="tree"
+          width={360}
+          height={420}
+          priority
+          className="object-contain"
+        />
       </div>
 
       {imgUrl && (
-      <div className="absolute left-1/2 top-3/8 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center">
-        <img
-          src={imgUrl}
-          alt="ornament preview"
-          className="w-24 h-24 rounded-full object-cover"
-        />
-        {/* 실시간 닉네임 미리보기 (이미지 바로 아래) */}
-        {nickname.trim() && (
-        <div className="mt-2">
-          <div
-            className="inline-block px-3 py-1 shadow-sm"
-            style={{ backgroundColor: 'rgba(230,243,249,0.2)', borderRadius: 8 }}
-          >
-            <span className="text-sm font-normal text-white">
-              {nickname.trim() || '\u00A0'}
-            </span>
-          </div>
+        <div className="absolute top-3/8 left-1/2 z-20 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
+          <img
+            src={imgUrl}
+            alt="ornament preview"
+            className="h-24 w-24 rounded-full object-cover"
+          />
+          {/* 실시간 닉네임 미리보기 (이미지 바로 아래) */}
+          {nickname.trim() && (
+            <div className="mt-2">
+              <div
+                className="inline-block px-3 py-1 shadow-sm"
+                style={{
+                  backgroundColor: "rgba(230,243,249,0.2)",
+                  borderRadius: 8,
+                }}
+              >
+                <span className="text-sm font-normal text-white">
+                  {nickname.trim() || "\u00A0"}
+                </span>
+              </div>
+            </div>
+          )}
         </div>
-        )}
-      </div>
       )}
 
       {/* 오버레이 카드: 트리와 겹치도록 위쪽으로 올려 배치 */}
       <div
         className="absolute left-1/2 z-30 w-full"
-        style={{ top: '100%', transform: 'translateX(-50%) translateY(-100%)' }}
+        style={{ top: "100%", transform: "translateX(-50%) translateY(-100%)" }}
       >
-        <div className="mx-auto w-full bg-[#CCE8F3] p-6 md:p-8 shadow-xl">
-          <div className="text-center mb-4">
-            <h1 className="text-xl md:text-2xl mb-10 font-bold text-fg-primary">닉네임 입력</h1>
+        <div className="mx-auto w-full bg-[#CCE8F3] p-6 shadow-xl md:p-8">
+          <div className="mb-4 text-center">
+            <h1 className="text-fg-primary mb-10 text-xl font-bold md:text-2xl">
+              닉네임 입력
+            </h1>
           </div>
 
           <div className="flex items-center gap-3">
@@ -102,24 +117,20 @@ export default function NicknameRegisterPage() {
               onChange={(e) => setNickname(e.target.value.slice(0, maxLength))}
               placeholder="닉네임을 입력해주세요."
               maxLength={maxLength}
-              className="flex-1 p-3 rounded-lg border border-gray-200 bg-white"
+              className="flex-1 rounded-lg border border-gray-200 bg-white p-3"
             />
-            <button
-              onClick={() => { /* 확인 버튼: 추후 중복 검사 연결 */ }}
-              className="px-4 py-2 bg-muted-navy text-beige rounded-lg font-semibold"
-            >
-              확인
-            </button>
           </div>
 
-          <p className="text-xs text-fg-secondary mt-3 mb-10">글자 수 {nickname.length}/{maxLength}</p>
+          <p className="text-fg-secondary mt-3 mb-10 text-xs">
+            글자 수 {nickname.length}/{maxLength}
+          </p>
 
           <button
             onClick={handleComplete}
             disabled={isLoading || nickname.trim().length === 0}
-            className="w-full mt-6 bg-green text-beige py-3 rounded-lg font-semibold hover:opacity-90 disabled:opacity-50"
+            className="bg-green text-beige mt-6 w-full rounded-lg py-3 font-semibold hover:opacity-90 disabled:opacity-50"
           >
-            {isLoading ? '등록 중...' : '다음'}
+            {isLoading ? "등록 중..." : "다음"}
           </button>
         </div>
       </div>
@@ -133,6 +144,5 @@ export default function NicknameRegisterPage() {
         onConfirm={goToLetter}
       />
     </div>
-
   );
 }
