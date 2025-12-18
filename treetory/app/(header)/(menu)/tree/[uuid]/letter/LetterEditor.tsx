@@ -19,7 +19,7 @@ const fontOptions = [
 ]
 
 const fontFamilyMap: Record<string, string> = {
-  NANUM_PEN: "'Nanum Pen', sans-serif",
+  NANUM_PEN: "'Nanum Pen Script', cursive",
   GANGWON_EDUCATION_SAEUM: "'GangwonEducationSaeum', sans-serif",
   ONGLEIP_WISH_LIST: "'OngleipWFontList', sans-serif",
   ONGLEIP_TTEROM: "'OngleipTterom', sans-serif",
@@ -75,7 +75,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
     <div className="max-w-md mt-6">
         <div className="px-4 py-2 relative">
             <div className="flex items-center gap-3">
-                <p className="text-sm text-green font-lightbold m-0" style={{ fontFamily: fontFamilyMap[selectedFont] }}>
+                <p className="text-md text-green font-lightbold m-0" style={{ fontFamily: fontFamilyMap[selectedFont] }}>
                 {fontOptions.find(f => f.key === selectedFont)?.label}로 편지를 쓰고 있습니다
                 </p>
 
@@ -171,7 +171,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
       >
         {/* ornament + to */}
         <div className="absolute top-24 left-12 flex items-center gap-3">
-          <div className="text-sm text-muted">Dear. {nickname || '받는 사람'}</div>
+          <div className="text-3xl text-muted" style={{ fontFamily: fontFamilyMap['NANUM_PEN'] }}>Dear. {nickname || '받는 사람'}</div>
         </div>
 
         {/* 현재 글자수 */}
@@ -205,7 +205,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
         {/* footer row: 작성일 (left) and From (right) */}
         <div className="w-full px-6 mb-12 flex items-center justify-between">
           <div className="text-sm text-gray-600 mt-10">작성일 {formattedDate}</div>
-          <div className="text-sm">From. {ownerNickname ?? '내가누구'}</div>
+          <div className={`text-3xl ${styles.fontNanumPen}`}>From. {ownerNickname ?? '내가누구'}</div>
         </div>
       </div>
     </div>
