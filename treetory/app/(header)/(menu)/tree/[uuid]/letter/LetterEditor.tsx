@@ -32,7 +32,7 @@ const fontOptions = [
 ];
 
 const fontFamilyMap: Record<string, string> = {
-  NANUM_PEN: "'Nanum Pen', sans-serif",
+  NANUM_PEN: "'Nanum Pen Script', cursive",
   GANGWON_EDUCATION_SAEUM: "'GangwonEducationSaeum', sans-serif",
   ONGLEIP_WISH_LIST: "'OngleipWFontList', sans-serif",
   ONGLEIP_TTEROM: "'OngleipTterom', sans-serif",
@@ -103,7 +103,10 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
     <div className="mt-6 max-w-md">
       <div className="relative px-4 py-2">
         <div className="flex items-center gap-3">
-          <p className="m-0 text-sm font-light text-white">
+          <p
+            className="text-md text-green font-lightbold m-0"
+            style={{ fontFamily: fontFamilyMap[selectedFont] }}
+          >
             {fontOptions.find((f) => f.key === selectedFont)?.label}로 편지를
             쓰고 있습니다
           </p>
@@ -111,7 +114,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
           <button
             type="button"
             onClick={() => setIsFontOpen((prev) => !prev)}
-            className="text-sm font-light text-white underline"
+            className="font-base text-sm text-white underline"
           >
             변경하기 ↓
           </button>
@@ -141,7 +144,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
 
         {/* 드롭다운 */}
         {isFontOpen && (
-          <div className="absolute z-10 mt-2 w-48 rounded-md bg-white shadow">
+          <div className="border-green absolute z-10 mt-2 w-48 rounded-md border-2 bg-white shadow">
             {fontOptions.map((option) => (
               <button
                 key={option.key}
@@ -189,7 +192,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
                     src={imgUrl}
                     alt="preview"
                     style={{ width: ornamentSize, height: ornamentSize }}
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full object-cover"
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover"
                   />
                 ) : (
                   <div
@@ -223,7 +226,10 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
       >
         {/* ornament + to */}
         <div className="absolute top-24 left-12 flex items-center gap-3">
-          <div className="text-muted text-sm">
+          <div
+            className="text-muted text-3xl"
+            style={{ fontFamily: fontFamilyMap["NANUM_PEN"] }}
+          >
             Dear. {nickname || "받는 사람"}
           </div>
         </div>
@@ -246,6 +252,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
             className={`w-full resize-y bg-transparent text-base outline-none`}
             style={{
               lineHeight: `${lineHeight}px`,
+              resize: "none",
               backgroundImage: linesBackground,
               backgroundRepeat: "repeat",
               backgroundAttachment: "local",
@@ -285,7 +292,9 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
               <ChevronRight size={24} strokeWidth={3} className="mb-0.5" />
             </button>
           </div>
-          <div className="text-sm">From. {ownerNickname ?? "내가누구"}</div>
+          <div className={`text-3xl ${styles.fontNanumPen}`}>
+            From. {ownerNickname ?? "내가누구"}
+          </div>
         </div>
       </div>
     </div>
