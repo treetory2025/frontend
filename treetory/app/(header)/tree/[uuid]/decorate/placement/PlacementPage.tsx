@@ -1,32 +1,23 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Group, Layer, Stage } from "react-konva";
+import { Layer } from "react-konva";
 import { Tree } from "@/components/ui/tree/Tree";
 import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
 import { useRouter } from "next/navigation";
 import { Ornarment } from "@/types/ornarment";
-import { useBottomSheet } from "@/hooks/useBottomSheet";
-import OrnamentBottomSheet from "@/components/ui/tree/OrnamentBottomSheet";
 import { useThemeStore } from "@/store/userStore";
 import Konva from "konva";
 import { useStageZoom } from "@/hooks/useStageZoom";
-import { useUserStore } from "@/store/userStore";
-import { WelcomeBottomSheet } from "@/components/commons/BottomSheet";
-import TreeSizeAddGuideBottomSheet from "@/components/ui/tree/TreeSizeAddGuideBottomSheet";
 import StageLayout from "@/components/ui/tree/StageLayout";
 
-export default function TreePage() {
-  const { owner, uuid, isSizeSheetOpen, closeSizeSheet } = useOwner(); // 해당 트리 소유자 정보
-  const user = useUserStore((s) => s.user); // 로그인 유저 정보
-
-  const isOwner = user?.uuid === uuid;
+export default function PlacementPage() {
+  const { owner, uuid } = useOwner(); // 해당 트리 소유자 정보
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [treeHeight, setTreeHeight] = useState(0);
   const [treeWidth, setTreeWidth] = useState(0);
-  const [treeSize, setTreeSize] = useState(3);
 
   const stageRef = useRef<Konva.Stage | null>(null);
 
@@ -43,13 +34,6 @@ export default function TreePage() {
 
   // 배경 테마 확인
   const setTheme = useThemeStore((s) => s.setTheme);
-
-  //선택된 장식 확인
-  const [selectedOrnament, setSelectedOrnament] = useState<Ornarment | null>(
-    null,
-  );
-  // 장식 조회 바텀 시트 상태 관리
-  const { isOpen, open, close } = useBottomSheet();
 
   const router = useRouter();
 
@@ -72,16 +56,6 @@ export default function TreePage() {
       el.removeEventListener("auxclick", preventWheelClick);
     };
   });
-
-  // 트리 사이즈 확인
-  useEffect(() => {
-    //  storeOwner가 아직 없으면 바로 저장
-    if (!owner) {
-      return;
-    }
-
-    setTreeSize(owner.treeSize ?? 3);
-  }, [owner]);
 
   // 배경 테마 적용
   useEffect(() => {
@@ -112,10 +86,7 @@ export default function TreePage() {
   }, []);
 
   // 선택된 장식 정보 상태 저장
-  const handleSelectOrnament = (ornament: Ornarment) => {
-    setSelectedOrnament(ornament);
-    open(); // 바텀시트 열기
-  };
+  const handleSelectOrnament = (ornament: Ornarment) => {};
   const overflowX = Math.max(0, treeWidth - size.width);
   const canDragX = overflowX > 0;
 
@@ -147,7 +118,7 @@ export default function TreePage() {
         >
           <Layer
             // onWheel={handleWheel}
-            onTouchMove={handleTouchMove} // 모바일
+            onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
             <Tree
@@ -169,25 +140,10 @@ export default function TreePage() {
       </div>
       <button
         className="bg-skyblue text-button text-navy absolute right-4 bottom-20 left-auto translate-x-0 cursor-pointer rounded-full border-4 border-white px-6 py-5 font-bold md:bottom-10"
-        onClick={() => {
-          router.push(`/tree/${uuid}/decorate`);
-        }}
+        onClick={() => {}}
       >
         장식하기
       </button>
-
-      {/* 바텀 시트 */}
-      <OrnamentBottomSheet
-        isOpen={isOpen}
-        onClose={close}
-        ornament={selectedOrnament}
-      />
-      <WelcomeBottomSheet isOwner={isOwner} />
-      <TreeSizeAddGuideBottomSheet
-        treeSize={owner.treeSize ?? 3}
-        isOpen={isSizeSheetOpen}
-        onClose={closeSizeSheet}
-      />
     </div>
   );
 }
