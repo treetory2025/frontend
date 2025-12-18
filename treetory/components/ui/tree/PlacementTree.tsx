@@ -8,7 +8,6 @@ import Konva from "konva";
 import Ornaments, { PlacementOrnament } from "./Ornaments";
 import Background from "./Background";
 import type { Ornarment } from "@/types/ornarment";
-import { TestOrnament } from "@/app/(header)/tree/[uuid]/decorate/placement/PlacementPage";
 import { useSearchParams } from "next/navigation";
 
 interface Props {
@@ -155,6 +154,10 @@ export function PlacementTree({
       <Ornaments diffX={diffX} onSelectOrnament={onSelectOrnament} />
       {/* 등록할 장식 */}
       <PlacementOrnament
+        initialPos={{
+          x: treeW / 2 - diffX,
+          y: containerHeight / 2,
+        }}
         imgUrl={imgUrl ?? ""}
         ornamentSize={ornamentSize ?? "SMALL"}
         diffX={diffX}
