@@ -52,8 +52,8 @@ export default function DecoratePage() {
         const categoryToSend =
           selectedCategory === "all" ? "" : selectedCategory;
 
-        const FRONT_PAGE_SIZE = 6;
-        const BACKEND_PAGE_SIZE = 18;
+        const FRONT_PAGE_SIZE = 12;
+        const BACKEND_PAGE_SIZE = 12;
 
         const backendPage = Math.floor(
           (currentPage * FRONT_PAGE_SIZE) / BACKEND_PAGE_SIZE,
@@ -174,17 +174,17 @@ export default function DecoratePage() {
 
       {/* 메시지와 버튼 */}
       <div className="mb-6 flex items-center justify-around gap-4">
-        <p className="text-body text-fg-secondary" style={{ fontSize: "14px" }}>
+        <p className="text-body text-fg-secondary text-sm md:text-xl">
           나만의 특별한 장식이 필요하신가요?
         </p>
         <CreateOrnamentButton />
       </div>
 
       {/* 장식 그리드 */}
-      <OrnamentGrid
-        ornaments={deferredOrnaments}
-        onSelect={(id) => setSelectedOrnamentId(id)}
-      />
+      <div className="-mx-4 md:-mx-6">
+        <div className="h-px bg-white my-4" />
+      </div>
+      <OrnamentGrid ornaments={deferredOrnaments} onSelect={(id) => setSelectedOrnamentId(id)} />
 
       {/* 선택된 장식 모달 */}
       <OrnamentDetailModal
@@ -199,7 +199,7 @@ export default function DecoratePage() {
             <button
               disabled={currentPage <= 0}
               onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
-              className="bg-muted-navy text-beige cursor-pointer rounded-full px-3 py-1 disabled:opacity-30"
+              className="bg-muted-navy text-beige cursor-pointer rounded-full px-3 py-1 disabled:opacity-30 disabled:cursor-not-allowed"
             >
               이전
             </button>
@@ -210,10 +210,8 @@ export default function DecoratePage() {
 
             <button
               disabled={currentPage >= totalPages - 1}
-              onClick={() =>
-                setCurrentPage(Math.min(totalPages - 1, currentPage + 1))
-              }
-              className="bg-muted-navy text-beige cursor-pointer rounded-full px-3 py-1 disabled:opacity-30"
+              onClick={() => setCurrentPage(Math.min(totalPages - 1, currentPage + 1))}
+              className="bg-muted-navy text-beige cursor-pointer rounded-full px-3 py-1 disabled:opacity-30 disabled:cursor-not-allowed"
             >
               다음
             </button>

@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { ArrowBigDown, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { getTreeOwner, getTreeOwnerInLetter } from "@/lib/api";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import styles from "./letter.module.css";
-import { ChevronRight } from "lucide-react";
 
 interface Props {
   uuid: string;
@@ -100,7 +101,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
   const ornamentSize = text.length <= 100 ? 44 : text.length <= 200 ? 60 : 76;
 
   return (
-    <div className="mt-6 max-w-md">
+    <div className="flex-1 overflow-y-auto">
       <div className="relative px-4 py-2">
         <div className="flex items-center gap-3">
           <p
@@ -114,12 +115,13 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
           <button
             type="button"
             onClick={() => setIsFontOpen((prev) => !prev)}
-            className="font-base text-sm text-white underline"
+            className="font-base flex items-center gap-1 text-sm text-white"
           >
-            변경하기 ↓
+            <span>변경하기</span>
+            <ArrowBigDown size={16} strokeWidth={2.5} />
           </button>
         </div>
-        <div className="absolute top-1/100 z-50 ml-84 -translate-y-1/2">
+        <div className="absolute top-[-32px] right-4 z-50">
           <div
             role="button"
             tabIndex={0}
@@ -142,25 +144,33 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
           </div>
         </div>
 
-        {/* 드롭다운 */}
-        {isFontOpen && (
-          <div className="border-green absolute z-10 mt-2 w-48 rounded-md border-2 bg-white shadow">
-            {fontOptions.map((option) => (
-              <button
-                key={option.key}
-                type="button"
-                onClick={() => {
-                  setSelectedFont(option.key);
-                  setIsFontOpen(false);
-                }}
-                className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
-                style={{ fontFamily: fontFamilyMap[option.key] }}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        )}
+        {/* 드롭다운 (framer-motion) */}
+        <AnimatePresence>
+          {isFontOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.18 }}
+              className="border-green absolute z-10 mt-2 ml-28 w-48 origin-top rounded-md border-2 bg-white shadow"
+            >
+              {fontOptions.map((option) => (
+                <button
+                  key={option.key}
+                  type="button"
+                  onClick={() => {
+                    setSelectedFont(option.key);
+                    setIsFontOpen(false);
+                  }}
+                  className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
+                  style={{ fontFamily: fontFamilyMap[option.key] }}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
       {/* Preview modal triggered by snowman */}
       {showPreview && (
@@ -236,7 +246,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
 
         {/* 현재 글자수 */}
         <div className="absolute top-16 right-4 flex items-center gap-3">
-          <div className="text-sm text-gray-600">
+          <div className="text-muted-navy text-sm">
             현재 글자수&nbsp; {text.length}/300
           </div>
         </div>
@@ -249,7 +259,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
             rows={12}
             placeholder={"마음을 담아 편지를 작성해주세요."}
             maxLength={300}
-            className={`w-full resize-y bg-transparent text-base outline-none`}
+            className={`w-full resize-y bg-transparent text-base text-xl outline-none`}
             style={{
               lineHeight: `${lineHeight}px`,
               resize: "none",

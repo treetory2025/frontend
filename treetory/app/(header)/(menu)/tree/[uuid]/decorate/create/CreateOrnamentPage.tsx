@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import { Upload, Check, X } from "lucide-react";
 import Cropper from "react-easy-crop";
 import { Area } from "react-easy-crop";
 import { useRouter, useParams } from "next/navigation";
@@ -183,8 +184,8 @@ export default function CreateOrnamentPage() {
       return;
     }
 
-    // 특수문자(이모지 포함) 허용하지 않음: 한글, 영문, 숫자, 공백만 허용
-    const invalidChar = /[^\p{L}\p{N}\s]/u.test(name);
+    // 특수문자(이모지 포함) 허용하지 않음: 한글, 영문, 숫자, 공백과 언더바(_)만 허용
+    const invalidChar = /[^\p{L}\p{N}_\s]/u.test(name);
     if (invalidChar) {
       alert("특수문자는 사용할 수 없습니다. 한글, 영문, 숫자만 허용됩니다.");
       return;
@@ -223,10 +224,10 @@ export default function CreateOrnamentPage() {
       return;
     }
 
-    // 특수문자(이모지 포함) 허용하지 않음: 한글, 영문, 숫자, 공백만 허용
-    const invalidChar = /[^\p{L}\p{N}\s]/u.test(name);
+    // 특수문자(이모지 포함) 허용하지 않음: 한글, 영문, 숫자, 언더바(_)만 허용
+    const invalidChar = /[^\p{L}\p{N}_\s]/u.test(name);
     if (invalidChar) {
-      alert("특수문자는 사용할 수 없습니다. 한글, 영문, 숫자만 허용됩니다.");
+      alert("한글, 영문, 숫자, 언더바(_)만 허용됩니다.");
       return;
     }
 
@@ -305,9 +306,9 @@ export default function CreateOrnamentPage() {
               배경이 제거된 이미지일수록 자연스럽게 장식됩니다.
             </p>
 
-            <div className="flex items-center justify-center gap-12">
+            <div className="flex items-center justify-around gap-12">
               <div
-                className="bg-beige flex h-32 w-32 flex-shrink-0 cursor-pointer items-center justify-center rounded-full hover:opacity-80"
+                className="bg-beige flex h-48 w-48 flex-shrink-0 cursor-pointer items-center justify-center rounded-full hover:opacity-80"
                 onClick={() => fileInputRef.current?.click()}
               >
                 {previewUrl ? (
@@ -333,9 +334,9 @@ export default function CreateOrnamentPage() {
 
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="bg-muted-navy text-beige flex w-fit items-center justify-center gap-2 rounded-lg px-4 py-2 font-semibold hover:opacity-90"
+                  className="bg-muted-navy text-beige font-base flex w-fit items-center justify-center gap-2 rounded-lg px-4 py-2 hover:opacity-90"
                 >
-                  <span>📁</span>
+                  <Upload className="text-beige h-5 w-5" />
                   파일선택
                 </button>
               </div>
@@ -443,7 +444,7 @@ export default function CreateOrnamentPage() {
             </div>
           </div>
 
-          <label className="text-fg-secondary text-sm">장식 이름</label>
+          <label className="text-md text-fg-secondary">장식 이름</label>
           <div className="relative mt-2">
             <input
               value={ornamentName}
@@ -465,13 +466,22 @@ export default function CreateOrnamentPage() {
               {nameCheckLoading ? "확인중..." : "확인"}
             </button>
           </div>
+          <div className="text-fg-secondary mt-2 text-xs">
+            한글, 영어, 숫자 포함 최소 2글자 ~ 최대 12글자 '_'만 가능
+          </div>
 
-          <div className="mt-2 text-sm">
+          <div className="mt-1 text-center text-sm">
             {nameAvailable === true && (
-              <span className="text-green">사용 가능한 이름입니다.</span>
+              <span className="text-green inline-flex items-center justify-center gap-2">
+                <Check className="h-4 w-4" />
+                <span>사용 가능한 이름입니다.</span>
+              </span>
             )}
             {nameAvailable === false && (
-              <span className="text-red-600">이미 사용 중인 이름입니다.</span>
+              <span className="inline-flex items-center justify-center gap-2 text-red-600">
+                <X className="h-4 w-4" />
+                <span>이미 사용 중인 이름입니다.</span>
+              </span>
             )}
           </div>
         </div>
@@ -491,8 +501,8 @@ export default function CreateOrnamentPage() {
 
       {/* 장식 분류 선택 */}
       {step === "name" && (
-        <div className="mt-2 mb-4 w-full">
-          <div className="text-fg-secondary mb-2 text-sm">장식 분류</div>
+        <div className="mt-4 mb-4 w-full">
+          <div className="text-md text-fg-secondary mb-2">장식 분류</div>
           <div className="flex items-center justify-center gap-6">
             {[
               { id: "CHRISTMAS", label: "크리스마스", icon: "🎄" },
