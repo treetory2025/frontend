@@ -43,7 +43,7 @@ export default function TreeHeader() {
         {isPlacement ? (
           <>
             <p>
-              장식이 완료되면 우측 하단
+              우측 하단
               <span className="font-bold"> 장식 완료</span> 버튼을 눌러주세요!
             </p>
             <div className="flex items-center gap-3 md:gap-4">
