@@ -11,9 +11,10 @@ import { useUserStore } from "@/store/userStore";
 import { useEffect, useMemo, useState } from "react";
 import { apiFetch } from "@/lib/api";
 import { Check, CircleCheckBig, Info } from "lucide-react";
+import { useAlert } from "@/hooks/useAlert";
 
 // 유효성검사
-const NICKNAME_REGEX = /^[가-힣a-zA-Z0-9_]+$/;
+const NICKNAME_REGEX = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9_]+$/;
 
 export default function NicknameBottomSheet({
   isOpen,
@@ -21,9 +22,10 @@ export default function NicknameBottomSheet({
 }: BottomSheetProps) {
   const user = useUserStore((s) => s.user);
   const hasHydrated = useUserStore((s) => s._hasHydrated);
-  const setUser = useUserStore.getState().setUser;
+  const setUser = useUserStore((s) => s.setUser);
 
   const [nickname, setNickname] = useState("");
+  const alert = useAlert();
 
   useEffect(() => {
     if (isOpen && hasHydrated) {
@@ -74,7 +76,10 @@ export default function NicknameBottomSheet({
   // 변경 버튼 활성화 조건
   const isDisabled = useMemo(() => {
     const original = user?.nickname || "";
-    return nickname.length === 0 || nickname === original;
+
+    if (nickname.length === 0) return true;
+    if (nickname === original) return true;
+    if (validation.type === "error") return true;
   }, [nickname, user?.nickname]);
 
   // 닉네임 변경
