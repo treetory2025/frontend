@@ -39,7 +39,8 @@ export default function Header() {
 
   // 유저 정보, 트리 소유자 정보 확인
   const pathname = usePathname();
-  const isTreePage = pathname.startsWith("/tree/");
+  const segments = pathname.split("/").filter(Boolean);
+  const isTreePage = segments.length === 2 && segments[0] === "tree";
 
   const params = useParams<{ uuid?: string }>();
   const treeUuid = isTreePage ? params?.uuid : null;
