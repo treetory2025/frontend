@@ -38,7 +38,7 @@ export function OwnerProvider({
 
   async function refreshOwner() {
     try {
-      const res = await apiFetch(`/api/trees/${uuid}`, {
+      const res = await fetch(`/api/trees/${uuid}`, {
         credentials: "include",
       });
 
