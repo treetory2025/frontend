@@ -20,7 +20,7 @@ import {
 import { useUserStore } from "@/store/userStore";
 import { useParams, usePathname } from "next/navigation";
 import { isLoggedIn } from "@/lib/auth";
-import { Star, StarOff, ImageDown } from "lucide-react";
+import { ImageDown } from "lucide-react";
 import { useCaptureStore } from "@/store/useCaptureStore";
 import { useBookmarkStore } from "@/store/useBookmarkStore";
 import { toggleBookmakApi } from "@/lib/bookmark";
