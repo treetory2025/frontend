@@ -24,8 +24,8 @@ function OrnamentGrid({ ornaments, onSelect }: OrnamentGridProps) {
             type="button"
           >
             {/* 이미지 카드 */}
-            <div className="bg-beige relative flex items-center justify-center rounded-full">
-              <div className="h-28 w-28 overflow-hidden rounded-full md:h-28 md:w-28">
+            <div className="bg-muted-bg/50 relative flex size-26 cursor-pointer items-center justify-center rounded-full md:size-32">
+              <div className="size-20 overflow-hidden rounded-full md:h-28 md:w-28">
                 <img
                   src={ornament.imgUrl}
                   alt={ornament.name}
@@ -36,7 +36,7 @@ function OrnamentGrid({ ornaments, onSelect }: OrnamentGridProps) {
                 />
               </div>
               {/* 호버 오버레이 */}
-              <div className="absolute inset-0 bg-black opacity-0 transition-opacity duration-200 group-hover:opacity-10" />
+              <div className="absolute inset-0 opacity-0 transition-opacity duration-200 group-hover:opacity-10" />
             </div>
             {/* 이름 */}
             <div className="text-fg-primary max-w-[6rem] truncate text-center text-xs font-semibold md:text-sm">
