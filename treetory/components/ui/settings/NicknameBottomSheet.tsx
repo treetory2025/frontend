@@ -10,7 +10,10 @@ import {
 import { useUserStore } from "@/store/userStore";
 import { useEffect, useMemo, useState } from "react";
 import { apiFetch } from "@/lib/api";
-import { Info } from "lucide-react";
+import { Check, CircleCheckBig, Info } from "lucide-react";
+
+// 유효성검사
+const NICKNAME_REGEX = /^[가-힣a-zA-Z0-9_]+$/;
 
 export default function NicknameBottomSheet({
   isOpen,
@@ -38,6 +41,35 @@ export default function NicknameBottomSheet({
     if (value.length > 6) return;
     setNickname(value);
   };
+
+  // 실시간 유효성 검사
+  const validation = useMemo(() => {
+    if (nickname.length === 0) {
+      return {
+        type: "info",
+        message: "닉네임을 입력해 주세요.",
+      };
+    }
+
+    if (!NICKNAME_REGEX.test(nickname)) {
+      return {
+        type: "error",
+        message: "한글, 영문, 숫자, _(언더바)만 사용할 수 있어요.",
+      };
+    }
+
+    if (nickname === user?.nickname) {
+      return {
+        type: "info",
+        message: "현재 사용 중인 닉네임이에요.",
+      };
+    }
+
+    return {
+      type: "success",
+      message: "사용 가능한 닉네임이에요.",
+    };
+  }, [nickname, user?.nickname]);
 
   // 변경 버튼 활성화 조건
   const isDisabled = useMemo(() => {
@@ -95,13 +127,25 @@ export default function NicknameBottomSheet({
       onClose={onClose}
       className="gap-12 select-none"
     >
-      <div className="flex flex-col items-center gap-2">
-        <h3 className="text-subtitle md:text-title text-primary">
-          닉네임 <span className="text-green">변경</span>
-        </h3>
-        <p className="text-body text-fg-secondary text-center">
-          닉네임은 <span className="font-bold">6글자 이하</span>만 가능합니다.
-        </p>
+      <h3 className="text-subtitle md:text-title text-primary">
+        닉네임 <span className="text-green">변경</span>
+      </h3>
+
+      <div className="text-body md:text-subtitle flex w-full flex-col gap-2 font-medium">
+        <div className="flex w-full gap-3">
+          <Check size={20} className="text-green" />
+          <p className="text-fg-secondary text-center">
+            닉네임은 <span className="font-bold">최대 6글자 </span>설정할 수
+            있어요.
+          </p>
+        </div>
+        <div className="flex w-full gap-3">
+          <Check size={20} className="text-green" />
+          <p className="text-fg-secondary text-center">
+            <span className="font-bold">한글, 영어, 숫자, _만 </span>
+            사용할 수 있어요.
+          </p>
+        </div>
       </div>
       <div className="text-body text-fg-primary w-full space-y-2">
         <p className="text-caption md:text-body text-fg-secondary mb-3">
@@ -122,8 +166,28 @@ export default function NicknameBottomSheet({
           글자수 : {nickname.length} / <span className="font-bold">6</span>
         </p>
       </div>
+      <div className="text-caption md:text-body text-fg-tertiary flex flex-1 items-center gap-2 p-2">
+        {validation.type === "error" && (
+          <>
+            <Info size={16} className="text-red" />
+            <span className="text-red">{validation.message}</span>
+          </>
+        )}
+        {validation.type === "info" && (
+          <>
+            <Info size={16} className="text-fg-tertiary" />
+            <span className="text-fg-tertiary">{validation.message}</span>
+          </>
+        )}
+        {validation.type === "success" && (
+          <>
+            <CircleCheckBig size={16} className="text-green" />
+            <span className="text-green">{validation.message}</span>
+          </>
+        )}
+      </div>
 
-      <div className="flex w-full flex-col gap-2">
+      <div className="flex w-full flex-col gap-4">
         <ActionButton onClick={onChangeNickname} disabled={isDisabled}>
           변경
         </ActionButton>

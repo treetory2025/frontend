@@ -35,7 +35,7 @@ export default function BookmarksPage() {
         if (!data) return;
 
         setMembers(data.members.content);
-        setTotalPage(data.totalPage);
+        setTotalPage(data.members.totalPage);
       } finally {
         setIsLoading(false);
       }

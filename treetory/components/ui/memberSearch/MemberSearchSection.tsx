@@ -31,8 +31,11 @@ export default function MemberSearchSection({ close }: { close: () => void }) {
 
       try {
         const res = await fetch(
-          `/api/members?query=${searchKeyword.trim()}&page=${page}&size=${size}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/members?query=${searchKeyword.trim()}&page=${page}&size=${size}`,
         );
+        // const res = await fetch(
+        //   `/api/members?query=${searchKeyword.trim()}&page=${page}&size=${size}`,
+        // );
 
         if (!res.ok) {
           console.log("사용자 검색 결과 없음");
@@ -41,10 +44,11 @@ export default function MemberSearchSection({ close }: { close: () => void }) {
 
         const data = await res.json();
         if (!data?.body) return;
+        console.log(data);
 
         setMembers(data.body.members.content);
-        setTotalPage(data.body.totalPage);
-        setTotalElements(data.body.totalElements);
+        setTotalPage(data.body.members.totalPage);
+        setTotalElements(data.body.members.totalElements);
       } catch (error) {
         console.error("사용자 검색 실패", error);
       } finally {
