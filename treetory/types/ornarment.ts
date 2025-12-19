@@ -8,3 +8,11 @@ export type Ornarment = {
   size: string;
   imgUrl: string;
 };
+
+export type OrnamentInfo = {
+  name: string;
+  category: string;
+  imgUrl: string;
+  userNickname: string;
+  createdDate: string;
+};

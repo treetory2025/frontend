@@ -39,3 +39,19 @@ export const useInviteModalStore = create<InviteModalState>((set) => ({
   openModal: () => set({ isOpen: true }),
   closeModal: () => set({ isOpen: false }),
 }));
+
+interface OrnamentInfoModalState {
+  ornamentId: number | null;
+  isOpen: boolean;
+  openModal: (ornamentId: number) => void;
+  closeModal: () => void;
+}
+
+export const useOrnamentInfoMdalStore = create<OrnamentInfoModalState>(
+  (set) => ({
+    ornamentId: null,
+    isOpen: false,
+    openModal: (ornamentId) => set({ isOpen: true, ornamentId }),
+    closeModal: () => set({ isOpen: false, ornamentId: null }),
+  }),
+);
