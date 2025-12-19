@@ -6,10 +6,11 @@ import { useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
-  const user = useUserStore((s) => s.user);
+  const { user, clearUser } = useUserStore();
 
   useEffect(() => {
     if (!user) {
+      clearUser();
       router.replace("/login");
       return;
     }
