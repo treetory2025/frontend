@@ -15,6 +15,7 @@ import { useUserStore } from "@/store/userStore";
 import { WelcomeBottomSheet } from "@/components/commons/BottomSheet";
 import TreeSizeAddGuideBottomSheet from "@/components/ui/tree/TreeSizeAddGuideBottomSheet";
 import StageLayout from "@/components/ui/tree/StageLayout";
+import OrnamentInfoModal from "@/components/ui/tree/OrnamentInfoModal";
 
 export default function TreePage() {
   const { owner, uuid, isSizeSheetOpen, closeSizeSheet } = useOwner(); // 해당 트리 소유자 정보
@@ -188,6 +189,7 @@ export default function TreePage() {
         isOpen={isSizeSheetOpen}
         onClose={closeSizeSheet}
       />
+      <OrnamentInfoModal />
     </div>
   );
 }

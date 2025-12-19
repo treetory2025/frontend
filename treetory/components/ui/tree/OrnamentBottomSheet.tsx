@@ -14,11 +14,12 @@ import { isUser } from "@/lib/auth";
 
 import ChatCircle from "@/public/icons/Chat_Circle_Dots.png";
 import CloseCircle from "@/public/icons/Close_Circle.png";
-import { MoveRight } from "lucide-react";
+import { Info, MoveRight } from "lucide-react";
 import NoticeMessage from "./NoticeMessage";
 import { isChristmas2025InKorea } from "@/lib/date";
 import { useState } from "react";
 import { apiFetch } from "@/lib/api";
+import { useOrnamentInfoMdalStore } from "@/store/useModalStore";
 
 type OrnamentBottomSheetProps = BottomSheetProps & {
   ornament: Ornarment | null;
@@ -30,9 +31,11 @@ export default function OrnamentBottomSheet({
   ornament,
 }: OrnamentBottomSheetProps) {
   const { owner } = useOwner();
+
   const isOwner = owner ? isUser() : false;
   const isChristmas = isChristmas2025InKorea();
 
+  const openModal = useOrnamentInfoMdalStore((s) => s.openModal);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   if (!ornament) return null;
@@ -41,16 +44,22 @@ export default function OrnamentBottomSheet({
   return (
     <BottomSheet isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col items-center gap-6">
-        <div className="bg-muted-bg relative flex size-30 items-center justify-center rounded-full">
-          <div className="h-20 w-20 overflow-hidden rounded-full">
+        <div className="bg-muted-bg relative flex size-40 items-center justify-center rounded-full">
+          <div className="relative size-30 overflow-hidden rounded-full">
             <Image
               alt="선택된 장식 이미지"
               src={ornament.imgUrl}
-              width={80}
-              height={80}
+              width={120}
+              height={120}
               className="object-cover"
             />
           </div>
+          <button
+            className="text-body text-beige bg-muted-navy border-beige absolute right-0 bottom-0 flex size-8 cursor-pointer items-center justify-center rounded-full border-2 select-none"
+            onClick={() => openModal(ornament.ornamentId)}
+          >
+            i
+          </button>
         </div>
         <div className="flex flex-col items-center">
           <p className="text-body text-green font-bold">방문자</p>
