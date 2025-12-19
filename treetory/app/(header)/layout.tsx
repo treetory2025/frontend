@@ -2,6 +2,7 @@
 
 import Header from "@/components/commons/Header";
 import MemberSearchBottomSheet from "@/components/ui/memberSearch/MemberSearchBottomSheet";
+import OrnamentInfoModal from "@/components/ui/tree/OrnamentInfoModal";
 
 export default function HeaderLayout({
   children,
@@ -16,6 +17,7 @@ export default function HeaderLayout({
 
       {children}
       <MemberSearchBottomSheet />
+      <OrnamentInfoModal />
     </div>
   );
 }
