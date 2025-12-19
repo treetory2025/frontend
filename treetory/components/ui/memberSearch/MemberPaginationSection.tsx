@@ -24,7 +24,7 @@ export default function MemberPaginationSection({
       </span>
 
       <button
-        disabled={page >= totalPage - 1}
+        disabled={page + 1 >= totalPage}
         onClick={() => onChangePage(page + 1)}
         className="bg-muted-navy text-beige cursor-pointer rounded-full px-3 py-1 disabled:opacity-30"
       >
