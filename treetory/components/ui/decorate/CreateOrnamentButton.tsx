@@ -1,3 +1,5 @@
+import { useAlert } from "@/hooks/useAlert";
+import { isLoggedIn } from "@/lib/auth";
 import { Plus } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 
@@ -5,8 +7,14 @@ export default function CreateOrnamentButton() {
   const router = useRouter();
   const params = useParams();
   const uuid = params?.uuid as string;
+  const loggedin = isLoggedIn();
+  const alert = useAlert();
 
   const handleCreateOrnament = () => {
+    if (!loggedin) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
     // 장식 만들기 페이지로 이동
     router.push(`/tree/${uuid}/decorate/create`);
   };
