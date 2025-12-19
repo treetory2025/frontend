@@ -3,6 +3,8 @@
 import menuIcon from "@/public/icons/menu(default).svg";
 import rudolphIcon from "@/public/icons/rudolph.png";
 import santaIcon from "@/public/icons/santa.png";
+import starIcon from "@/public/icons/Star.svg";
+import starOffIcon from "@/public/icons/StarOff.svg";
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -105,6 +107,7 @@ export default function Header() {
             <ImageDown size={24} strokeWidth={2} />
           </button>
         )}
+
         {/* 즐겨찾기 버튼 */}
         {loggedIn && isTreePage && !isTreeOwner && (
           <div className="group relative">
@@ -112,7 +115,11 @@ export default function Header() {
               className="text-yellow flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white"
               onClick={onClickBookmark}
             >
-              {isBookmarked ? <StarOff size={24} /> : <Star size={24} />}
+              {isBookmarked ? (
+                <Image src={starIcon} alt="bookmark True" />
+              ) : (
+                <Image src={starOffIcon} alt="bookmark False" />
+              )}
             </button>
 
             <div
