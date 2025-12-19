@@ -35,7 +35,7 @@ export async function generateMetadata({
   const { uuid } = params;
   const owner = (await getTreeOwner(uuid)) as Owner;
 
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const SITE_URL = "https://develop.bacinf.com";
 
   const title = `${owner.nickname}의 트리 | 트리토리`;
   const description = `${owner.nickname}와 함께 만드는 크리스마스 이야기`;
