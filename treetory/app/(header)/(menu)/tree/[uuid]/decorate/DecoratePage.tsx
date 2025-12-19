@@ -197,7 +197,7 @@ export default function DecoratePage() {
 
       {/* 페이지네이션 */}
       {totalPages > 0 && (
-        <div className="mt-6 w-full">
+        <div className="mt-6 w-full pb-8">
           <div className="flex items-center justify-center gap-4">
             <button
               disabled={currentPage <= 0}
