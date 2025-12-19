@@ -20,7 +20,13 @@ export default function TreeSizeAddGuideBottomSheet({
   onClose,
 }: TreeSizeAddGuideBottomSheetProps) {
   if (!treeSize) return null;
-  const { refreshOwner } = useOwner();
+  const { owner, refreshOwner } = useOwner();
+  if (!owner) return;
+
+  const theme = owner.treeTheme;
+  const bg = owner.treeBackground;
+
+  const bgClass = bg === "SILENT_NIGHT" ? "bg-navy" : "bg-skyblue";
 
   if (treeSize === 10) {
     return (
@@ -40,7 +46,7 @@ export default function TreeSizeAddGuideBottomSheet({
           </p>
           <p className="text-caption text-fg-tertiary">
             최대 추가할 수 있는 트리 사이즈는
-            <span className="font-bold"> 10</span>입니다
+            <span className="ml-1 font-bold">10</span>입니다
           </p>
         </div>
         <CancleButton onClick={onClose} />
@@ -146,7 +152,9 @@ export default function TreeSizeAddGuideBottomSheet({
       </div>
       {/* 콘텐츠 */}
       <div className="relative flex flex-col items-center gap-4">
-        <div className="bg-navy relative h-70 w-60 overflow-hidden rounded-lg">
+        <div
+          className={`${bgClass} relative h-70 w-60 overflow-hidden rounded-lg`}
+        >
           <AnimatePresence custom={direction} mode="wait">
             <motion.div
               key={isPreview ? `next-${nextTreeSize}` : `current-${treeSize}`}
@@ -160,8 +168,8 @@ export default function TreeSizeAddGuideBottomSheet({
               <Image
                 src={
                   isPreview
-                    ? `/images/theme/tree/NORMAL/Size${nextTreeSize}.png`
-                    : `/images/theme/tree/NORMAL/Size${treeSize}.png`
+                    ? `/images/theme/tree/${theme}/Size${nextTreeSize}.png`
+                    : `/images/theme/tree/${theme}/Size${treeSize}.png`
                 }
                 alt="트리 이미지"
                 fill
@@ -187,7 +195,7 @@ export default function TreeSizeAddGuideBottomSheet({
           <div className="flex items-center gap-2">
             <CircleAlert size={16} />
             <p className="text-caption font-bold">
-              추가하면 이전 트리 사이즈로 되돌릴 수 없습니다!
+              진행 시 이전 트리 사이즈로 되돌릴 수 없어요!
             </p>
           </div>
           <ActionButton onClick={increaseTreeSize}>추가하기</ActionButton>
