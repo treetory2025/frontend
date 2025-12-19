@@ -146,7 +146,7 @@ export default function TreeSizeAddGuideBottomSheet({
           </div>
           <p className="text-caption text-fg-tertiary">
             최대 추가할 수 있는 트리 사이즈는
-            <span className="font-bold">10</span>입니다
+            <span className="ml-1 font-bold">10</span>입니다
           </p>
         </div>
       </div>
