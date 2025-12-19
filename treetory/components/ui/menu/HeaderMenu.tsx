@@ -2,7 +2,7 @@ import { MenuItem } from "@/components/ui/menu/MunuItem";
 
 import { MoveRight, Copy, LogIn, LogOut, Search, Star } from "lucide-react";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { isLoggedIn } from "@/lib/auth";
 import { useUserStore } from "@/store/userStore";
 import { useMemberSearchSheet } from "@/store/useMemberSearchSheet";
@@ -24,6 +24,11 @@ type Menu =
 export default function HeaderMenu({ onClose }: { onClose: () => void }) {
   const router = useRouter();
   const params = useParams();
+
+  // 유저 정보, 트리 소유자 정보 확인
+  const pathname = usePathname();
+  const segments = pathname.split("/").filter(Boolean);
+  const isTreePage = segments.length === 2 && segments[0] === "tree";
 
   const loggedIn = isLoggedIn();
   const user = useUserStore((s) => s.user);
@@ -125,7 +130,7 @@ export default function HeaderMenu({ onClose }: { onClose: () => void }) {
 
         onClose();
 
-        if (params?.uuid === user.uuid) {
+        if (isTreePage && params?.uuid === user.uuid) {
           alert("현재 나의 트리토리입니다.");
           return;
         }

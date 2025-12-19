@@ -3,6 +3,8 @@
 import menuIcon from "@/public/icons/menu(default).svg";
 import rudolphIcon from "@/public/icons/rudolph.png";
 import santaIcon from "@/public/icons/santa.png";
+import starIcon from "@/public/icons/Star.svg";
+import starOffIcon from "@/public/icons/StarOff.svg";
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -18,7 +20,7 @@ import {
 import { useUserStore } from "@/store/userStore";
 import { useParams, usePathname } from "next/navigation";
 import { isLoggedIn } from "@/lib/auth";
-import { Star, StarOff, ImageDown } from "lucide-react";
+import { ImageDown } from "lucide-react";
 import { useCaptureStore } from "@/store/useCaptureStore";
 import { useBookmarkStore } from "@/store/useBookmarkStore";
 import { toggleBookmakApi } from "@/lib/bookmark";
@@ -37,7 +39,8 @@ export default function Header() {
 
   // 유저 정보, 트리 소유자 정보 확인
   const pathname = usePathname();
-  const isTreePage = pathname.startsWith("/tree/");
+  const segments = pathname.split("/").filter(Boolean);
+  const isTreePage = segments.length === 2 && segments[0] === "tree";
 
   const params = useParams<{ uuid?: string }>();
   const treeUuid = isTreePage ? params?.uuid : null;
@@ -105,6 +108,7 @@ export default function Header() {
             <ImageDown size={24} strokeWidth={2} />
           </button>
         )}
+
         {/* 즐겨찾기 버튼 */}
         {loggedIn && isTreePage && !isTreeOwner && (
           <div className="group relative">
@@ -112,13 +116,19 @@ export default function Header() {
               className="text-yellow flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white"
               onClick={onClickBookmark}
             >
-              {isBookmarked ? <StarOff size={24} /> : <Star size={24} />}
+              {isBookmarked ? (
+                <Image src={starIcon} alt="bookmark True" />
+              ) : (
+                <Image src={starOffIcon} alt="bookmark False" />
+              )}
             </button>
 
             <div
               className={`pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 translate-y-1 rounded-md ${isBookmarked ? "bg-muted-navy" : "bg-[#FF4800]"} px-2 py-1 text-xs whitespace-nowrap text-white opacity-0 transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100`}
             >
-              {isBookmarked ? "즐겨찾기 해제" : "즐겨찾기 해보세요!"}
+              {isBookmarked
+                ? "클릭하면 즐겨찾기에서 제거됩니다."
+                : "클릭해서 즐겨찾기에 추가해보세요!"}
             </div>
           </div>
         )}
