@@ -153,7 +153,7 @@ export function PlacementOrnament({
     >
       <Circle
         radius={radius * 1.05}
-        fill="#FFFFFF"
+        fill="rgba(255, 255, 255, 0.2)"
         shadowColor="#FFFFFF"
         shadowBlur={8}
         shadowOpacity={0.9}
