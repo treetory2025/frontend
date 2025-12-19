@@ -1,27 +1,28 @@
 import { Ornarment } from "@/types/ornarment";
 import Image from "next/image";
-import useImage from "use-image";
 
 export default function MyOrnaments({ ornaments }: { ornaments: Ornarment[] }) {
   return (
-    <div className="no-scrollbar my-4 flex h-full flex-1 flex-col gap-4 overflow-y-auto px-4 py-2">
+    <div className="flex flex-col gap-4 px-4">
       {ornaments.map((o) => {
-        const [ornamentImg] = useImage(o.imgUrl);
-        if (!ornamentImg) return;
-
         const [year, month, date] = o.createdDate.split(".");
+
         return (
           <div
             key={o.placedOrnamentId}
             className="flex w-full items-center justify-between"
           >
-            <div className="flex items-center justify-center gap-8">
-              <div className="bg-muted-bg size-20 rounded-full p-4">
+            <div className="flex items-center gap-8">
+              <div className="bg-muted-bg size-18 rounded-full p-3">
                 <Image
-                  src={ornamentImg}
+                  src={o.imgUrl}
                   alt={`등록된 장식 이미지 ${o.placedOrnamentId}`}
+                  width={72}
+                  height={72}
+                  className="rounded-full object-cover"
                 />
               </div>
+
               <div className="flex flex-col gap-2">
                 <p className="text-body text-navy font-bold">
                   {o.writerNickname}
@@ -31,6 +32,7 @@ export default function MyOrnaments({ ornaments }: { ornaments: Ornarment[] }) {
                 </p>
               </div>
             </div>
+
             <button className="bg-muted-navy text-beige text-caption rounded-full px-4 py-2">
               자세히
             </button>
