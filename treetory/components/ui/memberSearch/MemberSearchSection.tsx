@@ -31,11 +31,8 @@ export default function MemberSearchSection({ close }: { close: () => void }) {
 
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/members?query=${searchKeyword.trim()}&page=${page}&size=${size}`,
+          `/api/members?query=${searchKeyword.trim()}&page=${page}&size=${size}`,
         );
-        // const res = await fetch(
-        //   `/api/members?query=${searchKeyword.trim()}&page=${page}&size=${size}`,
-        // );
 
         if (!res.ok) {
           console.log("사용자 검색 결과 없음");
