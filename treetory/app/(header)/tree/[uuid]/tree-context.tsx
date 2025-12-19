@@ -1,7 +1,9 @@
 "use client";
 
+import { useAlert } from "@/hooks/useAlert";
 import { useBookmarkStore } from "@/store/useBookmarkStore";
 import { Owner } from "@/types/user";
+import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
 type OwnerContextType = {
@@ -21,21 +23,29 @@ export function OwnerProvider({
   children,
   uuid,
 }: {
-  initialOwner: Owner;
+  initialOwner: Owner | null;
   children: React.ReactNode;
   uuid: string;
 }) {
-  const [owner, setOwner] = useState<Owner>(initialOwner);
+  const [owner, setOwner] = useState<Owner | null>(initialOwner);
   const [isSizeSheetOpen, setIsSizeSheetOpen] = useState(false);
   const setBookmarked = useBookmarkStore((s) => s.setBookmarked);
+  const router = useRouter();
 
   const [hydrated, setHydrated] = useState(false);
+  const alert = useAlert();
 
   async function refreshOwner() {
     try {
       const res = await fetch(`/api/trees/${uuid}`, {
         credentials: "include",
       });
+
+      if (res.status === 404) {
+        // 존재하지 않는 트리 uuid
+        setOwner(null);
+        return;
+      }
 
       if (!res.ok) {
         console.log("갱신 실패", res);
@@ -45,9 +55,6 @@ export function OwnerProvider({
       const data = await res.json();
       const newOwner = data?.body;
       setOwner(newOwner);
-      console.log("갱신 성공", owner);
-
-      return;
     } catch (error: any) {
       throw new Error(error);
     }
@@ -63,15 +70,29 @@ export function OwnerProvider({
     init();
   }, []);
 
-  // 북마크 여부 확인 로직
+  // owner가 없으면 Index로 이동
   useEffect(() => {
     if (!hydrated) return;
 
-    if (owner.isBookmarked !== undefined) {
-      setBookmarked(owner.isBookmarked);
-      console.log("실제 api 응답 :", owner.isBookmarked);
+    if (!owner) {
+      alert("잘못된 접근입니다.");
+      router.replace("/");
     }
-  }, [hydrated, owner.isBookmarked]);
+  }, [hydrated, owner]);
+
+  // 북마크 상태 동기화
+  useEffect(() => {
+    if (!hydrated || !owner) return;
+
+    if (typeof owner.isBookmarked === "boolean") {
+      setBookmarked(owner.isBookmarked);
+    }
+  }, [hydrated, owner, setBookmarked]);
+
+  /** 아직 준비 안 됐거나 redirect 중이면 렌더링 차단 */
+  if (!hydrated || !owner) {
+    return null;
+  }
 
   return (
     <OwnerContext.Provider
