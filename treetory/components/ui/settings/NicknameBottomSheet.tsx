@@ -131,18 +131,19 @@ export default function NicknameBottomSheet({
         닉네임 <span className="text-green">변경</span>
       </h3>
 
-      <div className="flex w-full flex-col gap-2">
+      <div className="text-body md:text-subtitle flex w-full flex-col gap-2 font-medium">
         <div className="flex w-full gap-3">
           <Check size={20} className="text-green" />
-          <p className="text-body text-fg-secondary text-center">
-            닉네임은 <span className="font-bold">최대 6글자까지</span>설정할 수
+          <p className="text-fg-secondary text-center">
+            닉네임은 <span className="font-bold">최대 6글자 </span>설정할 수
             있어요.
           </p>
         </div>
         <div className="flex w-full gap-3">
           <Check size={20} className="text-green" />
-          <p className="text-body text-fg-secondary text-center">
-            한글,영어,숫자, _만 사용 가능해요.
+          <p className="text-fg-secondary text-center">
+            <span className="font-bold">한글, 영어, 숫자, _만 </span>
+            사용할 수 있어요.
           </p>
         </div>
       </div>
@@ -165,7 +166,7 @@ export default function NicknameBottomSheet({
           글자수 : {nickname.length} / <span className="font-bold">6</span>
         </p>
       </div>
-      <div className="text-caption text-fg-tertiary flex flex-1 items-center gap-2 p-2">
+      <div className="text-caption md:text-body text-fg-tertiary flex flex-1 items-center gap-2 p-2">
         {validation.type === "error" && (
           <>
             <Info size={16} className="text-red" />
@@ -186,7 +187,7 @@ export default function NicknameBottomSheet({
         )}
       </div>
 
-      <div className="flex w-full flex-col gap-2">
+      <div className="flex w-full flex-col gap-4">
         <ActionButton onClick={onChangeNickname} disabled={isDisabled}>
           변경
         </ActionButton>
