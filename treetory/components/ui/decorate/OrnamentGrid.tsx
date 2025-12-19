@@ -13,7 +13,7 @@ interface OrnamentGridProps {
 
 function OrnamentGrid({ ornaments, onSelect }: OrnamentGridProps) {
   return (
-    <div className="grid grid-cols-3 gap-4 md:gap-6 min-h-[28rem] md:min-h-[32rem]">
+    <div className="grid min-h-[28rem] grid-cols-3 gap-4 md:min-h-[32rem] md:gap-6">
       {ornaments.length > 0 ? (
         // show only first 12 items (3 per row × 4 rows)
         ornaments.slice(0, 12).map((ornament) => (
@@ -32,6 +32,7 @@ function OrnamentGrid({ ornaments, onSelect }: OrnamentGridProps) {
                   loading="lazy"
                   decoding="async"
                   className="h-full w-full object-cover"
+                  crossOrigin="anonymous"
                 />
               </div>
               {/* 호버 오버레이 */}
