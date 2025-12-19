@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useUserStore } from "@/store/userStore";
+import { useThemeStore, useUserStore } from "@/store/userStore";
 
 import ContentSection from "@/components/commons/ContentSection";
 import PageHeading from "@/components/commons/PageHeading";
@@ -17,7 +17,6 @@ import {
 } from "@/types/theme";
 
 import { useAlert } from "@/hooks/useAlert";
-import { useOwner } from "@/app/(header)/tree/[uuid]/tree-context";
 
 const THEME_TABS = [
   { label: "배경", value: "background" },
@@ -26,11 +25,11 @@ const THEME_TABS = [
 type ThemeTab = (typeof THEME_TABS)[number]["value"];
 
 export default function Page() {
-  const { refreshOwner } = useOwner();
   const user = useUserStore((s) => s.user);
   const setUser = useUserStore.getState().setUser;
   const hasHydrated = useUserStore((s) => s._hasHydrated);
   const alert = useAlert();
+  const theme = useThemeStore((s) => s.setTheme);
 
   const [tab, setTab] = useState<ThemeTab>("background");
 
@@ -75,8 +74,8 @@ export default function Page() {
       if (!res.ok) throw new Error("background update failed");
 
       await refreshMe();
-      await refreshOwner();
       setBackground(background);
+      theme(background);
       alert("배경 테마 변경 완료");
     } catch (error) {
       console.error("배경 테마 변경 실패", error);
