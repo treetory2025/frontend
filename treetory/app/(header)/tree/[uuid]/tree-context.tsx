@@ -1,9 +1,10 @@
 "use client";
 
 import { useAlert } from "@/hooks/useAlert";
+import { apiFetch } from "@/lib/api";
 import { useBookmarkStore } from "@/store/useBookmarkStore";
 import { Owner } from "@/types/user";
-import { useRouter } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
 type OwnerContextType = {
@@ -44,6 +45,7 @@ export function OwnerProvider({
       if (res.status === 404) {
         // 존재하지 않는 트리 uuid
         setOwner(null);
+        setHydrated(true);
         return;
       }
 
@@ -70,18 +72,21 @@ export function OwnerProvider({
     init();
   }, []);
 
-  // owner가 없으면 Index로 이동
+  // owner가 없으면 Not found로 이동
   useEffect(() => {
     if (!hydrated) return;
 
     if (!owner) {
-      alert("잘못된 접근입니다.");
-      router.replace("/");
+      alert("요청하신 트리는 삭제되었거나 잘못된 주소입니다.");
+      setHydrated(true);
+      notFound();
+      return;
     }
   }, [hydrated, owner]);
 
   // 북마크 상태 동기화
   useEffect(() => {
+    console.log(owner);
     if (!hydrated || !owner) return;
 
     if (typeof owner.isBookmarked === "boolean") {

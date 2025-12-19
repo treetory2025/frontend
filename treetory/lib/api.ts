@@ -1,10 +1,10 @@
 import { textUser } from "@/app/mock/userInfoMock";
+import { useUserStore } from "@/store/userStore";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // client 패치
 export async function apiFetch(url: string, options: RequestInit = {}) {
-  console.log("api fetch urL", url);
   let res = await fetch(url, {
     ...options,
     credentials: "include",
@@ -18,9 +18,8 @@ export async function apiFetch(url: string, options: RequestInit = {}) {
     });
 
     if (!refreshed.ok) {
-      // 로그인 만료
-      window.location.href = "/login";
-      throw new Error("Unauthorized"); // undefined 방지
+      useUserStore.getState().clearUser();
+      throw new Error("AUTH_EXPIRED");
     }
 
     // access token 갱신 후 재요청
@@ -193,7 +192,9 @@ export async function createOrnament(
 export async function checkOrnamentNameExists(name: string): Promise<boolean> {
   try {
     const params = new URLSearchParams({ name });
-    const res = await apiFetch(`https://develop.bacinf.com/api/ornaments/exists?${params.toString()}`);
+    const res = await apiFetch(
+      `https://develop.bacinf.com/api/ornaments/exists?${params.toString()}`,
+    );
 
     if (!res.ok) {
       console.log("오너먼트 이름 중복 조회 실패", res);
@@ -222,7 +223,9 @@ export async function getOrnamentDetail(
   ornamentId: number,
 ): Promise<OrnamentDetail | null> {
   try {
-    const res = await apiFetch(`https://develop.bacinf.com/api/ornaments/${ornamentId}`);
+    const res = await apiFetch(
+      `https://develop.bacinf.com/api/ornaments/${ornamentId}`,
+    );
 
     if (!res.ok) {
       console.log("오너먼트 상세 조회 실패", res);
