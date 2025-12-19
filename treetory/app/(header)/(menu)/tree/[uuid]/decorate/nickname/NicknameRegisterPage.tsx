@@ -128,7 +128,7 @@ export default function NicknameRegisterPage() {
           <button
             onClick={handleComplete}
             disabled={isLoading || nickname.trim().length === 0}
-            className="bg-green text-beige mt-6 w-full rounded-lg py-3 font-semibold hover:opacity-90 disabled:opacity-50"
+            className="bg-green text-body text-beige mt-6 w-full cursor-pointer rounded-lg py-3 font-semibold hover:opacity-90 disabled:opacity-50"
           >
             {isLoading ? "등록 중..." : "다음"}
           </button>

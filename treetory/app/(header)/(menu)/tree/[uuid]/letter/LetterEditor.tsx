@@ -101,27 +101,29 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
   const ornamentSize = text.length <= 100 ? 44 : text.length <= 200 ? 60 : 76;
 
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div className="h-full w-full flex-1 overflow-y-auto pt-4">
       <div className="relative px-4 py-2">
-        <div className="flex items-center gap-3">
-          <p
-            className="text-md text-green font-lightbold m-0"
-            style={{ fontFamily: fontFamilyMap[selectedFont] }}
-          >
-            {fontOptions.find((f) => f.key === selectedFont)?.label}로 편지를
-            쓰고 있습니다
-          </p>
-
+        <div className="flex items-center justify-start gap-4">
+          <p className="text-caption text-fg-primary">적용된 글씨체</p>
           <button
             type="button"
             onClick={() => setIsFontOpen((prev) => !prev)}
-            className="font-base flex items-center gap-1 text-sm text-white"
+            className="font-base bg-muted-navy/40 flex cursor-pointer items-center gap-1 rounded-sm px-2 py-1 text-sm text-white"
           >
             <span>변경하기</span>
             <ArrowBigDown size={16} strokeWidth={2.5} />
           </button>
         </div>
-        <div className="absolute top-[-32px] right-4 z-50">
+        <div className="flex items-center gap-3">
+          <p
+            className="text-subtitle text-green font-lightbold m-0"
+            style={{ fontFamily: fontFamilyMap[selectedFont] }}
+          >
+            {fontOptions.find((f) => f.key === selectedFont)?.label}로 편지를
+            쓰고 있습니다
+          </p>
+        </div>
+        <div className="absolute -top-1 right-4 z-8">
           <div
             role="button"
             tabIndex={0}
@@ -240,7 +242,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
             className="text-muted text-3xl"
             style={{ fontFamily: fontFamilyMap["NANUM_PEN"] }}
           >
-            Dear. {nickname || "받는 사람"}
+            Dear. {ownerNickname || "받는 사람"}
           </div>
         </div>
 
@@ -252,7 +254,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
         </div>
 
         {/* transparent textarea positioned to match letter lines */}
-        <div className="flex-1 px-6" style={{ paddingTop: topPadding }}>
+        <div className="h-full flex-1 px-6" style={{ paddingTop: topPadding }}>
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
@@ -303,7 +305,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
             </button>
           </div>
           <div className={`text-3xl ${styles.fontNanumPen}`}>
-            From. {ownerNickname ?? "내가누구"}
+            From. {nickname ?? "내가누구"}
           </div>
         </div>
       </div>

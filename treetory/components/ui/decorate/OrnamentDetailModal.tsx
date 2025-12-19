@@ -80,16 +80,14 @@ export default function OrnamentDetailModal({ ornamentId, onClose }: Props) {
             </div>
 
             <div className="w-full">
-              <div className="text-fg-secondary text-green text-sm">
-                장식 이름
-              </div>
+              <div className="text-green text-sm">장식 이름</div>
               <div className="border-green text-fg-primary mt-1 border-b pb-2 text-2xl font-semibold">
                 {detail?.name ?? "-"}
               </div>
             </div>
 
             <button
-              className="bg-green text-beige mt-6 w-full rounded-md px-4 py-3 font-light"
+              className="bg-green text-beige text-button mt-6 w-full cursor-pointer rounded-md px-4 py-3"
               onClick={() => {
                 onClose();
                 const params = new URLSearchParams();
@@ -102,7 +100,6 @@ export default function OrnamentDetailModal({ ornamentId, onClose }: Props) {
               }}
             >
               해당 장식으로 진행하기
-              <span className="ml-2">→</span>
             </button>
           </div>
         </div>
