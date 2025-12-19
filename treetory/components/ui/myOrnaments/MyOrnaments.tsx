@@ -1,7 +1,13 @@
 import { Ornarment } from "@/types/ornarment";
 import Image from "next/image";
 
-export default function MyOrnaments({ ornaments }: { ornaments: Ornarment[] }) {
+export default function MyOrnaments({
+  ornaments,
+  onSelect,
+}: {
+  ornaments: Ornarment[];
+  onSelect: (ornament: Ornarment) => void;
+}) {
   return (
     <div className="flex flex-col gap-4 px-4">
       {ornaments.map((o) => {
@@ -33,7 +39,10 @@ export default function MyOrnaments({ ornaments }: { ornaments: Ornarment[] }) {
               </div>
             </div>
 
-            <button className="bg-muted-navy text-beige text-caption rounded-full px-4 py-2">
+            <button
+              className="bg-muted-navy text-beige text-caption cursor-pointer rounded-full px-4 py-2"
+              onClick={() => onSelect(o)}
+            >
               자세히
             </button>
           </div>
