@@ -126,7 +126,9 @@ export default function Header() {
             <div
               className={`pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 translate-y-1 rounded-md ${isBookmarked ? "bg-muted-navy" : "bg-[#FF4800]"} px-2 py-1 text-xs whitespace-nowrap text-white opacity-0 transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100`}
             >
-              {isBookmarked ? "즐겨찾기 해제" : "즐겨찾기 해보세요!"}
+              {isBookmarked
+                ? "클릭하면 즐겨찾기에서 제거됩니다."
+                : "클릭해서 즐겨찾기에 추가해보세요!"}
             </div>
           </div>
         )}
