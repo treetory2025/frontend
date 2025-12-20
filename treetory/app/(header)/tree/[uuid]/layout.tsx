@@ -2,7 +2,6 @@ import { getTreeOwner } from "@/lib/api";
 import { Owner } from "@/types/user";
 import { OwnerProvider } from "@/app/(header)/tree/[uuid]/tree-context";
 import TreeHeader from "@/components/ui/tree/Header";
-import { Metadata } from "next";
 
 export default async function Layout({
   children,
