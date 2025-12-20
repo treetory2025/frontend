@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: `Treetory 2025`,
     description: `함께 만드는 우리의 크리스마스 이야기`,
     openGraph: {
-      title: `트리토리 초대 링크 이미지`,
+      title: `트리토리 2025`,
       description: `함께 만드는 우리의 크리스마스 이야기`,
       images: [
         {
