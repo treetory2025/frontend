@@ -8,10 +8,10 @@ type Props = {
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: `트리토리 초대 링크 도착!`,
+    title: `Treetory 2025`,
     description: `함께 만드는 우리의 크리스마스 이야기`,
     openGraph: {
-      title: `트리토리 초대 링크`,
+      title: `트리토리 초대 링크 이미지`,
       description: `함께 만드는 우리의 크리스마스 이야기`,
       images: [
         {
