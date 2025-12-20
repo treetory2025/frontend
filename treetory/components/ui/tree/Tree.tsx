@@ -94,20 +94,16 @@ export function Tree({
     diff = 8;
   }
 
-  const clamp = (v: number, min: number, max: number) =>
-    Math.min(Math.max(v, min), max);
-
-  const MIN_H = 360;
-  const MAX_H = 900;
-
-  // 높이에 따른 비율 (작을수록 내려가게)
-  const ratio = clamp(
-    0.3 - ((containerHeight - MIN_H) / (MAX_H - MIN_H)) * 0.15,
-    0.15,
-    0.3,
-  );
-
-  const y = containerHeight * ratio;
+  let y = 0;
+  if (containerHeight <= 455) {
+    y = containerHeight * 0.3;
+  } else if (containerWidth >= 540 && containerHeight <= 720) {
+    y = containerHeight * 0.1;
+  } else {
+    y = containerHeight * 0.2;
+  }
+  const TOP_PADDING_PX = 40; // 최소 보장 높이
+  y = Math.max(TOP_PADDING_PX, y);
 
   const x = (containerWidth - treeW) / 2 - diff * scale;
   const diffX = (treeW - defaultW) / 2 + diff * scale;
@@ -115,7 +111,7 @@ export function Tree({
   // 드래그 범위 제한
   const overflowX = Math.max(0, treeW - containerWidth);
   const canDragX = overflowX > 0;
-  console.log(canDragX);
+
   const overflowY = Math.max(0, treeH - containerHeight + y);
   const canDragY = overflowY > 0;
 
