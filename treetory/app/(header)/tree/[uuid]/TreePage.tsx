@@ -168,7 +168,7 @@ export default function TreePage() {
         </StageLayout>
       </div>
       <button
-        className="bg-skyblue text-button text-navy fixed right-4 bottom-4 cursor-pointer rounded-full border-4 border-white px-6 py-5 font-bold md:absolute md:right-4 md:bottom-40"
+        className="bg-skyblue text-button text-navy fixed right-4 bottom-4 cursor-pointer rounded-full border-4 border-white px-6 py-5 font-bold md:absolute md:right-4 md:bottom-4"
         onClick={() => {
           router.push(`/tree/${uuid}/decorate`);
         }}
