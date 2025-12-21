@@ -200,7 +200,7 @@ export default function PlacementPage() {
         </StageLayout>
       </div>
       <button
-        className="bg-skyblue text-button text-navy absolute right-4 bottom-20 left-auto translate-x-0 cursor-pointer rounded-full border-4 border-white px-6 py-5 font-bold md:bottom-10"
+        className="bg-skyblue text-button text-navy fixed right-4 bottom-4 max-w-30 cursor-pointer rounded-full border-4 border-white px-6 py-5 font-bold md:bottom-4 md:left-1/2 md:ml-70 md:-translate-x-1/2"
         onClick={enrollOrnament}
       >
         장식완료
