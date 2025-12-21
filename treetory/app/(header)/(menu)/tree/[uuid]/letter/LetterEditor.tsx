@@ -101,10 +101,10 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
   const ornamentSize = text.length <= 100 ? 44 : text.length <= 200 ? 60 : 76;
 
   return (
-    <div className="h-full w-full flex-1 overflow-y-auto pt-4">
+    <div className="h-full w-full flex-1 overflow-y-auto pt-4 pb-30">
       <div className="relative px-4 py-2">
         <div className="flex items-center justify-start gap-4">
-          <p className="text-caption text-fg-primary">적용된 글씨체</p>
+          <p className="text-caption text-green">적용된 글씨체</p>
           <button
             type="button"
             onClick={() => setIsFontOpen((prev) => !prev)}
@@ -116,7 +116,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
         </div>
         <div className="flex items-center gap-3">
           <p
-            className="text-subtitle text-green font-lightbold m-0"
+            className="text-subtitle text-green text-xl"
             style={{ fontFamily: fontFamilyMap[selectedFont] }}
           >
             {fontOptions.find((f) => f.key === selectedFont)?.label}로 편지를
@@ -227,19 +227,19 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
         </div>
       )}
       <div
-        className="relative flex w-full flex-col overflow-hidden bg-white shadow"
+        className="relative flex w-full flex-col bg-white shadow"
         style={{
           backgroundImage: `url('/images/letter.png')`,
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center top",
           backgroundSize: "cover",
-          minHeight: 680,
+          minHeight: 720,
         }}
       >
         {/* ornament + to */}
         <div className="absolute top-24 left-12 flex items-center gap-3">
           <div
-            className="text-muted text-3xl"
+            className="text-navy text-3xl"
             style={{ fontFamily: fontFamilyMap["NANUM_PEN"] }}
           >
             Dear. {ownerNickname || "받는 사람"}
@@ -249,7 +249,8 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
         {/* 현재 글자수 */}
         <div className="absolute top-16 right-4 flex items-center gap-3">
           <div className="text-muted-navy text-sm">
-            현재 글자수&nbsp; {text.length}/300
+            현재 글자수&nbsp; <span className="font-bold">{text.length}</span>
+            /300
           </div>
         </div>
 
@@ -275,12 +276,17 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
             }}
           />
         </div>
-
+        <div
+          className={`text-navy w-full pr-6 text-right text-3xl whitespace-pre-line ${styles.fontNanumPen}`}
+        >
+          From. {nickname ?? "내가누구"}
+        </div>
         {/* footer row: 작성일 (left) and From (right) */}
         <div className="mb-12 flex w-full items-center justify-between px-6">
           <div className="flex flex-col items-start gap-3">
-            <div className="mt-10 text-sm text-gray-600">
-              작성일 {formattedDate}
+            <div className="text-muted-navy mt-10 text-sm">
+              <p className="font-bold">작성일</p>
+              <p>{formattedDate}</p>
             </div>
             {/* 작성 완료 버튼 추가 */}
             <button
@@ -303,9 +309,6 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
               작성 완료
               <ChevronRight size={24} strokeWidth={3} className="mb-0.5" />
             </button>
-          </div>
-          <div className={`text-3xl ${styles.fontNanumPen}`}>
-            From. {nickname ?? "내가누구"}
           </div>
         </div>
       </div>
