@@ -25,24 +25,18 @@ export default function OrnamentTabs({
           className="flex flex-col items-center gap-2"
         >
           <div
-            className={`flex h-14 w-14 items-center justify-center overflow-hidden rounded-full text-2xl transition-all ${
+            className={`flex size-12 items-center justify-center overflow-hidden rounded-full text-2xl transition-all md:size-14 ${
               selectedCategory === category.id
                 ? "border-green bg-navy border-3"
                 : "bg-beige"
             }`}
           >
-            {category.icon &&
-            (category.icon.endsWith(".png") ||
-              category.icon.endsWith(".jpg") ||
-              category.icon.endsWith(".jpeg")) ? (
-              // eslint-disable-next-line @next/next/no-img-element
+            {category.icon && (
               <img
                 src={category.icon}
                 alt={category.label}
-                className="h-10 w-10 object-contain"
+                className="size-8 rounded-full object-contain"
               />
-            ) : (
-              <span>{category.icon}</span>
             )}
           </div>
           <span className="text-fg-primary text-center text-xs font-semibold">
