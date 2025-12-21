@@ -65,7 +65,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
 
   const canPush = text.length > 0;
   const size =
-    text.length > 100 ? "MEDIUM" : text.length > 200 ? "LARGE" : "SMALL";
+    text.length > 200 ? "LARGE" : text.length > 100 ? "MEDIUM" : "SMALL";
 
   useEffect(() => {
     // optional: prefill or other init
