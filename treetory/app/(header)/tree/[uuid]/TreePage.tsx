@@ -120,7 +120,7 @@ export default function TreePage() {
   const canDragX = overflowX > 0;
 
   return (
-    <div className={`relative h-full w-full`} ref={containerRef}>
+    <div className={`relative h-dvh w-full`} ref={containerRef}>
       <div
         style={{
           width: size.width,
