@@ -20,7 +20,7 @@ export default function Page() {
   return (
     <>
       <PageHeading title="개발 팀 소개" />
-      <ContentSection className="no-scrollbar relative flex h-dvh flex-col space-y-4 overflow-y-auto md:space-y-6">
+      <ContentSection className="no-scrollbar relative flex h-dvh flex-col space-y-4 overflow-y-auto pb-20 md:space-y-6">
         <ContentContainer>
           <div className="flex items-center justify-between">
             <p className="text-subtitle text-fg-primary mb-2 font-bold">
@@ -40,7 +40,7 @@ export default function Page() {
           <p className="text-subtitle text-fg-primary mb-2 font-bold">
             서비스 기획
           </p>
-          <div className="flex items-start justify-center gap-8">
+          <div className="flex w-full items-start justify-center gap-4">
             <div className="flex flex-col items-center gap-3">
               <div className="bg-muted-bg flex size-24 items-center justify-center rounded-full">
                 <Image
@@ -58,9 +58,7 @@ export default function Page() {
                 github
               </Link>
             </div>
-            <div className="flex flex-col items-center justify-center pt-10">
-              <Image src={stick} alt="장식" className="size-8" />
-            </div>
+
             <div className="flex flex-col items-center gap-3">
               <div className="bg-navy flex size-24 items-center justify-center rounded-full">
                 <Image
@@ -79,9 +77,7 @@ export default function Page() {
                 github
               </Link>
             </div>
-            <div className="flex flex-col items-center justify-center pt-10">
-              <Image src={star} alt="장식" className="size-8" />
-            </div>
+
             <div className="flex flex-col items-center gap-3">
               <div className="bg-muted-bg flex size-24 items-center justify-center rounded-full">
                 <Image src={tree} alt="정진영 팀원 소개" className="w-12" />
@@ -117,9 +113,7 @@ export default function Page() {
                 github
               </Link>
             </div>
-            <div className="flex flex-col items-center justify-center pt-10">
-              <Image src={stick} alt="장식" className="size-8" />
-            </div>
+
             <div className="flex flex-col items-center gap-3">
               <div className="bg-muted-bg flex size-24 items-center justify-center rounded-full">
                 <Image src={cookie} alt="오주원 팀원 소개" className="w-16" />
@@ -153,9 +147,7 @@ export default function Page() {
                 github
               </Link>
             </div>
-            <div className="flex flex-col items-center justify-center pt-10">
-              <Image src={star} alt="장식" className="size-8" />
-            </div>
+
             <div className="flex flex-col items-center gap-3">
               <div className="bg-navy flex size-24 items-center justify-center rounded-full">
                 <Image src={tree} alt="정진영 팀원 소개" className="w-12" />
