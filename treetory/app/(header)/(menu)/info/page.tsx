@@ -10,8 +10,6 @@ import snowman from "@/public/icons/snowman.png";
 import cookie from "@/public/icons/cookie.png";
 import ornament from "@/public/icons/ornament.png";
 import teamIcon from "@/public/icons/team-logo.png";
-import stick from "@/public/images/common/ornament3.png";
-import star from "@/public/icons/Star.svg";
 
 import Link from "next/link";
 import { Link2 } from "lucide-react";
@@ -20,7 +18,7 @@ export default function Page() {
   return (
     <>
       <PageHeading title="개발 팀 소개" />
-      <ContentSection className="no-scrollbar relative flex h-dvh flex-col space-y-4 overflow-y-auto pb-20 md:space-y-6">
+      <ContentSection className="no-scrollbar relative flex h-dvh flex-col space-y-4 overflow-y-auto pb-40 md:space-y-6">
         <ContentContainer>
           <div className="flex items-center justify-between">
             <p className="text-subtitle text-fg-primary mb-2 font-bold">
