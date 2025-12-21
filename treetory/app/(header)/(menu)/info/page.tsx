@@ -90,7 +90,7 @@ export default function Page() {
           </div>
         </ContentContainer>
         <ContentContainer>
-          <p className="text-body text-fg-primary mb-2 font-bold">
+          <p className="text-subtitle text-fg-primary mb-2 font-bold">
             백엔드 개발
           </p>
           <div className="flex items-center justify-center gap-8">
@@ -124,7 +124,7 @@ export default function Page() {
           </div>
         </ContentContainer>
         <ContentContainer>
-          <p className="text-body text-fg-primary mb-2 font-bold">
+          <p className="text-subtitle text-fg-primary mb-2 font-bold">
             프론트엔드 개발
           </p>
           <div className="flex items-center justify-center gap-8">
