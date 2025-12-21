@@ -7,11 +7,16 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { CategoryBadge } from "./CategoryBadge";
 
+import rudolphIcon from "@/public/icons/rudolph.png"; // animal
+import santaIcon from "@/public/icons/santa.png"; //christmas
+import cookieIcon from "@/public/images/common/ornament2.png"; // foot
+import ornamentIcon from "@/public/images/common/ornament1.png"; //etc
+
 const CATEGORIES = [
-  { id: "CHRISTMAS", label: "크리스마스", icon: "/icons/rudolph.png" },
-  { id: "FOOD", label: "음식", icon: "/icons/rudolph.png" },
-  { id: "ANIMAL", label: "동물", icon: "/icons/rudolph.png" },
-  { id: "ETC", label: "기타", icon: "/icons/rudolph.png" },
+  { id: "CHRISTMAS", label: "크리스마스", icon: santaIcon.src },
+  { id: "FOOD", label: "음식", icon: cookieIcon.src },
+  { id: "ANIMAL", label: "동물", icon: rudolphIcon.src },
+  { id: "ETC", label: "기타", icon: ornamentIcon.src },
 ];
 export default function OrnamentInfoModal() {
   const { isOpen, ornamentId, closeModal } = useOrnamentInfoMdalStore();
