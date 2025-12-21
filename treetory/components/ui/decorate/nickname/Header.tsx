@@ -16,7 +16,7 @@ export default function Header({ title }: { title: string }) {
         : "bg-navy";
   return (
     <div
-      className={`text-beige sticky top-0 z-40 box-content flex items-center gap-4 px-5 ${bgClass}`}
+      className={`text-beige sticky top-0 z-3 box-content flex items-center gap-4 px-5 pb-10 ${bgClass}`}
     >
       <button className="cursor-pointer" onClick={() => router.back()}>
         <ChevronLeft
