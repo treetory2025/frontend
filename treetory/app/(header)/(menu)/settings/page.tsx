@@ -20,19 +20,19 @@ export default function Page() {
   const { isOpen, open, close } = useBottomSheet();
 
   const alert = useAlert();
-  // if (!user) {
-  //   alert("로그인이 필요합니다.", () => router.back());
-  //   return (
-  //     <>
-  //       <PageHeading title="설정" />
-  //       <ContentSection className="no-scrollbar relative flex h-full flex-col space-y-4 overflow-y-auto md:space-y-6">
-  //         <div className="text-navy text-subtitle flex h-full items-center justify-center text-center">
-  //           사용자 정보 확인 중
-  //         </div>
-  //       </ContentSection>
-  //     </>
-  //   );
-  // }
+  if (!user) {
+    alert("로그인이 필요합니다.", () => router.back());
+    return (
+      <>
+        <PageHeading title="설정" />
+        <ContentSection className="no-scrollbar relative flex h-full flex-col space-y-4 overflow-y-auto md:space-y-6">
+          <div className="text-navy text-subtitle flex h-full items-center justify-center text-center">
+            사용자 정보 확인 중
+          </div>
+        </ContentSection>
+      </>
+    );
+  }
 
   if (!hasHydrated) {
     return (
@@ -120,8 +120,19 @@ export default function Page() {
           <button className="cursor-pointer p-2">
             <div className="itemsx-center flex w-full gap-4">
               <p className="text-navy text-body md:text-lg">의견 보내기</p>
-              <MessageCircleQuestionMark size={20} />
+              <MessageCircleQuestionMark size={18} className="mt-0.5" />
             </div>
+            <p
+              className="text-caption text-muted-navy text-left"
+              onClick={() =>
+                window.open(
+                  "https://docs.google.com/forms/d/e/1FAIpQLScy13SV6H_YUz61h_lDa9qtbOWN8w3r8uEQjtlTTb2vkN7I9A/viewform?pli=1",
+                  "_blank",
+                )
+              }
+            >
+              서비스 의견을 들려주세요! 클릭 시 구글 폼 설문조사로 이동합니다.
+            </p>
           </button>
         </ContentContainer>
       </ContentSection>
