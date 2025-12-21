@@ -279,7 +279,7 @@ export default function CreateOrnamentPage() {
   return (
     <div
       style={{ backgroundColor: "#CCE8F3" }}
-      className="flex-1 overflow-y-auto p-4 md:p-6"
+      className="flex-1 p-4 pb-40 md:p-6"
     >
       {/* 헤더 */}
       <div className="mb-6">
