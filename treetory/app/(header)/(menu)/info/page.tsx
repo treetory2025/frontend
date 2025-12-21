@@ -25,7 +25,7 @@ export default function Page() {
               developed by
             </p>
             <Link
-              href="https://github.com/orgs/treetory2025/repositories"
+              href="https://github.com/treetory2025"
               className="text-muted-navy text-caption flex items-center gap-2"
             >
               <Link2 />
