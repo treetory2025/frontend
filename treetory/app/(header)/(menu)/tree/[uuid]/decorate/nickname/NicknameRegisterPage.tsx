@@ -60,9 +60,9 @@ export default function NicknameRegisterPage() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-0">
       {/* 큰 트리 배경 (상단 중앙) */}
-      <div className="bg-navy border-beige pointer-events-none relative flex size-80 w-full shrink-0 items-center justify-center overflow-hidden border-b-8">
+      <div className="bg-navy pointer-events-none relative flex size-70 w-full shrink-0 items-center justify-center overflow-hidden">
         <div className="relative size-110">
           <Image
             src="/images/theme1.png"
@@ -101,7 +101,7 @@ export default function NicknameRegisterPage() {
       </div>
 
       {/* 오버레이 카드: 트리와 겹치도록 위쪽으로 올려 배치 */}
-      <div className="flex w-full flex-col items-center gap-8 px-4 py-8 pb-40">
+      <div className="bg-skyblue border-beige flex w-full flex-col items-center gap-8 border-t-8 px-4 py-8 pb-40">
         <h1 className="text-fg-primary text-xl font-bold md:text-2xl">
           닉네임 입력
         </h1>
