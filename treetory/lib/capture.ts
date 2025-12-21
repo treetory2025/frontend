@@ -10,7 +10,6 @@ export const exportTreeImage = async (dataURL: string) => {
         files: [file],
         title: "나의 트리토리 공유",
         text: "트리토리에서 함께 크리스마스 추억을 만들어요 🎄",
-        url: "",
       });
       return;
     } catch {
