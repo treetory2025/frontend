@@ -15,7 +15,7 @@ export function CategoryBadge({ label, icon, active }: CategoryBadgeProps) {
         className={`rounded-full ${
           active
             ? "bg-navy border-green"
-            : "bg-muted-bg text-muted-navy box-content"
+            : "bg-beige text-muted-navy box-content"
         }`}
       >
         <Image
