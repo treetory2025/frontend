@@ -73,7 +73,7 @@ export default function OrnamentBottomSheet({
       </div>
 
       {isOwner && (
-        <div className="flex w-full flex-col py-6">
+        <div className="flex w-full flex-col">
           {!isChristmas && <NoticeMessage />}
 
           <button
@@ -92,7 +92,7 @@ export default function OrnamentBottomSheet({
             </div>
             <MoveRight size={28} />
           </button>
-          <div className="my-2 flex items-center px-3">
+          <div className="my-1 flex items-center px-3">
             <div className="bg-green h-0.5 w-full" />
           </div>
           <button
