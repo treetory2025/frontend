@@ -70,7 +70,8 @@ export function useStageZoom(
       return;
     }
 
-    if (touches.length !== 2) return;
+    // 줌 핀치 이벤트 차단
+    if (touches.length === 2) return;
 
     // drag 완전 차단
     stage.stopDrag();

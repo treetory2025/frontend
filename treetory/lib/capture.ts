@@ -8,7 +8,9 @@ export const exportTreeImage = async (dataURL: string) => {
 
       await navigator.share({
         files: [file],
-        title: `2025 트리토리 공유`,
+        title: "나의 트리토리 공유",
+        text: "트리토리에서 함께 크리스마스 추억을 만들어요 🎄",
+        url: "",
       });
       return;
     } catch {

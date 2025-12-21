@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Group, Image as KonvaImage, Rect } from "react-konva";
+import { Group, Image as KonvaImage } from "react-konva";
 import useImage from "use-image";
 import Konva from "konva";
 
@@ -37,9 +37,7 @@ export function PlacementTree({
   const searchParams = useSearchParams();
 
   const imgUrl = searchParams.get("imgUrl");
-  const nickname = searchParams.get("nickname");
   const ornamentId = searchParams.get("ornamentId");
-  const message = searchParams.get("text");
   const ornamentSize = searchParams.get("size");
 
   const defaultSrc = `/images/theme/tree/${theme}/Size3.png`;
@@ -49,6 +47,9 @@ export function PlacementTree({
   const [treeImg] = useImage(imgSrc);
 
   const groupRef = useRef<Konva.Group | null>(null);
+
+  /** 🔑 Tree와 동일한 드래그 기준점 */
+  const initialPosRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     if (treeImg && onLoad) {
@@ -65,7 +66,6 @@ export function PlacementTree({
   const treeH = treeImg.height * scale;
   const defaultW = defaultImg.width * scale;
 
-  // 트리 위치 계산
   let diff = 0;
   if (theme === "SNOWY" && (size === 8 || size === 10)) {
     diff = 8;
@@ -73,42 +73,54 @@ export function PlacementTree({
 
   let y = 0;
   if (containerHeight <= 455) {
-    y = containerHeight * 0.05;
+    y = containerHeight * 0.3;
   } else if (containerWidth >= 540 && containerHeight <= 720) {
     y = containerHeight * 0.1;
   } else {
     y = containerHeight * 0.2;
   }
 
+  const TOP_PADDING_PX = 40;
+  const EXTRA_UP = Math.min(120, containerHeight * 0.15);
+  y = Math.max(TOP_PADDING_PX, y);
+
   const x = (containerWidth - treeW) / 2 - diff * scale;
   const diffX = (treeW - defaultW) / 2 + diff * scale;
 
-  // 트리 드래그 가능 여부
+  const visualTreeHeight = size && size < 5 ? treeH + 75 : treeH + 55;
+  const BOTTOM_PADDING = 100;
+
   const overflowX = Math.max(0, treeW - containerWidth);
-  const overflowY = Math.max(0, treeH - containerHeight + y);
+  const overflowY = Math.max(
+    0,
+    visualTreeHeight + y - containerHeight + BOTTOM_PADDING,
+  );
+
   const canDragTree = !isDraggingOrnament && (overflowX > 0 || overflowY > 0);
 
   const handleTreeDragMove = (e: any) => {
     if (isDraggingOrnament) return;
 
     const node = e.target;
+    const { x: baseX, y: baseY } = initialPosRef.current;
+
     let nextX = node.x();
     let nextY = node.y();
 
     if (overflowX > 0) {
-      const minX = 2 * x;
+      const minX = 2 * baseX;
       const maxX = 0;
       nextX = Math.min(Math.max(nextX, minX), maxX);
     } else {
-      nextX = x;
+      nextX = baseX;
     }
 
     if (overflowY > 0) {
-      const minY = y - overflowY;
-      const maxY = y;
+      const minY = baseY - overflowY - EXTRA_UP;
+      const maxY = baseY;
       nextY = Math.min(Math.max(nextY, minY), maxY);
     } else {
-      nextY = y;
+      nextY = baseY;
     }
 
     node.position({ x: nextX, y: nextY });
@@ -120,22 +132,11 @@ export function PlacementTree({
       x={x}
       y={y}
       draggable={canDragTree}
+      onDragStart={() => {
+        initialPosRef.current = { x, y };
+      }}
       onDragMove={handleTreeDragMove}
     >
-      {/* 배경 */}
-      <Rect
-        x={-treeW * 0.3}
-        y={-25}
-        width={treeW * 1.6}
-        height={size && size < 5 ? treeH + 75 : treeH + 55}
-        fill={
-          background === "SNOWY_HILL"
-            ? "#C6E9F5"
-            : background === "SILENT_NIGHT"
-              ? "#17395C"
-              : "transparent"
-        }
-      />
       {background && (
         <Background
           x={x}
@@ -149,10 +150,13 @@ export function PlacementTree({
           theme={background}
         />
       )}
+
       <KonvaImage image={treeImg} scale={{ x: scale, y: scale }} />
+
       {/* 기존 장식 */}
       <Ornaments diffX={diffX} onSelectOrnament={onSelectOrnament} />
-      {/* 등록할 장식 */}
+
+      {/* 배치 중인 장식 */}
       <PlacementOrnament
         initialPos={{
           x: treeW / 2 - diffX,

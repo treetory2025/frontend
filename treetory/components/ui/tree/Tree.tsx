@@ -172,9 +172,9 @@ export function Tree({
     >
       <Rect
         x={-treeW * 0.3}
-        y={-25}
+        y={-120}
         width={treeW * 1.6}
-        height={visualTreeHeight}
+        height={visualTreeHeight + 95}
         fill={
           background === "SNOWY_HILL"
             ? "#C6E9F5"
