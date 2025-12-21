@@ -47,7 +47,7 @@ export default function Page() {
       <PageHeading title="설정" />
       <ContentSection className="no-scrollbar relative flex h-full flex-col space-y-4 overflow-y-auto md:space-y-6">
         <ContentContainer>
-          <p className="text-subtitle text-primary pb-3">내 정보</p>
+          <p className="text-subtitle text-fg-primary pb-3">내 정보</p>
           <div className="flex flex-col gap-3 px-2 py-1">
             <p className="text-caption md:text-body text-muted-navy">닉네임</p>
             {/* 닉네임 정보 */}
@@ -73,7 +73,7 @@ export default function Page() {
 
         <ContentContainer>
           <div className="flex w-full items-center justify-between pb-3">
-            <h3 className="text-subtitle text-primary">테마 정보</h3>
+            <h3 className="text-subtitle text-fg-primary">테마 정보</h3>
             <button
               className="cursor-pointer"
               onClick={() => {
@@ -88,7 +88,7 @@ export default function Page() {
               <p className="text-caption md:text-body text-muted-navy">
                 현재 적용된 배경
               </p>
-              <p className="text-navy text-body text-primary md:text-lg">
+              <p className="text-navy text-body md:text-lg">
                 {user?.background === "SILENT_NIGHT"
                   ? "고요한 밤"
                   : "눈 내리는 언덕"}
@@ -110,15 +110,29 @@ export default function Page() {
           <p className="text-subtitle text-primary pb-3">트리토리 서비스</p>
           <div className="flex items-center justify-between p-2">
             <p className="text-navy text-body md:text-lg">팀원 소개</p>
-            <button className="cursor-pointer">
+            <button
+              className="cursor-pointer"
+              onClick={() => router.push("/info")}
+            >
               <MoveRight size={24} className="text-muted-navy" />
             </button>
           </div>
           <button className="cursor-pointer p-2">
             <div className="itemsx-center flex w-full gap-4">
               <p className="text-navy text-body md:text-lg">의견 보내기</p>
-              <MessageCircleQuestionMark size={20} />
+              <MessageCircleQuestionMark size={18} className="mt-0.5" />
             </div>
+            <p
+              className="text-caption text-muted-navy text-left"
+              onClick={() =>
+                window.open(
+                  "https://docs.google.com/forms/d/e/1FAIpQLScy13SV6H_YUz61h_lDa9qtbOWN8w3r8uEQjtlTTb2vkN7I9A/viewform?pli=1",
+                  "_blank",
+                )
+              }
+            >
+              서비스 의견을 들려주세요! 클릭 시 구글 폼 설문조사로 이동합니다.
+            </p>
           </button>
         </ContentContainer>
       </ContentSection>
