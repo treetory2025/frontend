@@ -20,19 +20,19 @@ export default function Page() {
   const { isOpen, open, close } = useBottomSheet();
 
   const alert = useAlert();
-  if (!user) {
-    alert("로그인이 필요합니다.", () => router.back());
-    return (
-      <>
-        <PageHeading title="설정" />
-        <ContentSection className="no-scrollbar relative flex h-full flex-col space-y-4 overflow-y-auto md:space-y-6">
-          <div className="text-navy text-subtitle flex h-full items-center justify-center text-center">
-            사용자 정보 확인 중
-          </div>
-        </ContentSection>
-      </>
-    );
-  }
+  // if (!user) {
+  //   alert("로그인이 필요합니다.", () => router.back());
+  //   return (
+  //     <>
+  //       <PageHeading title="설정" />
+  //       <ContentSection className="no-scrollbar relative flex h-full flex-col space-y-4 overflow-y-auto md:space-y-6">
+  //         <div className="text-navy text-subtitle flex h-full items-center justify-center text-center">
+  //           사용자 정보 확인 중
+  //         </div>
+  //       </ContentSection>
+  //     </>
+  //   );
+  // }
 
   if (!hasHydrated) {
     return (
@@ -47,7 +47,7 @@ export default function Page() {
       <PageHeading title="설정" />
       <ContentSection className="no-scrollbar relative flex h-full flex-col space-y-4 overflow-y-auto md:space-y-6">
         <ContentContainer>
-          <p className="text-subtitle text-primary pb-3">내 정보</p>
+          <p className="text-subtitle text-fg-primary pb-3">내 정보</p>
           <div className="flex flex-col gap-3 px-2 py-1">
             <p className="text-caption md:text-body text-muted-navy">닉네임</p>
             {/* 닉네임 정보 */}
@@ -73,7 +73,7 @@ export default function Page() {
 
         <ContentContainer>
           <div className="flex w-full items-center justify-between pb-3">
-            <h3 className="text-subtitle text-primary">테마 정보</h3>
+            <h3 className="text-subtitle text-fg-primary">테마 정보</h3>
             <button
               className="cursor-pointer"
               onClick={() => {
@@ -88,7 +88,7 @@ export default function Page() {
               <p className="text-caption md:text-body text-muted-navy">
                 현재 적용된 배경
               </p>
-              <p className="text-navy text-body text-primary md:text-lg">
+              <p className="text-navy text-body md:text-lg">
                 {user?.background === "SILENT_NIGHT"
                   ? "고요한 밤"
                   : "눈 내리는 언덕"}
@@ -110,7 +110,10 @@ export default function Page() {
           <p className="text-subtitle text-primary pb-3">트리토리 서비스</p>
           <div className="flex items-center justify-between p-2">
             <p className="text-navy text-body md:text-lg">팀원 소개</p>
-            <button className="cursor-pointer">
+            <button
+              className="cursor-pointer"
+              onClick={() => router.push("/info")}
+            >
               <MoveRight size={24} className="text-muted-navy" />
             </button>
           </div>
