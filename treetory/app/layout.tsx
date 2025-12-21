@@ -20,12 +20,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Treetory 2025",
     description: "함께 만드는 우리만의 크리스마스 이야기, 트리토리",
-    url: "https://develop.bacinf.com", // 배포 사이트 연결 전
+    url: "https://treetory.co.kr",
     siteName: "트리토리",
     locale: "ko_KR",
     images: [
       {
-        url: `https://develop.bacinf.com/og-image.png`,
+        url: `https://treetory.co.kr/og-image.png`,
         width: 1200,
         height: 630,
         alt: "Treetory 2025",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Treetory 2025",
     description: "함께 만드는 우리만의 크리스마스 이야기, 트리토리",
-    images: [`https://develop.bacinf.com/og-image.png`],
+    images: [`https://treetory.co.kr/og-image.png`],
   },
 };
 

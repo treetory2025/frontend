@@ -94,7 +94,6 @@ export default function TreePage() {
   useEffect(() => {
     function updateSize() {
       if (!containerRef.current) return;
-      console.log(containerRef);
       const { clientWidth, clientHeight } = containerRef.current;
       setSize({ width: clientWidth, height: clientHeight });
     }

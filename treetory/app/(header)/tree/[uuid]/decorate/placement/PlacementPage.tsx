@@ -81,7 +81,6 @@ export default function PlacementPage() {
   useEffect(() => {
     function updateSize() {
       if (!containerRef.current) return;
-      console.log(containerRef);
       const { clientWidth, clientHeight } = containerRef.current;
       setSize({ width: clientWidth, height: clientHeight });
     }
@@ -100,7 +99,7 @@ export default function PlacementPage() {
 
   // 선택된 장식 정보 상태 저장
   const handleSelectOrnament = (ornament: Ornarment) => {
-    console.log(ornament);
+    return;
   };
 
   // 장식등록 요청 후 이동
@@ -108,7 +107,6 @@ export default function PlacementPage() {
     if (!ornamentId || !placedPositions) return;
     const positionX = placedPositions[ornamentId]["x"];
     const positionY = placedPositions[ornamentId]["y"];
-    console.log("장식 완료 요청 ");
 
     try {
       const res = await fetch(`/api/trees/${uuid}/ornaments`, {
