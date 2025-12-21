@@ -147,7 +147,6 @@ export function DeleteBottomSheet({
       });
 
       if (res.ok) {
-        console.log("장식 삭제 성공");
         await refreshOwner();
         onClose();
         isDone();

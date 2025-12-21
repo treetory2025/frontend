@@ -1,10 +1,5 @@
 import TreePage from "@/app/(header)/tree/[uuid]/TreePage";
-import { getTreeOwner } from "@/lib/api";
 import { Metadata } from "next";
-
-type Props = {
-  params: { uuid: string };
-};
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

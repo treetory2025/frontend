@@ -74,7 +74,6 @@ export default function Header() {
         targetMemberId: treeUuid,
         isBookmarked: current,
       });
-      console.log("북마크 api 성공");
     } catch {
       toggleBookmarked();
     }

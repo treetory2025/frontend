@@ -61,7 +61,6 @@ export default function ClientRootLayout({
     theme && isThemeAllowedRoute
       ? (TREE_THEME_BG_MAP[theme] ?? "bg-navy")
       : "bg-navy";
-  console.log(theme, bgClass);
 
   return (
     <MusicProvider>

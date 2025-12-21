@@ -86,7 +86,6 @@ export function OwnerProvider({
 
   // 북마크 상태 동기화
   useEffect(() => {
-    console.log(owner);
     if (!hydrated || !owner) return;
 
     if (typeof owner.isBookmarked === "boolean") {
