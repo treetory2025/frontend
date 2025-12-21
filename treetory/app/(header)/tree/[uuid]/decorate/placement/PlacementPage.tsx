@@ -146,7 +146,7 @@ export default function PlacementPage() {
   };
 
   return (
-    <div className={`relative h-full w-full`} ref={containerRef}>
+    <div className={`relative h-dvh w-full`} ref={containerRef}>
       <div
         style={{
           width: size.width,
@@ -172,7 +172,7 @@ export default function PlacementPage() {
           height={Math.max(size.height + 120, treeHeight + 120)}
         >
           <Layer
-            onWheel={handleWheel}
+            // onWheel={handleWheel}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
