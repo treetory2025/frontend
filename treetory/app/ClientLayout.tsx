@@ -66,7 +66,7 @@ export default function ClientRootLayout({
   return (
     <MusicProvider>
       <motion.div
-        className={`flex h-full w-full flex-col items-center justify-center ${bgClass}`}
+        className={`min-h-vdh flex w-full flex-col items-center justify-center overflow-y-auto ${bgClass}`}
         initial={{ opacity: 0.3 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, ease: "easeOut" }}

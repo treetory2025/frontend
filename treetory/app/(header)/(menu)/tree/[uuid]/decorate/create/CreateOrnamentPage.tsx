@@ -11,6 +11,11 @@ import {
   uploadOrnamentImage,
 } from "@/lib/api";
 
+import rudolphIcon from "@/public/icons/rudolph.png"; // animal
+import santaIcon from "@/public/icons/santa.png"; //christmas
+import cookieIcon from "@/public/images/common/ornament2.png"; // foot
+import ornamentIcon from "@/public/images/common/ornament1.png"; //etc
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function CreateOrnamentPage() {
@@ -279,7 +284,7 @@ export default function CreateOrnamentPage() {
   return (
     <div
       style={{ backgroundColor: "#CCE8F3" }}
-      className="flex-1 overflow-y-auto p-4 md:p-6"
+      className="flex-1 p-4 pb-40 md:p-6"
     >
       {/* 헤더 */}
       <div className="mb-6">
@@ -505,10 +510,10 @@ export default function CreateOrnamentPage() {
           <div className="text-md text-fg-secondary mb-2">장식 분류</div>
           <div className="flex items-center justify-center gap-6">
             {[
-              { id: "CHRISTMAS", label: "크리스마스", icon: "🎄" },
-              { id: "FOOD", label: "음식", icon: "🍪" },
-              { id: "ANIMAL", label: "동물", icon: "🦌" },
-              { id: "ETC", label: "기타", icon: "✨" },
+              { id: "CHRISTMAS", label: "크리스마스", icon: santaIcon },
+              { id: "FOOD", label: "음식", icon: cookieIcon },
+              { id: "ANIMAL", label: "동물", icon: rudolphIcon },
+              { id: "ETC", label: "기타", icon: ornamentIcon },
             ].map((c) => {
               const selected = selectedCategory === c.id;
               return (
@@ -521,7 +526,13 @@ export default function CreateOrnamentPage() {
                   <div
                     className={`flex h-12 w-12 items-center justify-center rounded-full border ${selected ? "border-green bg-navy text-green border-4" : "bg-beige text-fg-primary border-transparent"}`}
                   >
-                    <span className="text-lg">{c.icon}</span>
+                    <img
+                      src={c.icon.src}
+                      width={32}
+                      height={32}
+                      className="object-fill"
+                      alt={`icon ${c.icon}`}
+                    />
                   </div>
                   <div
                     className={`text-xs ${selected ? "text-green" : "text-fg-secondary"}`}

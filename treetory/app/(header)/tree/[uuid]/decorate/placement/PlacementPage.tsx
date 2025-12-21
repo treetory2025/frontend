@@ -133,7 +133,7 @@ export default function PlacementPage() {
       }
       if (res.status == 400) {
         await refreshOwner();
-        alert("이미 다른 장식이 선택되었어요!");
+        alert("다른 장식과 너무 가깝거나 이미 등록된 장식이 있어요!");
         return;
       } else {
         console.log("장식 등록 실패", res);

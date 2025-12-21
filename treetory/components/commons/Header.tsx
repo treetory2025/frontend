@@ -138,7 +138,7 @@ export default function Header() {
         <ChristmasBanner isChristmas={isChristmas} />
       ) : (
         <div className="bg-beige flex h-10 items-center justify-center gap-2 rounded-full px-4">
-          <Image src={rudolphIcon} alt="rudolph" />
+          <Image src={rudolphIcon} alt="rudolph" className="size-8" />
           <p className="text-caption text-fg-primary">
             크리스마스까지?
             <span className="text-body font-bold"> D-{diffdays}</span>
@@ -190,7 +190,7 @@ export const ChristmasBanner = ({ isChristmas }: Props) => {
       }}
     >
       {/* 아이콘 */}
-      <Image src={santaIcon} alt="santa" />
+      <Image src={santaIcon} alt="santa" className="size-8" />
 
       {/* 텍스트 */}
       <span className="text-body text-beige">메리 크리스마스!</span>
