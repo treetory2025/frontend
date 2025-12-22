@@ -16,9 +16,9 @@ export default async function Layout({
 
   return (
     <OwnerProvider initialOwner={owner} uuid={uuid}>
-      <div className="flex h-full w-full flex-col justify-between">
+      <div className="flex h-dvh w-full flex-col justify-between">
         <TreeHeader />
-        <div className="no-scrollbar h-full overflow-y-auto">{children}</div>
+        <div className="flex-1 overflow-y-hidden">{children}</div>
       </div>
     </OwnerProvider>
   );

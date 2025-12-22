@@ -68,7 +68,7 @@ export default function MyOrnamentsPage() {
 
         {/* 리스트 + 페이지네이션 */}
         {!isLoading && ornaments.length > 0 && (
-          <div className="no-scrollbar h-full overflow-y-auto">
+          <div className="no-scrollbar h-dvh overflow-y-auto">
             <MyOrnaments
               ornaments={paginatedOrnaments}
               onSelect={handleSelectOrnament}

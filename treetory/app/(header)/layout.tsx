@@ -10,7 +10,7 @@ export default function HeaderLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`relative flex w-full flex-col justify-start gap-8`}>
+    <div className={`relative flex h-full w-full flex-col justify-start gap-8`}>
       <header>
         <Header />
       </header>
