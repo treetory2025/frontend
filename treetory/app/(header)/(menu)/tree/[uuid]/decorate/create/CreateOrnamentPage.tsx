@@ -13,8 +13,8 @@ import {
 
 import rudolphIcon from "@/public/icons/rudolph.png"; // animal
 import santaIcon from "@/public/icons/santa.png"; //christmas
-import cookieIcon from "@/public/images/common/ornament2.png"; // foot
-import ornamentIcon from "@/public/images/common/ornament1.png"; //etc
+import cookieIcon from "@/public/icons/cookie.png";
+import ornamentIcon from "@/public/icons/ornament.png"; //etc
 import { useAlert } from "@/hooks/useAlert";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
