@@ -4,12 +4,15 @@ import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import PreviewModal from "@/components/ui/decorate/nickname/PreviewModal";
+import { useAlert } from "@/hooks/useAlert";
 
 export default function NicknameRegisterPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const imgUrl = searchParams.get("imgUrl");
   const ornamentId = searchParams.get("ornamentId");
+
+  const alert = useAlert();
 
   const [nickname, setNickname] = useState("");
   const [isLoading, setIsLoading] = useState(false);
