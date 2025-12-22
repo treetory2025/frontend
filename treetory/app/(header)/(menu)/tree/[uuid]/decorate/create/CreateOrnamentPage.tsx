@@ -13,8 +13,9 @@ import {
 
 import rudolphIcon from "@/public/icons/rudolph.png"; // animal
 import santaIcon from "@/public/icons/santa.png"; //christmas
-import cookieIcon from "@/public/images/common/ornament2.png"; // foot
-import ornamentIcon from "@/public/images/common/ornament1.png"; //etc
+import cookieIcon from "@/public/icons/cookie.png";
+import ornamentIcon from "@/public/icons/ornament.png"; //etc
+import { useAlert } from "@/hooks/useAlert";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -136,6 +137,7 @@ export default function CreateOrnamentPage() {
   const [nameCheckLoading, setNameCheckLoading] = useState(false);
   const [nameAvailable, setNameAvailable] = useState<boolean | null>(null);
 
+  const alert = useAlert();
   const handleNext = async () => {
     if (!selectedFile) {
       alert("이미지를 선택해주세요.");
@@ -189,10 +191,13 @@ export default function CreateOrnamentPage() {
       return;
     }
 
-    // 특수문자(이모지 포함) 허용하지 않음: 한글, 영문, 숫자, 공백과 언더바(_)만 허용
-    const invalidChar = /[^\p{L}\p{N}_\s]/u.test(name);
+    // 특수문자(이모지 포함) 허용하지 않음: 한글, 영문, 숫자, 언더바(_)만 허용 공백 불가
+    const invalidChar = /[^\p{L}\p{N}_]/u.test(name);
+
     if (invalidChar) {
-      alert("특수문자는 사용할 수 없습니다. 한글, 영문, 숫자만 허용됩니다.");
+      alert(
+        "입력할 수 없는 문자가 포함되어 있습니다. 언더바(_)를 제외한 특수문자와 공백은 사용할 수 없습니다.",
+      );
       return;
     }
 

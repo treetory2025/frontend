@@ -9,8 +9,8 @@ import { CategoryBadge } from "./CategoryBadge";
 
 import rudolphIcon from "@/public/icons/rudolph.png"; // animal
 import santaIcon from "@/public/icons/santa.png"; //christmas
-import cookieIcon from "@/public/images/common/ornament2.png"; // foot
-import ornamentIcon from "@/public/images/common/ornament1.png"; //etc
+import cookieIcon from "@/public/icons/cookie.png"; // food
+import ornamentIcon from "@/public/icons/ornament.png"; //etc
 
 const CATEGORIES = [
   { id: "CHRISTMAS", label: "크리스마스", icon: santaIcon.src },
