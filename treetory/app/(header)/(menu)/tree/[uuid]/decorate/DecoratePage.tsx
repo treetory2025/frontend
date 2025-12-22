@@ -135,7 +135,7 @@ export default function DecoratePage() {
 
   return (
     <div
-      className="no-scrollbar flex-1 overflow-y-auto p-4 pb-6 md:p-6"
+      className="no-scrollbar h-dvh flex-1 overflow-y-auto p-4 pb-6 md:p-6"
       style={{ backgroundColor: "#CCE8F3" }}
     >
       {/* 검색 섹션 */}
@@ -202,7 +202,7 @@ export default function DecoratePage() {
 
       {/* 페이지네이션 */}
       {totalPages > 0 && (
-        <div className="mt-6 w-full pb-16">
+        <div className="mt-6 w-full pb-40">
           <div className="flex items-center justify-center gap-4">
             <button
               disabled={currentPage <= 0}
