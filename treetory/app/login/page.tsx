@@ -7,9 +7,58 @@ import BellRing2 from "@/public/icons/bell-ring2.svg";
 
 import Image from "next/image";
 import style from "@/app/login/login.module.css";
+import { useState } from "react";
+
+// 카카오인앱브라우저 확인
+const isKakaoInAppBrowser = () => {
+  if (typeof window === "undefined") return false;
+  return navigator.userAgent.toLowerCase().includes("kakaotalk");
+};
+const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isAndroid = () => /android/i.test(navigator.userAgent);
+
+// os별 새 브라우저 열기
+const openExternalOnIOS = (url: string) => {
+  window.location.href = `kakaotalk://web/openExternal?url=${encodeURIComponent(url)}`;
+};
+
+const openExternalOnAndroid = (url: string) => {
+  const { host, origin } = window.location;
+  const path = url.replace(origin, "");
+
+  window.location.href =
+    `intent://${host}${path}` +
+    `#Intent;scheme=https;package=com.android.chrome;end`;
+};
+
+const openInExternalBrowser = (path: string) => {
+  if (!isKakaoInAppBrowser()) return;
+
+  const url = `${window.location.origin}${path}`;
+
+  if (isIOS()) {
+    openExternalOnIOS(url);
+    return;
+  }
+
+  if (isAndroid()) {
+    openExternalOnAndroid(url);
+  }
+};
 
 export default function Page() {
-  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+  const [showExternalGuide, setShowExternalGuide] = useState(false);
+  const [pendingLoginPath, setPendingLoginPath] = useState<string | null>(null);
+
+  const handleGoogleLoginClick = (path: string) => {
+    if (isKakaoInAppBrowser()) {
+      setPendingLoginPath(path);
+      setShowExternalGuide(true);
+      return;
+    }
+
+    window.location.href = path;
+  };
 
   return (
     <div className={`${style.container}`}>
@@ -29,9 +78,7 @@ export default function Page() {
           <div className="flex w-34 flex-col items-center md:w-40">
             <button
               className={`${style.loginButton} bg-white`}
-              onClick={() => {
-                window.location.href = `/api/auth/login/google`;
-              }}
+              onClick={() => handleGoogleLoginClick("/api/auth/login/google")}
             >
               <Image
                 src={BellRing1}
@@ -63,6 +110,40 @@ export default function Page() {
           </div>
         </div>
       </div>
+      {showExternalGuide && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+          <div className="bg-beige w-80 rounded-xl p-6 text-center">
+            <h2 className="text-subtitle text-fg-primary mb-3 font-bold">
+              외부 브라우저로 이동 안내
+            </h2>
+            <p className="text-body text-fg-secondary mb-5">
+              카카오톡 브라우저에서는
+              <br />
+              구글 로그인이 원활하지 않아
+              <br />
+              외부 브라우저에서 진행해 주세요.
+            </p>
+            <div className="flex gap-3">
+              <button
+                className="bg-muted-bg flex-1 rounded-lg py-2"
+                onClick={() => setShowExternalGuide(false)}
+              >
+                취소
+              </button>
+              <button
+                className="bg-green flex-1 rounded-lg py-2 text-white"
+                onClick={() => {
+                  if (pendingLoginPath) {
+                    openInExternalBrowser(pendingLoginPath);
+                  }
+                }}
+              >
+                이동
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
