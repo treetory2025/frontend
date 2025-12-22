@@ -121,7 +121,6 @@ export function Tree({
   }
 
   const TOP_PADDING_PX = 40;
-  const EXTRA_UP = Math.min(120, containerHeight * 0.15);
 
   y = Math.max(TOP_PADDING_PX, y);
 
@@ -129,7 +128,7 @@ export function Tree({
   const diffX = (treeW - defaultW) / 2 + diff * scale;
 
   const visualTreeHeight = size && size < 5 ? treeH + 75 : treeH + 55;
-  const BOTTOM_PADDING = 100;
+  const BOTTOM_PADDING = 60;
   const overflowX = Math.max(0, treeW - containerWidth);
   const overflowY = Math.max(
     0,
@@ -162,7 +161,7 @@ export function Tree({
         if (!canDragY) {
           nextY = baseY;
         } else {
-          const minY = baseY - overflowY - EXTRA_UP;
+          const minY = baseY - overflowY;
           const maxY = baseY;
           nextY = Math.min(Math.max(nextY, minY), maxY);
         }

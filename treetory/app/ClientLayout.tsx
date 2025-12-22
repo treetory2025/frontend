@@ -65,7 +65,7 @@ export default function ClientRootLayout({
   return (
     <MusicProvider>
       <motion.div
-        className={`min-h-vdh flex w-full flex-col items-center justify-center overflow-y-auto ${bgClass}`}
+        className={`min-h-vdh no-scrollbar flex w-full flex-col items-center justify-center overflow-y-auto ${bgClass}`}
         initial={{ opacity: 0.3 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
