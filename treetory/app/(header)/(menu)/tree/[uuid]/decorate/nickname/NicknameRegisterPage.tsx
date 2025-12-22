@@ -4,12 +4,15 @@ import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import PreviewModal from "@/components/ui/decorate/nickname/PreviewModal";
+import { useAlert } from "@/hooks/useAlert";
 
 export default function NicknameRegisterPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const imgUrl = searchParams.get("imgUrl");
   const ornamentId = searchParams.get("ornamentId");
+
+  const alert = useAlert();
 
   const [nickname, setNickname] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -23,6 +26,12 @@ export default function NicknameRegisterPage() {
       return;
     }
 
+    if (/\s/.test(trimmedNickname)) {
+      alert(
+        "입력할 수 없는 문자가 포함되어 있습니다.\n공백은 사용할 수 없습니다.",
+      );
+      return;
+    }
     if (trimmedNickname.length > maxLength) {
       alert(`닉네임은 ${maxLength}자 이하로 입력해주세요.`);
       return;
@@ -58,6 +67,9 @@ export default function NicknameRegisterPage() {
     if (ornamentId) params.set("ornamentId", ornamentId);
     router.push(`${base}/letter?${params.toString()}`);
   };
+
+  // 닉네임 공백 확인
+  const hasWhitespace = /\s/.test(nickname);
 
   return (
     <div className="flex flex-col items-center gap-0">
@@ -117,11 +129,16 @@ export default function NicknameRegisterPage() {
           <p className="text-fg-secondary text-caption">
             글자수 {nickname.length}/{maxLength}
           </p>
+          {hasWhitespace && (
+            <p className="text-caption text-red">
+              공백은 닉네임에 포함할 수 없습니다.
+            </p>
+          )}
         </div>
 
         <button
           onClick={handleComplete}
-          disabled={isLoading || nickname.trim().length === 0}
+          disabled={isLoading || nickname.trim().length === 0 || hasWhitespace}
           className="bg-green text-body text-beige w-full cursor-pointer rounded-lg py-3 font-semibold hover:opacity-90 disabled:opacity-50"
         >
           {isLoading ? "등록 중..." : "다음"}
