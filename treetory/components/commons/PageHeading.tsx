@@ -28,7 +28,7 @@ export default function PageHeading({ title }: { title: string }) {
         />
       </button>
       <p
-        className={`text-title font-memoment select-none ${
+        className={`text-beige text-title font-memoment select-none ${
           theme === "SILENT_NIGHT" ? "text-beige" : "text-navy"
         }`}
       >
