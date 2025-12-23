@@ -57,6 +57,7 @@ export default function PreviewModal({
                         repeat: Infinity,
                         ease: "linear",
                       }}
+                      crossOrigin="anonymous"
                     />
                   ) : (
                     <motion.div
