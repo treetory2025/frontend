@@ -160,7 +160,7 @@ export function PlacementTree({
       <PlacementOrnament
         initialPos={{
           x: treeW / 2 - diffX,
-          y: containerHeight / 2,
+          y: visualTreeHeight / 2,
         }}
         imgUrl={imgUrl ?? ""}
         ornamentSize={ornamentSize ?? "SMALL"}

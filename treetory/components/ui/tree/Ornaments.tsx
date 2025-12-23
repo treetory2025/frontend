@@ -153,11 +153,9 @@ export function PlacementOrnament({
           containerWidth - radius,
         );
         const minY = radius;
-        const maxY = treeRect.height - radius;
-
         return {
           x: Math.min(Math.max(position.x, minX), maxX),
-          y: Math.min(Math.max(position.y, minY), maxY),
+          y: Math.max(position.y, minY),
         };
       }}
       onMouseOver={handleMouseOver}
