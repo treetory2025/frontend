@@ -205,6 +205,7 @@ export default function LetterEditor({ uuid, searchParams }: Props) {
                     alt="preview"
                     style={{ width: ornamentSize, height: ornamentSize }}
                     className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover"
+                    crossOrigin="anonymous"
                   />
                 ) : (
                   <div

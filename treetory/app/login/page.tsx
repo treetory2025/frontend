@@ -26,9 +26,7 @@ const openExternalOnAndroid = (url: string) => {
   const { host, origin } = window.location;
   const path = url.replace(origin, "");
 
-  window.location.href =
-    `intent://${host}${path}` +
-    `#Intent;scheme=https;package=com.android.chrome;end`;
+  window.location.href = `intent://${host}${path}` + `#Intent;scheme=https;end`;
 };
 
 const openInExternalBrowser = (path: string) => {

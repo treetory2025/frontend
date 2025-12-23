@@ -36,6 +36,7 @@ export default function OrnamentTabs({
                 src={category.icon}
                 alt={category.label}
                 className="size-8 rounded-full object-contain"
+                crossOrigin="anonymous"
               />
             )}
           </div>
