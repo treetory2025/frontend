@@ -20,6 +20,7 @@ import { isChristmas2025InKorea } from "@/lib/date";
 import { useState } from "react";
 import { apiFetch } from "@/lib/api";
 import { useOrnamentInfoMdalStore } from "@/store/useModalStore";
+import { useRouter } from "next/navigation";
 
 type OrnamentBottomSheetProps = BottomSheetProps & {
   ornament: Ornarment | null;
@@ -30,7 +31,8 @@ export default function OrnamentBottomSheet({
   onClose,
   ornament,
 }: OrnamentBottomSheetProps) {
-  const { owner } = useOwner();
+  const { owner, uuid } = useOwner();
+  const router = useRouter();
 
   const isOwner = owner ? isUser() : false;
   const isChristmas = isChristmas2025InKorea();
@@ -80,6 +82,14 @@ export default function OrnamentBottomSheet({
           <button
             disabled={!isChristmas}
             className={`flex w-full items-center justify-between px-4 py-2 ${!isChristmas ? "cursor-not-allowed opacity-30" : "cursor-pointer"} text-fg-secondary`}
+            onClick={() => {
+              const params = new URLSearchParams({
+                placedOrnamentId: ornament.placedOrnamentId.toString(),
+              });
+              router.push(
+                `/tree/${uuid}/my-ornaments/letter?${params.toString()}`,
+              );
+            }}
           >
             <div className="text-body flex items-center gap-3 font-bold">
               <Image
