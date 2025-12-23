@@ -167,6 +167,8 @@ export function PlacementTree({
         diffX={diffX}
         onDragStateChange={setIsDraggingOrnament}
         onPositionChange={(pos) => onPositionChange(ornamentId ?? "", pos)}
+        containerWidth={containerWidth}
+        treeRect={{ width: treeW, height: treeH }}
       />
     </Group>
   );

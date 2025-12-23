@@ -85,14 +85,17 @@ export function PlacementOrnament({
   onDragStateChange,
   diffX,
   onPositionChange,
+  containerWidth,
+  treeRect,
 }: {
   initialPos: { x: number; y: number };
   imgUrl?: string;
   ornamentSize?: string;
   onDragStateChange: (dragging: boolean) => void;
   onPositionChange: (pos: { x: number; y: number }) => void;
-
   diffX: number;
+  containerWidth: number;
+  treeRect: { width: number; height: number };
 }) {
   if (!imgUrl || !ornamentSize) return null;
 
@@ -137,6 +140,26 @@ export function PlacementOrnament({
       x={pos.x + diffX}
       y={pos.y}
       draggable
+      dragBoundFunc={(position) => {
+        const treeNode = (position as any).target?.getParent?.();
+        const treeX = treeNode?.x?.() ?? 0;
+
+        // 화면 밖으로 나간 트리 영역 계산
+        const hidden = Math.max(0, (containerWidth - treeRect.width) / 2);
+
+        const minX = hidden + radius;
+        const maxX = Math.min(
+          treeX + treeRect.width + hidden,
+          containerWidth - radius,
+        );
+        const minY = radius;
+        const maxY = treeRect.height - radius;
+
+        return {
+          x: Math.min(Math.max(position.x, minX), maxX),
+          y: Math.min(Math.max(position.y, minY), maxY),
+        };
+      }}
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}
       onDragStart={() => onDragStateChange(true)}
