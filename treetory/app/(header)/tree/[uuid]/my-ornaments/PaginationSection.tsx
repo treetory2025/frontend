@@ -24,7 +24,7 @@ export default function PaginationSection({
   };
 
   return (
-    <div className="mt-6 flex items-center justify-center gap-4">
+    <div className="mt-6 flex items-center justify-center gap-4 pt-5">
       <button
         disabled={page <= 1}
         onClick={() => goToPage(page - 1)}
