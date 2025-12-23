@@ -16,7 +16,7 @@ export default function AlertModal() {
         <p className="text-body text-green border-green w-full border-b-2 pb-2 text-lg font-bold">
           안내
         </p>
-        <p className="text-body pt-2">{message}</p>
+        <p className="text-body pt-2 whitespace-pre-line">{message}</p>
         <button
           onClick={handleConfirm}
           className="bg-green text-beige text-button cursor-pointer rounded-lg px-16 py-2"

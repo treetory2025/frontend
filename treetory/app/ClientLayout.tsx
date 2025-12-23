@@ -9,6 +9,8 @@ import AlertModal from "@/components/commons/AlertModal";
 import InviteModal from "@/components/ui/menu/InviteModal";
 import MusicProvider from "./MusicProvider";
 import BGMButton from "@/components/ui/menu/BGMButton";
+import { useOpenExternalBrowser } from "@/hooks/useOpenExternalBrowser";
+import { useAlert } from "@/hooks/useAlert";
 
 const TREE_THEME_BG_MAP: Record<string, string> = {
   SILENT_NIGHT: "bg-navy",
@@ -33,6 +35,26 @@ export default function ClientRootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { openExternalBrowser } = useOpenExternalBrowser();
+  const alert = useAlert();
+
+  // 카카오 인앱 브라우저 이동
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const ua = navigator.userAgent.toLowerCase();
+    const isKakaoInApp = ua.includes("kakaotalk");
+    if (!isKakaoInApp) return;
+
+    if (sessionStorage.getItem("kakao-forced")) return;
+    sessionStorage.setItem("kakao-forced", "true"); // 무한 루프 방지를 위한 세션 저장
+
+    const url = window.location.href;
+    alert("원활한 서비스 사용을 위해\n외부 브라우저로 이동합니다", () =>
+      openExternalBrowser(url),
+    );
+  }, []);
+
   const pathname = usePathname();
   const theme = useThemeStore((s) => s.theme);
 

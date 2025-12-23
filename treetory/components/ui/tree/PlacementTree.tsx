@@ -160,13 +160,15 @@ export function PlacementTree({
       <PlacementOrnament
         initialPos={{
           x: treeW / 2 - diffX,
-          y: containerHeight / 2,
+          y: visualTreeHeight / 2,
         }}
         imgUrl={imgUrl ?? ""}
         ornamentSize={ornamentSize ?? "SMALL"}
         diffX={diffX}
         onDragStateChange={setIsDraggingOrnament}
         onPositionChange={(pos) => onPositionChange(ornamentId ?? "", pos)}
+        containerWidth={containerWidth}
+        treeRect={{ width: treeW, height: treeH }}
       />
     </Group>
   );

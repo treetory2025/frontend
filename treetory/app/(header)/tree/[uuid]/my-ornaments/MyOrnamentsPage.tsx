@@ -53,7 +53,7 @@ export default function MyOrnamentsPage() {
   };
   return (
     <>
-      <ContentSection className="no-scrollbar flex h-full flex-col overflow-y-auto md:p-10">
+      <ContentSection className="no-scrollbar flex h-dvh flex-col overflow-y-auto md:p-10">
         {/* 데이터 없음 */}
         {!isLoading && ornaments.length === 0 && (
           <div className="flex flex-1 flex-col items-center justify-center gap-4">
@@ -68,7 +68,7 @@ export default function MyOrnamentsPage() {
 
         {/* 리스트 + 페이지네이션 */}
         {!isLoading && ornaments.length > 0 && (
-          <div className="no-scrollbar h-dvh overflow-y-auto">
+          <div className="no-scrollbar h-full overflow-y-auto pb-60 md:pb-40">
             <MyOrnaments
               ornaments={paginatedOrnaments}
               onSelect={handleSelectOrnament}
