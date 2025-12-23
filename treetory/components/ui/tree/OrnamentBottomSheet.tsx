@@ -16,7 +16,7 @@ import ChatCircle from "@/public/icons/Chat_Circle_Dots.png";
 import CloseCircle from "@/public/icons/Close_Circle.png";
 import { Info, MoveRight } from "lucide-react";
 import NoticeMessage from "./NoticeMessage";
-import { isChristmas2025InKorea } from "@/lib/date";
+import { getDaysUntilChristmas2025InKorea } from "@/lib/date";
 import { useState } from "react";
 import { apiFetch } from "@/lib/api";
 import { useOrnamentInfoMdalStore } from "@/store/useModalStore";
@@ -35,7 +35,8 @@ export default function OrnamentBottomSheet({
   const router = useRouter();
 
   const isOwner = owner ? isUser() : false;
-  const isChristmas = isChristmas2025InKorea();
+  const daysUntilChristmas = getDaysUntilChristmas2025InKorea();
+  const isBeforeChristmas = daysUntilChristmas > 0;
 
   const openModal = useOrnamentInfoMdalStore((s) => s.openModal);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -77,11 +78,11 @@ export default function OrnamentBottomSheet({
 
       {isOwner && (
         <div className="flex w-full flex-col">
-          {!isChristmas && <NoticeMessage />}
+          {isBeforeChristmas && <NoticeMessage />}
 
           <button
-            disabled={!isChristmas}
-            className={`flex w-full items-center justify-between px-4 py-2 ${!isChristmas ? "cursor-not-allowed opacity-30" : "cursor-pointer"} text-fg-secondary`}
+            disabled={isBeforeChristmas}
+            className={`flex w-full items-center justify-between px-4 py-2 ${isBeforeChristmas ? "cursor-not-allowed opacity-30" : "cursor-pointer"} text-fg-secondary`}
             onClick={() => {
               const params = new URLSearchParams({
                 placedOrnamentId: ornament.placedOrnamentId.toString(),

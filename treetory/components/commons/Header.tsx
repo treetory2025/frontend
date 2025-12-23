@@ -5,6 +5,7 @@ import rudolphIcon from "@/public/icons/rudolph.png";
 import santaIcon from "@/public/icons/santa.png";
 import starIcon from "@/public/icons/Star.svg";
 import starOffIcon from "@/public/icons/StarOff.svg";
+import heartIcon from "@/public/icons/heart.svg";
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -27,10 +28,13 @@ import { toggleBookmakApi } from "@/lib/bookmark";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [diffdays, setDiffdays] = useState(0);
 
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const isChristmas = isChristmas2025InKorea();
+  const isChristmasDay = isChristmas2025InKorea();
+  const daysUntilChristmas = getDaysUntilChristmas2025InKorea();
+
+  const isBeforeChristmas = daysUntilChristmas > 0;
+  const isAfterChristmas = daysUntilChristmas < 0;
 
   // 캡쳐 state
   const capture = useCaptureStore((s) => s.capture);
@@ -49,12 +53,6 @@ export default function Header() {
 
   const isTreeOwner =
     isTreePage && Boolean(user?.uuid && treeUuid && user.uuid === treeUuid);
-
-  useEffect(() => {
-    if (isChristmas) return;
-    const diff = getDaysUntilChristmas2025InKorea();
-    setDiffdays(diff);
-  }, [isChristmas]);
 
   useCloseOnOutsideOrEsc(menuRef, {
     isOpen: isMenuOpen,
@@ -133,14 +131,38 @@ export default function Header() {
         )}
       </div>
       {/* 크리스마스 디데이 안내 */}
-      {isChristmas ? (
-        <ChristmasBanner isChristmas={isChristmas} />
-      ) : (
+      {/* 크리스마스 이전 */}
+      {isBeforeChristmas && (
         <div className="bg-beige flex h-10 items-center justify-center gap-2 rounded-full px-4">
           <Image src={rudolphIcon} alt="rudolph" className="size-8" />
           <p className="text-caption text-fg-primary">
             크리스마스까지?
-            <span className="text-body font-bold"> D-{diffdays}</span>
+            <span className="text-body font-bold"> D-{daysUntilChristmas}</span>
+          </p>
+        </div>
+      )}
+
+      {/* 크리스마스 당일 */}
+      {isChristmasDay && <ChristmasBanner isChristmas={isChristmasDay} />}
+
+      {/* 크리스마스 이후 */}
+      {isAfterChristmas && (
+        <div className="bg-muted-navy flex h-10 items-center justify-center gap-2 rounded-full px-4">
+          <motion.img
+            src={heartIcon.src}
+            alt="after christmas"
+            className="size-5"
+            animate={{
+              scale: [1, 1.15, 1],
+            }}
+            transition={{
+              duration: 1.2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />{" "}
+          <p className="text-caption text-beige">
+            따뜻한 마음이 계속되고 있어요
           </p>
         </div>
       )}
