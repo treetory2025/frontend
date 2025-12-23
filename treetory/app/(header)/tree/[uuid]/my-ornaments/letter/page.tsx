@@ -100,7 +100,7 @@ export default function Page() {
     <>
       <PageHeading title="작성된 편지" />
       {/* 편지 조회 출력 */}
-      <div className="h-dvh overflow-y-auto pb-60">
+      <div className="no-scrollbar h-dvh overflow-y-auto pb-60">
         <div
           className="relative flex w-full flex-col bg-white shadow"
           style={{
