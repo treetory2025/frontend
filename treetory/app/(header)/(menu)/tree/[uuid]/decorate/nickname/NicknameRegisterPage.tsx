@@ -91,6 +91,7 @@ export default function NicknameRegisterPage() {
               src={imgUrl}
               alt="ornament preview"
               className="size-22 rounded-full object-cover"
+              crossOrigin="anonymous"
             />
             {/* 실시간 닉네임 미리보기 (이미지 바로 아래) */}
             {nickname.trim() && (

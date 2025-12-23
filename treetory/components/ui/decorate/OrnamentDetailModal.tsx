@@ -74,6 +74,7 @@ export default function OrnamentDetailModal({ ornamentId, onClose }: Props) {
                     src={detail?.imgUrl}
                     alt={detail?.name}
                     className="h-full w-full object-cover"
+                    crossOrigin="anonymous"
                   />
                 </button>
               )}
