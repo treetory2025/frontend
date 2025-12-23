@@ -94,13 +94,15 @@ export function PlacementOrnament({
 
   diffX: number;
 }) {
-  if (!imgUrl || !ornamentSize) return;
+  if (!imgUrl || !ornamentSize) return null;
 
-  const [imgSrc] = useImage(imgUrl, "anonymous");
+  const [imgSrc, status] = useImage(imgUrl, "anonymous");
   const [pos, setPos] = useState(initialPos);
 
   const radius =
     ornamentSize === "SMALL" ? 22 : ornamentSize === "MEDIUM" ? 30 : 38;
+
+  if (status !== "loaded") return null;
 
   const handleMouseOver = (e: any) => {
     e.target.getStage().container().style.cursor = "pointer";
@@ -161,11 +163,7 @@ export function PlacementOrnament({
         shadowOffsetY={0}
         listening={false}
       />
-      <Group
-        clipFunc={(ctx) => {
-          ctx.arc(0, 0, radius, 0, Math.PI * 2);
-        }}
-      >
+      <Group>
         <KonvaImage
           image={imgSrc}
           width={radius * 2}
