@@ -52,6 +52,7 @@ export default function OrnamentBottomSheet({
               width={120}
               height={120}
               className="object-cover"
+              crossOrigin="anonymous"
             />
           </div>
           <button
