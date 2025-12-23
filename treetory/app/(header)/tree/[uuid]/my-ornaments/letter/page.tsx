@@ -41,7 +41,6 @@ export default function Page() {
   const placedOrnamentId = searchParams.get("placedOrnamentId");
   const { owner, uuid } = useOwner();
   const isOwner = owner ? isUser() : false;
-  const isChristmas = isChristmas2025InKorea();
 
   const [font, setFont] = useState("NANUM_PEN");
   const [writer, setWriter] = useState("");
@@ -51,26 +50,8 @@ export default function Page() {
 
   const alert = useAlert();
 
-  //   if (!isOwner) {
-  //     alert("편지 조회 권한이 없습니다.", () => router.back);
-  //     return (
-  //       <div className="flex h-full items-center justify-center">
-  //         <p className="text-body text-fg-primary">권한 확인 중 . . .</p>
-  //       </div>
-  //     );
-  //   }
-
-  //   if (!isChristmas) {
-  //     alert("크리스마스 당일에\n편지를 조회할 수 있습니다!");
-  //     return (
-  //       <div className="flex h-full items-center justify-center">
-  //         <p className="text-body text-fg-primary">날짜 확인 중 . . .</p>
-  //       </div>
-  //     );
-  //   }
-
   useEffect(() => {
-    if (!owner || !isOwner || !isChristmas || !placedOrnamentId) return;
+    if (!owner || !isOwner || !placedOrnamentId) return;
 
     async function getLetter() {
       try {
@@ -87,8 +68,10 @@ export default function Page() {
         // 편지 조회 결과 확인
         if (res.status === 403) {
           // 크리스마스 이전이거나, 편지 권한 없음
-          alert("편지를 조회할 수 없습니다.");
-
+          alert(
+            "편지를 조회할 수 없습니다.\n트리 소유자가 크리스마스 이후에\n조회할 수 있습니다.",
+            () => router.back(),
+          );
           return;
         } else {
           console.error("편지 api 실패", res);
@@ -100,7 +83,7 @@ export default function Page() {
     }
 
     getLetter();
-  }, [owner, uuid, isOwner, isChristmas, placedOrnamentId]);
+  }, [owner, uuid, isOwner, placedOrnamentId]);
 
   const lineHeight = 36; // 줄 간격(px)
   const topPadding = 136; // 첫 줄 시작 위치(px)
