@@ -11,6 +11,7 @@ import rudolphIcon from "@/public/icons/rudolph.png"; // animal
 import santaIcon from "@/public/icons/santa.png"; //christmas
 import cookieIcon from "@/public/icons/cookie.png"; // food
 import ornamentIcon from "@/public/icons/ornament.png"; //etc
+import { CandyCane } from "lucide-react";
 
 const CATEGORIES = [
   { id: "CHRISTMAS", label: "크리스마스", icon: santaIcon.src },
@@ -23,7 +24,6 @@ export default function OrnamentInfoModal() {
 
   const [ornament, setOrnament] = useState<OrnamentInfo | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (!isOpen || !ornamentId) return;
@@ -32,9 +32,15 @@ export default function OrnamentInfoModal() {
       setLoading(true);
 
       try {
-        const res = await apiFetch(`/api/ornaments/${ornamentId}`);
+        // const res = await apiFetch(`/api/ornaments/${ornamentId}`);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/ornaments/${ornamentId}`,
+        );
 
         if (!res.ok) {
+          if (res.status === 403) {
+            return;
+          }
           throw new Error("장식 정보를 불러오지 못했습니다.");
         }
 
@@ -70,7 +76,7 @@ export default function OrnamentInfoModal() {
           </p>
         )}
 
-        {ornament && (
+        {!loading && ornament && (
           <>
             <div className="bg-muted-bg flex size-30 items-center justify-center rounded-full md:size-40">
               <div className="relative size-20 rounded-full md:size-30">
@@ -79,6 +85,7 @@ export default function OrnamentInfoModal() {
                   alt={"장식 미리보기"}
                   fill
                   className="rounded-full object-cover"
+                  crossOrigin="anonymous"
                 />
               </div>
             </div>
@@ -103,7 +110,19 @@ export default function OrnamentInfoModal() {
             </div>
           </>
         )}
-
+        {!loading && !ornament && (
+          <div className="flex flex-col items-center gap-2">
+            <div className="bg-muted-bg mb-4 flex size-20 flex-col items-center justify-center rounded-full">
+              <CandyCane className="text-muted-navy size-10" strokeWidth={2} />
+            </div>
+            <p className="text-caption md:text-body text-fg-primary font-bold">
+              이 장식은 방문자가 새로 만든 장식이에요.
+            </p>
+            <p className="text-caption text-fg-secondary">
+              아직 공유되지 않아 상세 정보를 볼 수 없어요.
+            </p>
+          </div>
+        )}
         <button
           onClick={handleClose}
           className="bg-muted-navy text-beige text-button w-full cursor-pointer rounded-lg py-3"
