@@ -44,7 +44,9 @@ export default function Page() {
 
   const [font, setFont] = useState("NANUM_PEN");
   const [writer, setWriter] = useState("");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(
+    "이름 푸하하\n    이름 푸하하\n이름 ~ 푸하하하",
+  );
   const [createdDate, setCreatedDate] = useState("");
   const [year, month, day] = createdDate.split(".");
 
