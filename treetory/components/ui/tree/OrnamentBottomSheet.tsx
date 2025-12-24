@@ -81,7 +81,7 @@ export default function OrnamentBottomSheet({
           {isBeforeChristmas && <NoticeMessage />}
 
           <button
-            disabled={!isBeforeChristmas}
+            disabled={isBeforeChristmas}
             className={`flex w-full items-center justify-between px-4 py-2 ${isBeforeChristmas ? "cursor-not-allowed opacity-30" : "cursor-pointer"} text-fg-secondary`}
             onClick={() => {
               const params = new URLSearchParams({
