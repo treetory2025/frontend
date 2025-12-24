@@ -100,7 +100,11 @@ export function PlacementOrnament({
   if (!imgUrl || !ornamentSize) return null;
 
   const [imgSrc, status] = useImage(imgUrl, "anonymous");
+  // 장식 좌표 초기값 전달
   const [pos, setPos] = useState(initialPos);
+  useEffect(() => {
+    onPositionChange(pos);
+  }, []);
 
   const radius =
     ornamentSize === "SMALL" ? 22 : ornamentSize === "MEDIUM" ? 30 : 38;

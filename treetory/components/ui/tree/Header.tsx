@@ -14,7 +14,7 @@ export default function TreeHeader() {
   const pathname = usePathname();
 
   const isPlacement = pathname.endsWith("/placement");
-  const isMyOrnaments = pathname.endsWith("/my-ornaments");
+  const isMyOrnaments = /^\/tree\/[^/]+\/my-ornaments(\/|$)/.test(pathname);
 
   const theme = useThemeStore((s) => s.theme);
   const isOwner = user?.uuid === uuid;
