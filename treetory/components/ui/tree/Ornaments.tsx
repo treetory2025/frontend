@@ -104,7 +104,7 @@ export function PlacementOrnament({
   const [pos, setPos] = useState(initialPos);
   useEffect(() => {
     onPositionChange(pos);
-  }, [pos]);
+  }, []);
 
   const radius =
     ornamentSize === "SMALL" ? 22 : ornamentSize === "MEDIUM" ? 30 : 38;
